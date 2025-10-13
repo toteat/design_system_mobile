@@ -34,6 +34,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
+            implementation(project(":toteatds"))
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.6.10")
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
