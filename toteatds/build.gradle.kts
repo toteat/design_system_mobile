@@ -60,7 +60,9 @@ kotlin {
         }
 
         androidMain {
-            dependencies {}
+            dependencies {
+
+            }
         }
 
         getByName("androidDeviceTest") {
