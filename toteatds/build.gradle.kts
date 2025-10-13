@@ -50,6 +50,8 @@ kotlin {
                 implementation(libs.jetbrains.compose.foundation)
                 implementation(libs.jetbrains.compose.material3)
                 implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(libs.material.icons)
             }
         }
 
