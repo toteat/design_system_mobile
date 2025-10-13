@@ -1,30 +1,51 @@
 package com.toteat.designsystemmobile
 
-import com.toteat.toteatds.components.PrimaryButton
-import com.toteat.toteatds.components.SecondaryButton
-import com.toteat.toteatds.components.TertiaryButton
-import com.toteat.toteatds.theme.ToteatTheme
-
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RocketLaunch
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.PrimaryButton
+import com.toteat.toteatds.components.SecondaryButton
+import com.toteat.toteatds.components.TertiaryButton
+import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
+import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
+import com.toteat.toteatds.components.textfields.ToteatTextField
+import com.toteat.toteatds.theme.ToteatTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 // Data class para representar cada sección de componentes en nuestra lista
@@ -41,7 +62,7 @@ fun App() {
     ToteatTheme() {
         val componentList = remember {
             mutableStateListOf(
-                ComponentShowcaseItem(title = "Buttons", isExpanded = true), // Inicia expandido
+                ComponentShowcaseItem(title = "Buttons"), // Inicia expandido
                 ComponentShowcaseItem(title = "Inputs"),
                 ComponentShowcaseItem(title = "Cards")
             )
@@ -100,6 +121,7 @@ fun ComponentShowcaseSection(
                 // Aquí decidimos qué componentes mostrar según el título de la sección
                 when (item.title) {
                     "Buttons" -> ButtonShowcase()
+                    "Inputs" -> InputShowcase()
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -144,7 +166,7 @@ fun ButtonShowcase() {
             PrimaryButton(onClick = {}, text = "Default")
             PrimaryButton(onClick = {}, text = "Disabled", enabled = false)
         }
-        Divider()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         // --- Secondary Buttons ---
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
@@ -152,7 +174,7 @@ fun ButtonShowcase() {
             SecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null) })
             SecondaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.Add, null) })
         }
-        Divider()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         // --- Tertiary Buttons ---
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
@@ -162,3 +184,55 @@ fun ButtonShowcase() {
         }
     }
 }
+
+@Composable
+fun InputShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        // --- Text Field ---
+        Text("TextField", style = MaterialTheme.typography.titleMedium)
+        val textState = rememberTextFieldState()
+        ToteatTextField(
+            state = textState,
+            title = "Email",
+            placeHolder = "user@toteat.com",
+            helperText = "Ingrese su correo",
+            isSuccess = true
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        // --- Password Field ---
+        Text("Password", style = MaterialTheme.typography.titleMedium)
+        val passwordState = rememberTextFieldState()
+        val isPasswordVisible = remember { mutableStateOf(false) }
+        ToteatPasswordTextField(
+            state = passwordState,
+            isPasswordVisible = isPasswordVisible.value,
+            title = "Contraseña",
+            placeHolder = "••••••••",
+            helperText = "Mínimo 8 caracteres",
+            isError = true,
+            onToggleVisibilityCLick = { isPasswordVisible.value = !isPasswordVisible.value }
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        // --- Phone Number Field ---
+        Text("Phone Number", style = MaterialTheme.typography.titleMedium)
+        val phoneState = rememberTextFieldState()
+        val dialCodes = listOf("+56", "+54", "+51", "+1")
+        val selectedDialCode = remember { mutableStateOf(dialCodes.first()) }
+        ToteatPhoneNumberField(
+            state = phoneState,
+            title = "Teléfono",
+            placeHolder = "9 1234 5678",
+            helperText = "Teléfono",
+            isWarning = true,
+            selectedDialCode = selectedDialCode.value,
+            dialCodeOptions = dialCodes,
+            onDialCodeChange = { selectedDialCode.value = it }
+        )
+    }
+}
+
