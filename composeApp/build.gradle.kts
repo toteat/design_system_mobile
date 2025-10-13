@@ -34,8 +34,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(project(":toteatds"))
-            implementation("org.jetbrains.compose.material:material-icons-extended:1.6.10")
+            implementation(projects.toteatds)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -45,6 +44,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.material.icons)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
