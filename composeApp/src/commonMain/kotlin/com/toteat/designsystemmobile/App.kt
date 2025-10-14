@@ -39,9 +39,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.components.PrimaryButton
-import com.toteat.toteatds.components.SecondaryButton
-import com.toteat.toteatds.components.TertiaryButton
+import com.toteat.toteatds.components.Buttons.PrimaryButton
+import com.toteat.toteatds.components.Buttons.SecondaryButton
+import com.toteat.toteatds.components.Buttons.TertiaryButton
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
@@ -255,20 +255,5 @@ fun DropdownShowcase() {
     }
 }
 
-fun DropdownShowcase() {
-    var selectedOption by remember { mutableStateOf("") }
-    val options = listOf("Mesero 1", "Mesero 2", "Mesero 3")
 
-    Column(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        AppDropdown(
-            label = "Meseros turno",
-            options = options,
-            selectedOption = selectedOption,
-            onOptionSelected = { selectedOption = it }
-        )
-    }
-}
 

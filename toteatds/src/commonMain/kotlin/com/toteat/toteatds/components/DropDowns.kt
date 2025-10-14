@@ -2,38 +2,40 @@ package com.toteat.toteatds.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
+import com.toteat.toteatds.theme.bodyMediumRegular
+import com.toteat.toteatds.theme.extended
 
-/**
- * Un componente de menú desplegable personalizado que se integra con el sistema de diseño.
- *
- * @param label El texto que se muestra encima del campo de selección.
- * @param options La lista de opciones (strings) para mostrar en el menú.
- * @param selectedOption El texto de la opción actualmente seleccionada.
- * @param onOptionSelected La función callback que se invoca cuando se selecciona una opción.
- * @param placeholder El texto que se muestra cuando no hay ninguna opción seleccionada.
- * @param modifier El modificador a aplicar al componente.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDropdown(
@@ -45,73 +47,99 @@ fun AppDropdown(
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
+    val density = LocalDensity.current
 
     Column(modifier = modifier) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            //modifier = Modifier.padding(bottom = 4.dp)
+            style = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 12.sp),
+            modifier = Modifier.padding(start = 12.dp)
         )
 
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded },
+        Box(
+            modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
+                value = selectedOption,
+                onValueChange = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .menuAnchor(),
-                readOnly = true,
-                value = selectedOption.ifEmpty { placeholder },
-                onValueChange = {},
+                    .onSizeChanged { textFieldSize = it }
+                    .defaultMinSize(minHeight = 50.dp),
+                placeholder = { Text(placeholder, fontSize = 14.sp) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = MaterialTheme.colorScheme.secondary,
-                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                    disabledTextColor = MaterialTheme.colorScheme.outline,
-                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.outline,
-                    focusedPlaceholderColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                ),
+                readOnly = true,
+                enabled = false,
                 shape = MaterialTheme.shapes.medium,
-                textStyle = MaterialTheme.typography.bodyLarge
+
+                textStyle = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 14.sp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.secondary,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.extended.neutral400,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             )
 
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        expanded = true
+                    }
+            )
 
-                modifier = Modifier.background(Color.Transparent, MaterialTheme.shapes.large)
-            ) {
+            if (expanded) {
+                val textFieldWidthInDp = with(density) { textFieldSize.width.toDp() }
+                val textFieldHeightInDp = with(density) { textFieldSize.height.toDp() }
 
-                Surface(
-
-                    shape = MaterialTheme.shapes.medium,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                    color = MaterialTheme.colorScheme.background,
-                    shadowElevation = 4.dp
+                Popup(
+                    alignment = Alignment.TopCenter,
+                    onDismissRequest = { expanded = false },
+                    properties = PopupProperties(
+                        focusable = true,
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true
+                    )
                 ) {
-                    Column {
-                        options.forEach { selectionOption ->
-                            val isSelected = selectionOption == selectedOption
-                            DropdownMenuItem(
-                                text = { Text(selectionOption, style = MaterialTheme.typography.bodyLarge) },
-                                onClick = {
-                                    onOptionSelected(selectionOption)
-                                    expanded = false
-                                },
-                                colors = MenuDefaults.itemColors(
-
-                                    textColor = if (isSelected) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.secondary
-                                ),
-                                modifier = Modifier
-
-                                    .background(
-                                        color = if (isSelected) MaterialTheme.colorScheme.tertiaryContainer else Color.Transparent
-                                    ),
-
-                            )
+                    Card(
+                        modifier = Modifier
+                            .padding(top = textFieldHeightInDp + 12.dp)
+                            .width(textFieldWidthInDp),
+                        shape = MaterialTheme.shapes.medium,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.background
+                        )
+                    ) {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            options.forEach { selectionOption ->
+                                val isSelected = selectionOption == selectedOption
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .defaultMinSize(minHeight = 50.dp)
+                                        .clickable {
+                                            onOptionSelected(selectionOption)
+                                            expanded = false
+                                        }
+                                        .background(
+                                            color = if (isSelected) MaterialTheme.colorScheme.tertiaryContainer else Color.Transparent
+                                        )
+                                        .padding(horizontal = 16.dp),
+                                    contentAlignment = Alignment.CenterStart
+                                ) {
+                                    Text(
+                                        text = selectionOption,
+                                        style = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 14.sp),
+                                        color = if (isSelected) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.secondary,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -119,4 +147,3 @@ fun AppDropdown(
         }
     }
 }
-
