@@ -19,6 +19,17 @@ kotlinStdlib = "2.2.20"
 runner = "1.5.2"
 core = "1.5.0"
 icons = "1.6.10"
+androidDesugarJdkLibs = "2.1.5"
+androidTools = "31.12.0"
+composeBom = "2025.07.00"
+material-icons = "1.7.3"
+
+projectApplicationId = "com.toteat.designsystemmobile"
+projectVersionName = "1.0"
+projectMinSdkVersion = "24"
+projectTargetSdkVersion = "36"
+projectCompileSdkVersion = "36"
+projectVersionCode = "1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -38,7 +49,16 @@ androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 jetbrains-compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-jetbrains" }
 jetbrains-compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-jetbrains" }
 jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-jetbrains" }
-material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "icons" }
+material-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material-icons" }
+compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+jetbrains-compose-material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "material-icons"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -49,3 +69,9 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLint = { id = "com.android.lint", version.ref = "agp" }
+
+convention-android-application = { id = "com.toteat.convention.android.application", version = "unspecified" }
+convention-android-application-compose = { id = "com.toteat.convention.android.application.compose", version = "unspecified" }
+convention-cmp-application = { id = "com.toteat.convention.cmp.application", version = "unspecified" }
+convention-kmp-library = { id = "com.toteat.convention.kmp.library", version = "unspecified" }
+convention-cmp-library = { id = "com.toteat.convention.cmp.library", version = "unspecified" }
