@@ -1,6 +1,5 @@
 package com.toteat.designsystemmobile
 
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
@@ -35,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -45,6 +45,7 @@ import com.toteat.toteatds.components.TertiaryButton
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
+import com.toteat.toteatds.components.AppDropdown
 import com.toteat.toteatds.theme.ToteatTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -58,11 +59,11 @@ data class ComponentShowcaseItem(
 @Composable
 @Preview
 fun App() {
-
-    ToteatTheme() {
+    ToteatTheme {
         val componentList = remember {
             mutableStateListOf(
-                ComponentShowcaseItem(title = "Buttons"), // Inicia expandido
+                ComponentShowcaseItem(title = "Buttons", isExpanded = true), // Inicia expandido
+                ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
                 ComponentShowcaseItem(title = "Cards")
             )
@@ -90,7 +91,6 @@ fun App() {
                 itemsIndexed(componentList) { index, item ->
                     ComponentShowcaseSection(
                         item = item,
-
                         onClick = {
                             // Al hacer clic, creamos una copia del item con el estado 'isExpanded' invertido
                             componentList[index] = item.copy(isExpanded = !item.isExpanded)
@@ -107,7 +107,11 @@ fun ComponentShowcaseSection(
     item: ComponentShowcaseItem,
     onClick: () -> Unit
 ) {
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background), border = BorderStroke(1.dp,MaterialTheme.colorScheme.outline), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
         Column {
             // Cabecera de la sección (ej. "Buttons")
             SectionHeader(
@@ -116,12 +120,11 @@ fun ComponentShowcaseSection(
                 onClick = onClick
             )
 
-            // Contenido expandible
             AnimatedVisibility(visible = item.isExpanded) {
-                // Aquí decidimos qué componentes mostrar según el título de la sección
                 when (item.title) {
                     "Buttons" -> ButtonShowcase()
                     "Inputs" -> InputShowcase()
+                    "Dropdowns" -> DropdownShowcase()
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -168,7 +171,6 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Secondary Buttons ---
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null) })
@@ -176,7 +178,6 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Tertiary Buttons ---
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
@@ -232,6 +233,41 @@ fun InputShowcase() {
             selectedDialCode = selectedDialCode.value,
             dialCodeOptions = dialCodes,
             onDialCodeChange = { selectedDialCode.value = it }
+        )
+    }
+}
+
+@Composable
+fun DropdownShowcase() {
+    var selectedOption by remember { mutableStateOf("") }
+    val options = listOf("Mesero 1", "Mesero 2", "Mesero 3")
+
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        AppDropdown(
+            label = "Meseros turno",
+            options = options,
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it }
+        )
+    }
+}
+
+fun DropdownShowcase() {
+    var selectedOption by remember { mutableStateOf("") }
+    val options = listOf("Mesero 1", "Mesero 2", "Mesero 3")
+
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        AppDropdown(
+            label = "Meseros turno",
+            options = options,
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it }
         )
     }
 }
