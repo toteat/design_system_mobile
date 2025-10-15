@@ -271,11 +271,10 @@ fun MyShowroomScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // --- ¡Así se implementa! ---
         WelcomeMessage(
 
             imageVector = Icons.Default.WavingHand,
-            userName = "Joaquín",
+            userName = "Jhon Doe",
             message = "Sesión iniciada con éxito"
         )
     }
