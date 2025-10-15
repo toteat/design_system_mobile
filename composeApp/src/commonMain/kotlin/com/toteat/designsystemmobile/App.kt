@@ -51,8 +51,6 @@ import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
 import com.toteat.toteatds.components.AppDropdown
 import com.toteat.toteatds.theme.ToteatTheme
-import designsystemmobile.composeapp.generated.resources.Res
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 // Data class para representar cada sección de componentes en nuestra lista
@@ -71,8 +69,7 @@ fun App() {
                 ComponentShowcaseItem(title = "Buttons", isExpanded = true), // Inicia expandido
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
-                ComponentShowcaseItem(title = "MessageView"),
-                ComponentShowcaseItem(title = "Cards")
+                ComponentShowcaseItem(title = "MessageView")
             )
         }
 
@@ -133,7 +130,6 @@ fun ComponentShowcaseSection(
                     "Inputs" -> InputShowcase()
                     "Dropdowns" -> DropdownShowcase()
                     "MessageView" -> MyShowroomScreen()
-                    "Cards" -> DropdownShowcase()
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
