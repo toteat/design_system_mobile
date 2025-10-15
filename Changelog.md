@@ -7,6 +7,7 @@ Showroom View: Component presentation view for showcasing the library on a devic
 Added
 - Button Component: Added PrimaryButton, SecondaryButton, and TertiaryButton components with normal, pressed, and disabled states.
 Showroom View: Component presentation view for showcasing the library on a device.
+- Build Logic module: Added the new module to centralize the module dependency management.
 - Dropdown Component: Added custom AppDropdown component with a text field anchor, a selectable list of options in a popup menu, and placeholder support.
 ## [0.0.1] - 2025-10-7
 ### Added
