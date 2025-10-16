@@ -84,7 +84,8 @@ fun App() {
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Segmented Tabs"),
                 ComponentShowcaseItem(title = "MessageView"),
-                ComponentShowcaseItem(title = "Brand")
+                ComponentShowcaseItem(title = "Brand"),
+                ComponentShowcaseItem(title = "Segmented Tabs"),
             )
         }
 
@@ -145,6 +146,7 @@ fun ComponentShowcaseSection(
                     "Segmented Tabs" -> SegmentedTabsShowcase()
                     "MessageView" -> MyShowroomScreen()
                     "Brand" -> BrandShowcase()
+
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -258,6 +260,8 @@ fun InputShowcase() {
         )
     }
 }
+
+
 
 @Composable
 fun DropdownShowcase() {
