@@ -41,15 +41,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.AppDropdown
 import com.toteat.toteatds.components.Buttons.PrimaryButton
 import com.toteat.toteatds.components.Buttons.SecondaryButton
 import com.toteat.toteatds.components.Buttons.TertiaryButton
+import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
+import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
+import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
+import com.toteat.toteatds.components.brand.logo.ToteatLogoBlackAndCream
+import com.toteat.toteatds.components.brand.logo.ToteatLogoCreamOrange
+import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
-import com.toteat.toteatds.components.AppDropdown
 import com.toteat.toteatds.theme.ToteatTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -66,10 +71,11 @@ fun App() {
     ToteatTheme {
         val componentList = remember {
             mutableStateListOf(
-                ComponentShowcaseItem(title = "Buttons", isExpanded = true), // Inicia expandido
+                ComponentShowcaseItem(title = "Buttons"),
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
-                ComponentShowcaseItem(title = "MessageView")
+                ComponentShowcaseItem(title = "MessageView"),
+                ComponentShowcaseItem(title = "Brand")
             )
         }
 
@@ -130,6 +136,7 @@ fun ComponentShowcaseSection(
                     "Inputs" -> InputShowcase()
                     "Dropdowns" -> DropdownShowcase()
                     "MessageView" -> MyShowroomScreen()
+                    "Brand" -> BrandShowcase()
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -260,6 +267,36 @@ fun DropdownShowcase() {
     }
 }
 
+@Composable
+fun BrandShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        // Logos
+        Text("Logos", style = MaterialTheme.typography.titleMedium)
+        Text("Original", style = MaterialTheme.typography.bodyMedium)
+        ToteatLogoOriginal()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Black and Cream", style = MaterialTheme.typography.bodyMedium)
+        ToteatLogoBlackAndCream()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Cream and Orange", style = MaterialTheme.typography.bodyMedium)
+        ToteatLogoCreamOrange()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        // Isotipos
+        Text("Isotipos", style = MaterialTheme.typography.titleMedium)
+        Text("Original", style = MaterialTheme.typography.bodyMedium)
+        ToteatIsoOriginal()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Black and Cream", style = MaterialTheme.typography.bodyMedium)
+        ToteatIsoBlackAndCream()
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Cream and Orange", style = MaterialTheme.typography.bodyMedium)
+        ToteatIsoCreamOrange()
+    }
+}
 
 @Composable
 fun MyShowroomScreen() {
