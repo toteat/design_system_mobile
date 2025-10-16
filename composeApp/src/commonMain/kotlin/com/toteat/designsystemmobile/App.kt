@@ -80,6 +80,9 @@ fun App() {
                 ComponentShowcaseItem(title = "Buttons"),
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
+                ComponentShowcaseItem(title = "Cards"),
+                ComponentShowcaseItem(title = "Dropdowns"),
+                ComponentShowcaseItem(title = "Segmented Tabs"),
                 ComponentShowcaseItem(title = "MessageView"),
                 ComponentShowcaseItem(title = "Brand")
             )
@@ -123,11 +126,7 @@ fun ComponentShowcaseSection(
     item: ComponentShowcaseItem,
     onClick: () -> Unit
 ) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-    ) {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background), border = BorderStroke(1.dp,MaterialTheme.colorScheme.outline), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)) {
         Column {
             // Cabecera de la sección (ej. "Buttons")
             SectionHeader(
@@ -136,7 +135,9 @@ fun ComponentShowcaseSection(
                 onClick = onClick
             )
 
+            // Contenido expandible
             AnimatedVisibility(visible = item.isExpanded) {
+                // Aquí decidimos qué componentes mostrar según el título de la sección
                 when (item.title) {
                     "Buttons" -> ButtonShowcase()
                     "Inputs" -> InputShowcase()
@@ -190,6 +191,7 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
+        // --- Secondary Buttons ---
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null) })
@@ -197,6 +199,7 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
+        // --- Tertiary Buttons ---
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
