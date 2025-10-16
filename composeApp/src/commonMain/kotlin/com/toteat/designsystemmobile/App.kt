@@ -71,7 +71,9 @@ fun App() {
             mutableStateListOf(
                 ComponentShowcaseItem(title = "Buttons"), // Inicia expandido
                 ComponentShowcaseItem(title = "Inputs"),
-                ComponentShowcaseItem(title = "Cards")
+                ComponentShowcaseItem(title = "Cards"),
+                ComponentShowcaseItem(title = "Dropdowns"),
+                ComponentShowcaseItem(title = "Segmented Tabs")
             )
         }
 
