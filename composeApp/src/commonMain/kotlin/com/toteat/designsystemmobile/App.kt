@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 
+
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
 import com.toteat.toteatds.components.Buttons.PrimaryButton
 import com.toteat.toteatds.components.Buttons.SecondaryButton
@@ -71,7 +72,6 @@ fun App() {
             mutableStateListOf(
                 ComponentShowcaseItem(title = "Buttons"), // Inicia expandido
                 ComponentShowcaseItem(title = "Inputs"),
-                ComponentShowcaseItem(title = "Cards"),
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Segmented Tabs")
             )
