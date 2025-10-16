@@ -1,18 +1,30 @@
-package com.toteat.toteatds.components.Buttons
+package com.toteat.toteatds.components.buttons
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.toteat.toteatds.theme.*
+import com.toteat.toteatds.theme.NeutralGray
+import com.toteat.toteatds.theme.NeutralGray300
+import com.toteat.toteatds.theme.NeutralGray400
+import com.toteat.toteatds.theme.NeutralGray500
+import com.toteat.toteatds.theme.PrimaryLight
+import com.toteat.toteatds.theme.SecondaryNormal
 
 
 private val ButtonShape = RoundedCornerShape(50)

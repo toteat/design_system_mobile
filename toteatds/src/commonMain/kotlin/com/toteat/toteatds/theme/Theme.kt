@@ -20,13 +20,17 @@ data class ExtendedColors(
     //TextField states
     val isSuccess: Color,
     val isWarning: Color,
+    val neutral100: Color,
     val neutral400: Color,
+    val neutral500: Color,
 )
 
 val LightExtendedColors = ExtendedColors(
     isSuccess = GreenNormal,
     isWarning = WarningDark,
+    neutral100 = NeutralGray100,
     neutral400 = NeutralGray400,
+    neutral500 = NeutralGray500,
 )
 
 val LightColorScheme = lightColorScheme(
