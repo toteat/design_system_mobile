@@ -28,7 +28,7 @@ import org.jetbrains.compose.resources.painterResource
  */
 @Composable
 fun WelcomeMessage(
-    imageVector: ImageVector, // El tipo es correcto
+    imageVector: ImageVector,
     userName: String,
     message: String,
     modifier: Modifier = Modifier
@@ -38,7 +38,7 @@ fun WelcomeMessage(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // La corrección clave está aquí
+
         Image(
             imageVector = imageVector,
             contentDescription = "Welcome Icon",
