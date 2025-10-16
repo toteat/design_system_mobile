@@ -1,5 +1,6 @@
 package com.toteat.designsystemmobile
 
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -31,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +43,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
+
+import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
 import com.toteat.toteatds.components.Buttons.PrimaryButton
 import com.toteat.toteatds.components.Buttons.SecondaryButton
 import com.toteat.toteatds.components.Buttons.TertiaryButton
@@ -59,11 +65,11 @@ data class ComponentShowcaseItem(
 @Composable
 @Preview
 fun App() {
-    ToteatTheme {
+
+    ToteatTheme() {
         val componentList = remember {
             mutableStateListOf(
-                ComponentShowcaseItem(title = "Buttons", isExpanded = true), // Inicia expandido
-                ComponentShowcaseItem(title = "Dropdowns"),
+                ComponentShowcaseItem(title = "Buttons"), // Inicia expandido
                 ComponentShowcaseItem(title = "Inputs"),
                 ComponentShowcaseItem(title = "Cards")
             )
@@ -91,6 +97,7 @@ fun App() {
                 itemsIndexed(componentList) { index, item ->
                     ComponentShowcaseSection(
                         item = item,
+
                         onClick = {
                             // Al hacer clic, creamos una copia del item con el estado 'isExpanded' invertido
                             componentList[index] = item.copy(isExpanded = !item.isExpanded)
@@ -107,11 +114,7 @@ fun ComponentShowcaseSection(
     item: ComponentShowcaseItem,
     onClick: () -> Unit
 ) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-    ) {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background), border = BorderStroke(1.dp,MaterialTheme.colorScheme.outline), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)) {
         Column {
             // Cabecera de la sección (ej. "Buttons")
             SectionHeader(
@@ -120,11 +123,14 @@ fun ComponentShowcaseSection(
                 onClick = onClick
             )
 
+            // Contenido expandible
             AnimatedVisibility(visible = item.isExpanded) {
+                // Aquí decidimos qué componentes mostrar según el título de la sección
                 when (item.title) {
                     "Buttons" -> ButtonShowcase()
                     "Inputs" -> InputShowcase()
                     "Dropdowns" -> DropdownShowcase()
+                    "Segmented Tabs" -> SegmentedTabsShowcase()
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -171,6 +177,7 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
+        // --- Secondary Buttons ---
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null) })
@@ -178,6 +185,7 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
+        // --- Tertiary Buttons ---
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
@@ -256,4 +264,37 @@ fun DropdownShowcase() {
 }
 
 
+
+@Composable
+fun SegmentedTabsShowcase() {
+    // 1. Define las opciones y el estado de la selección
+    val tabs = listOf("Resumen cuenta", "Información mesa")
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // 2. Llama a tu componente
+        SegmentedTabs(
+            items = tabs,
+            selectedIndex = selectedTabIndex,
+            onTabSelected = { index ->
+                // Cuando el usuario selecciona una pestaña, actualizamos el estado
+                selectedTabIndex = index
+            }
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // 3. (Opcional) Muestra un contenido diferente según la selección
+        when (selectedTabIndex) {
+            0 -> Text("Mostrando el contenido de Resumen de Cuenta...")
+            1 -> Text("Mostrando el contenido de Información de Mesa...")
+        }
+    }
+}
 
