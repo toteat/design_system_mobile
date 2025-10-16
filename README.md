@@ -1,48 +1,102 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
+# Toteat Design System (toteatds)
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+This repository contains Toteat’s mobile Design System implemented with Kotlin Multiplatform and Compose Multiplatform. Its goal is to provide a reusable UI library of components, tokens (colors, typography, spacing), and theming utilities to be consumed by the main Toteat project and any other internal apps that need it.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+- Library module: `:toteatds`
+- Demo/Showcase: `:composeApp` (used to preview and validate Design System components)
+- Platforms: Android and iOS (KMP)
 
-### Build and Run Android Application
+## How it’s consumed by the main project
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+The Design System is used as a library that supplies components to Toteat’s main app. There are two ways to integrate it:
 
-### Build and Run Desktop (JVM) Application
+1) Module dependency (monorepo)
+- If the main project lives in the same repository, add the module dependency directly:
+```kotlin
+dependencies {
+    implementation(project(":toteatds"))
+}
+```
 
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
+2) Published dependency (artifact repository)
+- If it’s published to an internal/external repository (example):
+```kotlin
+dependencies {
+    implementation("com.toteat:toteatds:<version>")
+}
+```
 
-### Build and Run iOS Application
+## Basic usage
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+- Global theme
+```kotlin
+ToteatTheme {
+    // Your UI
+}
+```
+
+- Components
+```kotlin
+PrimaryButton(text = "Continue", onClick = { /* ... */ })
+ToteatTextField(value = state, onValueChange = { /* ... */ }, label = "Email")
+```
+
+See more examples in `composeApp/src/.../App.kt`, which showcases Buttons, Dropdowns, Inputs, Cards, and more.
+
+## How to run the project
+
+Prerequisites
+- macOS, Windows, or Linux for Android/Desktop; macOS for iOS.
+- Android Studio latest stable (Koala+ recommended) with Kotlin plugin.
+- JDK 17 configured (AGP 8.x requires JDK 17; the project targets Java 11 bytecode).
+- Android SDK 36 with an emulator or a physical device.
+- Xcode 15+ for iOS Simulator or device (macOS only).
+
+1) Clone and open
+- Clone the repo and open it with Android Studio.
+- Let Gradle sync finish. Ensure the IDE uses JDK 17.
+
+2) Run on Android
+- From Android Studio: select the "composeApp" run configuration, choose an emulator/device, and click Run.
+- Or via terminal:
+```
+./gradlew :composeApp:installDebug
+```
+Then launch the app on the device/emulator.
+
+3) Run on iOS (Simulator)
+- Open `iosApp/iosApp.xcodeproj` in Xcode.
+- Select the `iosApp` scheme and pick an iOS Simulator (e.g., iPhone 15).
+- Press Run. If code signing warnings appear, set your Team in Signing & Capabilities for the `iosApp` target.
+
+4) Run Desktop (JVM)
+- From terminal:
+```
+./gradlew :composeApp:run
+```
+This runs the desktop target that previews the same UI as the mobile showcase.
+
+5) Build the Design System library only
+```
+./gradlew :toteatds:assemble
+```
+Artifacts will be in `toteatds/build/`.
+
+Common commands
+- Clean and build everything: `./gradlew clean build`
+- List tasks for a module: `./gradlew :composeApp:tasks`
+
+Troubleshooting
+- SDK not found: set `sdk.dir=/path/to/Android/sdk` in `local.properties`.
+- JDK mismatch: set Gradle JDK to 17 in Android Studio (Settings > Build > Gradle > Gradle JDK).
+- iOS build issues: ensure Xcode 15+, correct selected simulator, and valid signing for device builds.
+
+## Main packages
+- `com.toteat.toteatds.theme`: color/typography tokens and `ToteatTheme`.
+- `com.toteat.toteatds.components`: UI components (Buttons, TextFields, Dropdowns, Cards, etc.).
+
+## Maintenance and versioning
+- Changes and new versions are tracked in `Changelog.md`.
+- Aim to keep API compatibility across major versions whenever possible.
 
 ---
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
