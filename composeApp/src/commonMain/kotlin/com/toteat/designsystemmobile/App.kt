@@ -1,10 +1,12 @@
 package com.toteat.designsystemmobile
 
+import WelcomeMessage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.filled.WavingHand
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
@@ -38,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.Buttons.PrimaryButton
 import com.toteat.toteatds.components.Buttons.SecondaryButton
@@ -65,7 +69,7 @@ fun App() {
                 ComponentShowcaseItem(title = "Buttons", isExpanded = true), // Inicia expandido
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
-                ComponentShowcaseItem(title = "Cards")
+                ComponentShowcaseItem(title = "MessageView")
             )
         }
 
@@ -125,6 +129,7 @@ fun ComponentShowcaseSection(
                     "Buttons" -> ButtonShowcase()
                     "Inputs" -> InputShowcase()
                     "Dropdowns" -> DropdownShowcase()
+                    "MessageView" -> MyShowroomScreen()
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -256,4 +261,18 @@ fun DropdownShowcase() {
 }
 
 
+@Composable
+fun MyShowroomScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        WelcomeMessage(
+
+            imageVector = Icons.Default.WavingHand,
+            userName = "Jhon Doe",
+            message = "Sesión iniciada con éxito"
+        )
+    }
+}
 
