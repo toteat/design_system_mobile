@@ -30,8 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -55,10 +53,14 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
+import com.toteat.toteatds.components.topbar.BackNavigationTopBar
+import com.toteat.toteatds.components.topbar.CenterContentTopBar
+import com.toteat.toteatds.components.topbar.LoginTopBar
+import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
+import com.toteat.toteatds.components.topbar.RestaurantNameTopBarItem
 import com.toteat.toteatds.theme.ToteatTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// Data class para representar cada sección de componentes en nuestra lista
 data class ComponentShowcaseItem(
     val title: String,
     var isExpanded: Boolean = false
@@ -72,6 +74,7 @@ fun App() {
         val componentList = remember {
             mutableStateListOf(
                 ComponentShowcaseItem(title = "Buttons"),
+                ComponentShowcaseItem(title = "TopBars"),
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
                 ComponentShowcaseItem(title = "MessageView"),
@@ -81,12 +84,10 @@ fun App() {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text("Design System Showcase") },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                CenterContentTopBar(
+                    content = {
+                        ProcessNameTopBarItem("Design System Showcase")
+                    }
                 )
             },
 
@@ -133,6 +134,7 @@ fun ComponentShowcaseSection(
             AnimatedVisibility(visible = item.isExpanded) {
                 when (item.title) {
                     "Buttons" -> ButtonShowcase()
+                    "TopBars" -> TopBarShowcase()
                     "Inputs" -> InputShowcase()
                     "Dropdowns" -> DropdownShowcase()
                     "MessageView" -> MyShowroomScreen()
@@ -295,6 +297,38 @@ fun BrandShowcase() {
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
         Text("Cream and Orange", style = MaterialTheme.typography.bodyMedium)
         ToteatIsoCreamOrange()
+    }
+}
+
+@Composable
+fun TopBarShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Back Navigation", style = MaterialTheme.typography.titleMedium)
+        BackNavigationTopBar(onNavigateBackClick = {})
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Login", style = MaterialTheme.typography.titleMedium)
+        LoginTopBar(onMenuIconClick = {}, onCustomerServiceButtonClick = {})
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Center content: Restaurant", style = MaterialTheme.typography.titleMedium)
+        CenterContentTopBar {
+            RestaurantNameTopBarItem(
+                restaurantName = "Kintaro ramen bar",
+                counter = "2"
+            )
+        }
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Center content: Process", style = MaterialTheme.typography.titleMedium)
+        CenterContentTopBar {
+            ProcessNameTopBarItem(
+                processName = "Checkout"
+            )
+        }
     }
 }
 
