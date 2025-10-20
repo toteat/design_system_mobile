@@ -46,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
-
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
 import com.toteat.toteatds.components.Buttons.PrimaryButton
 import com.toteat.toteatds.components.Buttons.SecondaryButton
@@ -126,7 +125,11 @@ fun ComponentShowcaseSection(
     item: ComponentShowcaseItem,
     onClick: () -> Unit
 ) {
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background), border = BorderStroke(1.dp,MaterialTheme.colorScheme.outline), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
         Column {
             // Cabecera de la sección (ej. "Buttons")
             SectionHeader(
@@ -135,9 +138,7 @@ fun ComponentShowcaseSection(
                 onClick = onClick
             )
 
-            // Contenido expandible
             AnimatedVisibility(visible = item.isExpanded) {
-                // Aquí decidimos qué componentes mostrar según el título de la sección
                 when (item.title) {
                     "Buttons" -> ButtonShowcase()
                     "Inputs" -> InputShowcase()
@@ -192,7 +193,6 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Secondary Buttons ---
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null) })
@@ -200,7 +200,6 @@ fun ButtonShowcase() {
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Tertiary Buttons ---
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
@@ -259,8 +258,6 @@ fun InputShowcase() {
         )
     }
 }
-
-
 
 @Composable
 fun DropdownShowcase() {
@@ -325,6 +322,9 @@ fun MyShowroomScreen() {
         )
     }
 }
+
+
+
 
 @Composable
 fun SegmentedTabsShowcase() {
