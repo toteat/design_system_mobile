@@ -1,4 +1,4 @@
-package com.toteat.toteatds.components
+package com.toteat.toteatds.components.DropDowns
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
