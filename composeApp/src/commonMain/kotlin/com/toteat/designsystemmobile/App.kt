@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -32,6 +34,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +43,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.components.AppDropdown
+import com.toteat.toteatds.components.DropDowns.AppDropdown
+import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
 import com.toteat.toteatds.components.Buttons.PrimaryButton
 import com.toteat.toteatds.components.Buttons.SecondaryButton
 import com.toteat.toteatds.components.Buttons.TertiaryButton
@@ -77,8 +81,12 @@ fun App() {
                 ComponentShowcaseItem(title = "TopBars"),
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
+                ComponentShowcaseItem(title = "Cards"),
+                ComponentShowcaseItem(title = "Dropdowns"),
+                ComponentShowcaseItem(title = "Segmented Tabs"),
                 ComponentShowcaseItem(title = "MessageView"),
-                ComponentShowcaseItem(title = "Brand")
+                ComponentShowcaseItem(title = "Brand"),
+                ComponentShowcaseItem(title = "Segmented Tabs"),
             )
         }
 
@@ -137,8 +145,10 @@ fun ComponentShowcaseSection(
                     "TopBars" -> TopBarShowcase()
                     "Inputs" -> InputShowcase()
                     "Dropdowns" -> DropdownShowcase()
+                    "Segmented Tabs" -> SegmentedTabsShowcase()
                     "MessageView" -> MyShowroomScreen()
                     "Brand" -> BrandShowcase()
+
                     else -> Text(
                         text = "Componentes próximamente...",
                         style = MaterialTheme.typography.bodyMedium,
@@ -344,6 +354,42 @@ fun MyShowroomScreen() {
             userName = "Jhon Doe",
             message = "Sesión iniciada con éxito"
         )
+    }
+}
+
+
+
+
+@Composable
+fun SegmentedTabsShowcase() {
+    // 1. Define las opciones y el estado de la selección
+    val tabs = listOf("Resumen cuenta", "Información mesa")
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // 2. Llama a tu componente
+        SegmentedTabs(
+            items = tabs,
+            selectedIndex = selectedTabIndex,
+            onTabSelected = { index ->
+                // Cuando el usuario selecciona una pestaña, actualizamos el estado
+                selectedTabIndex = index
+            }
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // 3. (Opcional) Muestra un contenido diferente según la selección
+        when (selectedTabIndex) {
+            0 -> Text("Mostrando el contenido de Resumen de Cuenta...")
+            1 -> Text("Mostrando el contenido de Información de Mesa...")
+        }
     }
 }
 
