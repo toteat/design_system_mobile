@@ -4,6 +4,7 @@ import WelcomeMessage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
@@ -59,6 +61,8 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
+import com.toteat.toteatds.components.toast.ToteatToastMessage
+import com.toteat.toteatds.components.toast.ToteatToastMessageType
 import com.toteat.toteatds.theme.ToteatTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -79,11 +83,10 @@ fun App() {
                 ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Inputs"),
                 ComponentShowcaseItem(title = "Cards"),
-                ComponentShowcaseItem(title = "Dropdowns"),
                 ComponentShowcaseItem(title = "Segmented Tabs"),
                 ComponentShowcaseItem(title = "MessageView"),
                 ComponentShowcaseItem(title = "Brand"),
-                ComponentShowcaseItem(title = "Segmented Tabs"),
+                ComponentShowcaseItem(title = "Toast"),
             )
         }
 
@@ -110,7 +113,6 @@ fun App() {
                     ComponentShowcaseSection(
                         item = item,
                         onClick = {
-                            // Al hacer clic, creamos una copia del item con el estado 'isExpanded' invertido
                             componentList[index] = item.copy(isExpanded = !item.isExpanded)
                         }
                     )
@@ -131,7 +133,6 @@ fun ComponentShowcaseSection(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column {
-            // Cabecera de la sección (ej. "Buttons")
             SectionHeader(
                 title = item.title,
                 isExpanded = item.isExpanded,
@@ -146,6 +147,7 @@ fun ComponentShowcaseSection(
                     "Segmented Tabs" -> SegmentedTabsShowcase()
                     "MessageView" -> MyShowroomScreen()
                     "Brand" -> BrandShowcase()
+                    "Toast" -> ToastShowcase()
 
                     else -> Text(
                         text = "Componentes próximamente...",
@@ -273,6 +275,40 @@ fun DropdownShowcase() {
             options = options,
             selectedOption = selectedOption,
             onOptionSelected = { selectedOption = it }
+        )
+    }
+}
+
+@Composable
+fun ToastShowcase() {
+    Column(modifier = Modifier.fillMaxSize()
+        .background(Color.White)
+        .padding(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        ToteatToastMessage(
+            title = "Error",
+            message = "This is an error message.",
+            type = ToteatToastMessageType.Error,
+            onDismiss = {}
+        )
+        ToteatToastMessage(
+            title = "Success",
+            message = "This is an error message.",
+            type = ToteatToastMessageType.Success,
+            onDismiss = {}
+        )
+        ToteatToastMessage(
+            title = "Warning",
+            message = "This is a warning message.",
+            type = ToteatToastMessageType.Warning,
+            onDismiss = {}
+        )
+        ToteatToastMessage(
+            title = "Info",
+            message = "This is an info message.",
+            type = ToteatToastMessageType.Info,
+            onDismiss = {}
         )
     }
 }
