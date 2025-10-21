@@ -55,7 +55,7 @@ fun ToteatButtonTable(
     val contentColor: Color = if (isOccupied) NeutralGray else NeutralGray400
 
     Card(
-        modifier = modifier.size(width = 106.dp, height = 80.dp),
+        modifier = modifier.size(width = 108.dp, height = 80.dp),
         onClick = onClick,
         enabled = isOccupied,
         colors = CardDefaults.cardColors(

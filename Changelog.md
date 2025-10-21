@@ -14,7 +14,7 @@ Showroom View: Component presentation view for showcasing the library on a devic
 - Added TopBars
 - Squared and Rectangle button component added.
 - added Toast Component
-
+- Add table button
 ## [0.0.1] - 2025-10-7
 ### Added
 Initial Setup: Creation of the Kotlin Multiplatform library module (toteatds) with support for Android, iOS, and JVM.
