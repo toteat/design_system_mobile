@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -47,9 +48,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
-import com.toteat.toteatds.components.Buttons.PrimaryButton
-import com.toteat.toteatds.components.Buttons.SecondaryButton
-import com.toteat.toteatds.components.Buttons.TertiaryButton
+import com.toteat.toteatds.components.buttons.PrimaryButton
+import com.toteat.toteatds.components.buttons.SecondaryButton
+import com.toteat.toteatds.components.buttons.TertiaryButton
+import com.toteat.toteatds.components.buttons.ToteatRectangleButton
+import com.toteat.toteatds.components.buttons.ToteatSquareButton
+import com.toteat.toteatds.components.icons.TotalPaymentsIcon
+import com.toteat.toteatds.components.icons.SplitPaymentIcon
+import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
@@ -210,6 +216,39 @@ fun ButtonShowcase() {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
             TertiaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
+        }
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        // --- Botones de pago ---
+        Text("Payment Buttons", style = MaterialTheme.typography.titleMedium)
+
+        // Rectangle button
+        ToteatRectangleButton(
+            title = "Pago total",
+            subTitle = "de la cuenta",
+            icon = { TotalPaymentsIcon() },
+            onClick = {}
+        )
+
+        // Two square buttons below
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ToteatSquareButton(
+                title = "Dividir pago",
+                subTitle = "En partes iguales",
+                icon = { SplitPaymentIcon() },
+                onClick = {}
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            ToteatSquareButton(
+                title = "Pagos por",
+                subTitle = "montos diferentes",
+                icon = { DifferentAmountPaymentsIcon() },
+                onClick = {}
+            )
         }
     }
 }

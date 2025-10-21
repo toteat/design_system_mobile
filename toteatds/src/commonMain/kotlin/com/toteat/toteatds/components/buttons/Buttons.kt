@@ -1,4 +1,4 @@
-package com.toteat.toteatds.components.Buttons
+package com.toteat.toteatds.components.buttons
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
