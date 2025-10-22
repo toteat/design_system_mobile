@@ -53,9 +53,11 @@ import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
 import com.toteat.toteatds.components.brand.logo.ToteatLogoBlackAndCream
 import com.toteat.toteatds.components.brand.logo.ToteatLogoCreamOrange
 import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
+import com.toteat.toteatds.components.buttons.ButtonTableStatus
 import com.toteat.toteatds.components.buttons.PrimaryButton
 import com.toteat.toteatds.components.buttons.SecondaryButton
 import com.toteat.toteatds.components.buttons.TertiaryButton
+import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
@@ -66,8 +68,6 @@ import com.toteat.toteatds.components.topbar.CenterContentTopBar
 import com.toteat.toteatds.components.topbar.LoginTopBar
 import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
 import com.toteat.toteatds.components.topbar.RestaurantNameTopBarItem
-import com.toteat.toteatds.components.toast.ToteatToastMessage
-
 import com.toteat.toteatds.theme.ToteatTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -210,6 +210,25 @@ fun ButtonShowcase() {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
             TertiaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
+        }
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Tables", style = MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToteatButtonTable(
+                tableName = "Mesa S7",
+                waiterName = "Jaime",
+                occupationTime = "16:02 hrs",
+                tableStatus = ButtonTableStatus.OCCUPIED,
+                onClick = {}
+            )
+            ToteatButtonTable(
+                tableName = "Mesa S10",
+                waiterName = "Disponible",
+                occupationTime = "-",
+                tableStatus = ButtonTableStatus.AVAILABLE,
+                onClick = {}
+            )
         }
     }
 }
