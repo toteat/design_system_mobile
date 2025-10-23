@@ -269,25 +269,6 @@ fun ButtonShowcase() {
                 onClick = {}
             )
         }
-        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
-
-        Text("Tables", style = MaterialTheme.typography.titleMedium)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ToteatButtonTable(
-                tableName = "Mesa S7",
-                waiterName = "Jaime",
-                occupationTime = "16:02 hrs",
-                tableStatus = ButtonTableStatus.OCCUPIED,
-                onClick = {}
-            )
-            ToteatButtonTable(
-                tableName = "Mesa S10",
-                waiterName = "Disponible",
-                occupationTime = "-",
-                tableStatus = ButtonTableStatus.AVAILABLE,
-                onClick = {}
-            )
-        }
     }
 }
 
