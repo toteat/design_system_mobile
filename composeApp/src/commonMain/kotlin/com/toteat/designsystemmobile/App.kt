@@ -48,14 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
-import com.toteat.toteatds.components.buttons.PrimaryButton
-import com.toteat.toteatds.components.buttons.SecondaryButton
-import com.toteat.toteatds.components.buttons.TertiaryButton
-import com.toteat.toteatds.components.buttons.ToteatRectangleButton
-import com.toteat.toteatds.components.buttons.ToteatSquareButton
-import com.toteat.toteatds.components.icons.TotalPaymentsIcon
-import com.toteat.toteatds.components.icons.SplitPaymentIcon
-import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
@@ -67,6 +59,11 @@ import com.toteat.toteatds.components.buttons.PrimaryButton
 import com.toteat.toteatds.components.buttons.SecondaryButton
 import com.toteat.toteatds.components.buttons.TertiaryButton
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
+import com.toteat.toteatds.components.buttons.ToteatRectangleButton
+import com.toteat.toteatds.components.buttons.ToteatSquareButton
+import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
+import com.toteat.toteatds.components.icons.SplitPaymentIcon
+import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
@@ -250,6 +247,25 @@ fun ButtonShowcase() {
                 title = "Pagos por",
                 subTitle = "montos diferentes",
                 icon = { DifferentAmountPaymentsIcon() },
+                onClick = {}
+            )
+        }
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Tables", style = MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToteatButtonTable(
+                tableName = "Mesa S7",
+                waiterName = "Jaime",
+                occupationTime = "16:02 hrs",
+                tableStatus = ButtonTableStatus.OCCUPIED,
+                onClick = {}
+            )
+            ToteatButtonTable(
+                tableName = "Mesa S10",
+                waiterName = "Disponible",
+                occupationTime = "-",
+                tableStatus = ButtonTableStatus.AVAILABLE,
                 onClick = {}
             )
         }
