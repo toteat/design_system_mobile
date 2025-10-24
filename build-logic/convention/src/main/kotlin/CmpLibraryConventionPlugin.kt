@@ -1,4 +1,6 @@
 // CmpLibraryConventionPlugin.kt
+// package com.tu.organizacion.buildlogic // ← si tu build-logic usa package, colócalo aquí
+
 import com.toteat.designsystem.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,12 +17,10 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) = with(target) {
 
         with(pluginManager) {
-            // Asegúrate de tener estos plugins aquí (o en tu otro convention aplicado antes)
             apply("org.jetbrains.kotlin.multiplatform")
             apply("com.android.library")
             apply("org.jetbrains.kotlin.plugin.compose")
             apply("org.jetbrains.compose")
-
             apply("maven-publish")
         }
 
@@ -29,26 +29,30 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
             "commonMainImplementation"(libs.findLibrary("jetbrains-compose-foundation").get())
             "commonMainImplementation"(libs.findLibrary("jetbrains-compose-material3").get())
             "commonMainImplementation"(libs.findLibrary("jetbrains-compose-material-icons-core").get())
-
+            // tooling para Android (opcional)
             "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
         }
 
-        val libVersion = property("libVersion").toString() // p.ej. 0.1.1-SNAPSHOT
-        val libGroup   = property("libGroup").toString()   // p.ej. com.toteat.designsystem
+        val libVersion = property("libVersion").toString() // ej: 0.2.0-SNAPSHOT
+        val libGroup   = property("libGroup").toString()   // ej: com.toteat.designsystem
 
         extensions.configure<KotlinMultiplatformExtension> {
+            applyDefaultHierarchyTemplate()
+
             androidTarget {
-                publishLibraryVariants("debug", "release")
+                publishLibraryVariants("release")
             }
 
+            // Targets iOS
             iosArm64()
             iosX64()
             iosSimulatorArm64()
+
+
         }
 
 
         extensions.configure<LibraryExtension> {
-
             if (namespace == null) {
                 namespace = "${libGroup}.toteatds"
             }
@@ -56,11 +60,11 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
             defaultConfig { minSdk = 24 }
 
             publishing {
-                singleVariant("debug")  { withSourcesJar() }
-                singleVariant("release") { withSourcesJar() }
+                singleVariant("release") {
+                    withSourcesJar()
+                }
             }
         }
-
 
         extensions.configure<PublishingExtension> {
             publications {
@@ -74,6 +78,7 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
                     name = "GitHubPackages"
                     url = uri("https://maven.pkg.github.com/toteat/design_system_mobile")
                     credentials {
+
                         username = System.getenv("GITHUB_ACTOR") ?: findProperty("gpr.user")?.toString()
                         password = System.getenv("GITHUB_TOKEN") ?: findProperty("gpr.key")?.toString()
                     }
