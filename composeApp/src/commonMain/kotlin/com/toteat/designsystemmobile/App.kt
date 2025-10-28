@@ -33,6 +33,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -61,6 +62,7 @@ import com.toteat.toteatds.components.buttons.TertiaryButton
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
 import com.toteat.toteatds.components.buttons.ToteatSquareButton
+import com.toteat.toteatds.components.buttons.switchButtonContainer
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
@@ -98,6 +100,7 @@ fun App() {
                 ComponentShowcaseItem(title = "MessageView"),
                 ComponentShowcaseItem(title = "Brand"),
                 ComponentShowcaseItem(title = "Toast"),
+                ComponentShowcaseItem(title = "Switch container")
             )
         }
 
@@ -158,6 +161,7 @@ fun ComponentShowcaseSection(
                     "MessageView" -> MyShowroomScreen()
                     "Brand" -> BrandShowcase()
                     "Toast" -> ToastShowcase()
+                    "Switch container" -> SwitchButtonShowcase()
 
                     else -> Text(
                         text = "Componentes próximamente...",
@@ -341,6 +345,22 @@ fun DropdownShowcase() {
     }
 }
 
+@Composable
+fun SwitchButtonShowcase(){
+    var isChecked by remember { mutableStateOf(true)}
+
+    Column(modifier = Modifier.padding(16.dp)
+        .fillMaxSize()
+        .background(Color.White),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally){
+        switchButtonContainer(title = "Terminal compartido",
+            subtitle = "Esta opción es para POS compartidas",
+            checked = isChecked,
+            onCheckedChange = { isChecked = it },
+            modifier = Modifier.padding(16.dp))
+    }
+}
 @Composable
 fun ToastShowcase() {
     Column(modifier = Modifier.fillMaxSize()
