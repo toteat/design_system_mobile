@@ -2,8 +2,8 @@ name: Publish Test SNAPSHOT
 
 on:
   push:
-    branches:
-      - 'feature/publishing-test' # Se ejecuta solo en push a esta rama
+    tags:
+      - 'v*' # Se ejecuta solo en push a un tag de version
 
 jobs:
   publish-test:
