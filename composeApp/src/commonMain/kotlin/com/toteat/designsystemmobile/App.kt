@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
 import com.toteat.toteatds.components.bottomBar.ToteatBottomBar
+import com.toteat.toteatds.components.bottomBar.ToteatBottomBarButtonType
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
@@ -92,6 +93,9 @@ data class ComponentShowcaseItem(
 @Preview
 fun App() {
     ToteatTheme {
+        var selectedItem by remember {
+            mutableStateOf<ToteatBottomBarButtonType>(ToteatBottomBarButtonType.AllTables)
+        }
 
 
 
@@ -129,9 +133,10 @@ fun App() {
                 },
                 bottomBar = {
                     ToteatBottomBar(
+                        selectedType = selectedItem,
                         onMyTablesClick = { toastMessage = "Has presionado Mis mesas" },
                         onAllTablesClick = { toastMessage = "Has presionado Todas las mesas" },
-                        onMoreClick = { toastMessage = "Has presionado Ver más" }
+                        onMoreClick = { toastMessage = "Has presionado Ver más" },
                     )
                 }
             ) { paddingValues ->
