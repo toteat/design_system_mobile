@@ -57,69 +57,84 @@ fun ToteatToastMessage(
     message: String,
     type: ToteatToastMessageType,
     modifier: Modifier = Modifier,
-    onDismiss: (() -> Unit)? = null
+    onDismiss: (() -> Unit)? = null,
+    durationMs: Long = 1000L,
 ) {
     var isVisible by remember { mutableStateOf(true) }
 
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = expandVertically(expandFrom = Alignment.Top),
-        exit = shrinkVertically(shrinkTowards = Alignment.Top)
+
+    LaunchedEffect(durationMs, isVisible) {
+        if (durationMs > 0 && isVisible) {
+            kotlinx.coroutines.delay(durationMs)
+            isVisible = false
+            onDismiss?.invoke()
+        }
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+
     ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .background(type.backgroundColor, RoundedCornerShape(8.dp))
-                .border(1.dp, type.borderBackground, RoundedCornerShape(8.dp))
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = androidx.compose.animation.slideInVertically(initialOffsetY = { it }),
+            exit  = androidx.compose.animation.slideOutVertically(targetOffsetY = { it }),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
         ) {
-
-            Icon(
-                imageVector = vectorResource(type.iconRes),
-                contentDescription = null,
-                modifier = Modifier.size(21.dp),
-                tint = type.borderBackground,
-
-                )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(
-                modifier = Modifier.weight(1f)
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(type.backgroundColor, RoundedCornerShape(8.dp))
+                    .border(1.dp, type.borderBackground, RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Black
+                Icon(
+                    imageVector = vectorResource(type.iconRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(21.dp),
+                    tint = type.iconTint
                 )
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyMediumRegular,
-                    color = Color.Gray
-                )
-            }
 
+                Spacer(Modifier.width(12.dp))
 
-            if (onDismiss != null) {
-                IconButton(
-                    onClick = {
-                        isVisible = false
-                        onDismiss()
-                    },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Cerrar mensaje",
-                        tint = Color.Black
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.Black
                     )
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodyMediumRegular,
+                        color = Color.Gray
+                    )
+                }
+
+                if (onDismiss != null) {
+                    IconButton(
+                        onClick = {
+                            isVisible = false
+                            onDismiss()
+                        },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Cerrar mensaje",
+                            tint = Color.Black
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 
 @Preview()

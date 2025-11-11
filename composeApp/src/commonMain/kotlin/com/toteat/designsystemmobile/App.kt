@@ -33,9 +33,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -49,6 +50,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
+import com.toteat.toteatds.components.bottomBar.ToteatBottomBar
+import com.toteat.toteatds.components.bottomBar.ToteatBottomBarButtonType
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
@@ -77,6 +80,7 @@ import com.toteat.toteatds.components.topbar.LoginTopBar
 import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
 import com.toteat.toteatds.components.topbar.RestaurantNameTopBarItem
 import com.toteat.toteatds.theme.ToteatTheme
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 data class ComponentShowcaseItem(
@@ -89,6 +93,12 @@ data class ComponentShowcaseItem(
 @Preview
 fun App() {
     ToteatTheme {
+        var selectedItem by remember {
+            mutableStateOf<ToteatBottomBarButtonType>(ToteatBottomBarButtonType.AllTables)
+        }
+
+
+
         val componentList = remember {
             mutableStateListOf(
                 ComponentShowcaseItem(title = "Buttons"),
@@ -103,32 +113,58 @@ fun App() {
                 ComponentShowcaseItem(title = "Switch container")
             )
         }
+        var toastMessage by remember { mutableStateOf<String?>(null) }
 
-        Scaffold(
-            topBar = {
-                CenterContentTopBar(
-                    content = {
-                        ProcessNameTopBarItem("Design System Showcase")
-                    }
-                )
-            },
+        if (toastMessage != null) {
+            LaunchedEffect(toastMessage) {
+                delay(2000)
+                toastMessage = null
+            }
+        }
 
-            ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                itemsIndexed(componentList) { index, item ->
-                    ComponentShowcaseSection(
-                        item = item,
-                        onClick = {
-                            componentList[index] = item.copy(isExpanded = !item.isExpanded)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Scaffold(
+                topBar = {
+                    CenterContentTopBar(
+                        content = {
+                            ProcessNameTopBarItem("Design System Showcase")
                         }
                     )
+                },
+                bottomBar = {
+                    ToteatBottomBar(
+                        selectedType = selectedItem,
+                        onMyTablesClick = { toastMessage = "Has presionado Mis mesas" },
+                        onAllTablesClick = { toastMessage = "Has presionado Todas las mesas" },
+                        onMoreClick = { toastMessage = "Has presionado Ver más" },
+                    )
                 }
+            ) { paddingValues ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    itemsIndexed(componentList) { index, item ->
+                        ComponentShowcaseSection(
+                            item = item,
+                            onClick = {
+                                componentList[index] = item.copy(isExpanded = !item.isExpanded)
+                            }
+                        )
+                    }
+                }
+            }
+            toastMessage?.let {
+                ToteatToastMessage(
+                    title = "Acción",
+                    message = it,
+                    type = ToteatToastMessageType.Info,
+                    onDismiss = { toastMessage = null },
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp)
+                )
             }
         }
     }
@@ -508,4 +544,3 @@ fun SegmentedTabsShowcase() {
         }
     }
 }
-
