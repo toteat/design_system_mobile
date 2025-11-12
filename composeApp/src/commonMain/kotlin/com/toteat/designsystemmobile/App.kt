@@ -59,6 +59,7 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoBlackAndCream
 import com.toteat.toteatds.components.brand.logo.ToteatLogoCreamOrange
 import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.buttons.ButtonTableStatus
+import com.toteat.toteatds.components.buttons.ChipButtonContainer
 import com.toteat.toteatds.components.buttons.PrimaryButton
 import com.toteat.toteatds.components.buttons.SecondaryButton
 import com.toteat.toteatds.components.buttons.TertiaryButton
@@ -110,7 +111,8 @@ fun App() {
                 ComponentShowcaseItem(title = "MessageView"),
                 ComponentShowcaseItem(title = "Brand"),
                 ComponentShowcaseItem(title = "Toast"),
-                ComponentShowcaseItem(title = "Switch container")
+                ComponentShowcaseItem(title = "Switch container"),
+                ComponentShowcaseItem(title = "Chip container")
             )
         }
         var toastMessage by remember { mutableStateOf<String?>(null) }
@@ -198,6 +200,7 @@ fun ComponentShowcaseSection(
                     "Brand" -> BrandShowcase()
                     "Toast" -> ToastShowcase()
                     "Switch container" -> SwitchButtonShowcase()
+                    "Chip container" -> ChipButtonShowcase()
 
                     else -> Text(
                         text = "Componentes próximamente...",
@@ -310,6 +313,17 @@ fun ButtonShowcase() {
             )
         }
     }
+}
+
+@Composable
+fun ChipButtonShowcase() {
+
+        ChipButtonContainer(
+            items = listOf("Salon", "Bar", "Terraza", "Vip", "los tres"),
+            onItemSelected = {},
+            modifier = Modifier.padding(vertical = 24.dp, horizontal = 24.dp)
+        )
+
 }
 
 @Composable

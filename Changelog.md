@@ -17,6 +17,7 @@ Showroom View: Component presentation view for showcasing the library on a devic
 - Add table button
 - Added Segmented Tabs container
 - Added github workflows
+- add chip button container
 
 ## [0.0.1] - 2025-10-7
 ### Added
