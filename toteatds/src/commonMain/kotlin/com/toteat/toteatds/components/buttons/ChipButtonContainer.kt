@@ -24,8 +24,7 @@ fun ChipButtonContainer(
     var selectedItem by remember { mutableStateOf(items.firstOrNull()) }
     Row(
         modifier = modifier
-            .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp),
+            .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items.forEach { item ->
