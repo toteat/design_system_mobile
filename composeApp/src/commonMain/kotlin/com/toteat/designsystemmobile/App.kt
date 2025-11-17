@@ -136,11 +136,21 @@ fun App() {
                 bottomBar = {
                     ToteatBottomBar(
                         selectedType = selectedItem,
-                        onMyTablesClick = { toastMessage = "Has presionado Mis mesas" },
-                        onAllTablesClick = { toastMessage = "Has presionado Todas las mesas" },
-                        onMoreClick = { toastMessage = "Has presionado Ver más" },
+                        onMyTablesClick = {
+                            selectedItem = ToteatBottomBarButtonType.Tables
+                            toastMessage = "Has presionado Mis mesas"
+                        },
+                        onAllTablesClick = {
+                            selectedItem = ToteatBottomBarButtonType.AllTables
+                            toastMessage = "Has presionado Todas las mesas"
+                        },
+                        onMoreClick = {
+                            selectedItem = ToteatBottomBarButtonType.ViewMore
+                            toastMessage = "Has presionado Ver más"
+                        }
                     )
                 }
+
             ) { paddingValues ->
                 LazyColumn(
                     modifier = Modifier

@@ -2,8 +2,10 @@ name: Publish Test SNAPSHOT
 
 on:
   push:
-    tags:
-      - 'v*' # Se ejecuta solo en push a un tag de version
+    #tags:
+      #- 'v*' # Se ejecuta solo en push a un tag de version
+    branches:
+      - feature/tables-bottom-bar   # ⬅️ tu rama de trabajo
 
 jobs:
   publish-test:
