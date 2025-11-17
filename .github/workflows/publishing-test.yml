@@ -2,10 +2,8 @@ name: Publish Test SNAPSHOT
 
 on:
   push:
-    #tags:
-      #- 'v*' # Se ejecuta solo en push a un tag de version
-    branches:
-      - feature/added_icon_and_color  # ⬅️ tu rama de trabajo
+    tags:
+      - 'v*'
 
 jobs:
   publish-test:
