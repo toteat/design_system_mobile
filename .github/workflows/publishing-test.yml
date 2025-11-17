@@ -5,7 +5,7 @@ on:
     #tags:
       #- 'v*' # Se ejecuta solo en push a un tag de version
     branches:
-      - feature/tables-bottom-bar   # ⬅️ tu rama de trabajo
+      - feature/added_icon_and_color  # ⬅️ tu rama de trabajo
 
 jobs:
   publish-test:
