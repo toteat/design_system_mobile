@@ -1,7 +1,6 @@
 package com.toteat.toteatds.components.bottomBar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,10 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
@@ -39,9 +34,7 @@ sealed class ToteatBottomBarButtonType(
     val text: String? = null
 ) {
     object Tables : ToteatBottomBarButtonType(Res.drawable.icon_table, "Mis mesas")
-    object AllTables : ToteatBottomBarButtonType(
-        Res.drawable.icon_room, "Todas las mesas"
-    )
+    object AllTables : ToteatBottomBarButtonType(Res.drawable.icon_room, "Todas las mesas")
     object ViewMore : ToteatBottomBarButtonType(Res.drawable.icon_stroke_minus_plus, "Ver más")
 }
 
@@ -53,7 +46,7 @@ fun ToteatBottomBar(
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-   Box(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .dropShadow(
@@ -61,17 +54,15 @@ fun ToteatBottomBar(
                 shadow = Shadow(
                     radius = 6.dp,
                     color = Color(0x40000000),
-                    offset = DpOffset(x = 0.dp, -1.dp)
-                ))
+                    offset = DpOffset(x = 0.dp, y = -1.dp)
+                )
+            )
             .background(MaterialTheme.colorScheme.background)
-
-        )
-
-
-    {
+    ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth().height(64.dp),
+                .fillMaxWidth()
+                .height(64.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -101,28 +92,28 @@ fun BottomBarItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val contentColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.secondary
-    }
+    val activeColor = MaterialTheme.colorScheme.primary
+    val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+    val iconColor = if (isSelected) activeColor else inactiveColor
+    val textColor = if (isSelected) activeColor else inactiveColor
 
     Column(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier.noRippleClick(onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = vectorResource(type.iconRes),
             contentDescription = type.text,
-            modifier = Modifier.size(20.dp, 20.dp),
-            tint = contentColor
+            modifier = Modifier.size(20.dp),
+            tint = iconColor
         )
         type.text?.let {
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodyLarge,
-                color = contentColor
+                color = textColor
             )
         }
     }
@@ -132,15 +123,17 @@ fun BottomBarItem(
 @Composable
 fun ToteatBottomBarPreview() {
     ToteatTheme {
-        var selectedItem by remember {
-            mutableStateOf<ToteatBottomBarButtonType>(ToteatBottomBarButtonType.AllTables)
+        androidx.compose.runtime.remember {
+            androidx.compose.runtime.mutableStateOf(
+                ToteatBottomBarButtonType.AllTables
+            )
+        }.value.let { selected ->
+            ToteatBottomBar(
+                selectedType = selected,
+                onMyTablesClick = {},
+                onAllTablesClick = {},
+                onMoreClick = {}
+            )
         }
-
-        ToteatBottomBar(
-            selectedType = selectedItem,
-            onMyTablesClick = { selectedItem = ToteatBottomBarButtonType.Tables },
-            onAllTablesClick = { selectedItem = ToteatBottomBarButtonType.AllTables },
-            onMoreClick = { selectedItem = ToteatBottomBarButtonType.ViewMore }
-        )
     }
 }

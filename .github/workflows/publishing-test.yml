@@ -3,7 +3,7 @@ name: Publish Test SNAPSHOT
 on:
   push:
     tags:
-      - 'v*' # Se ejecuta solo en push a un tag de version
+      - 'v*'
 
 jobs:
   publish-test:

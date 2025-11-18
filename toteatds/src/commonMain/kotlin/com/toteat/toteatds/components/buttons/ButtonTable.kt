@@ -53,6 +53,7 @@ fun ToteatButtonTable(
     }
 
     val contentColor: Color = if (isOccupied) NeutralGray else NeutralGray400
+    val titleColor: Color = if (isOccupied) NeutralGray else MaterialTheme.colorScheme.secondary
 
     Card(
         modifier = modifier.size(width = 108.dp, height = 80.dp),
@@ -74,7 +75,7 @@ fun ToteatButtonTable(
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
-                color = contentColor,
+                color = titleColor,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.fillMaxWidth()
             )
