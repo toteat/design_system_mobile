@@ -2,11 +2,13 @@ package com.toteat.toteatds.components.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -32,14 +34,17 @@ fun GroupedListItem(
     valueBackgroundColor: Color = Color.White,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
     ) {
         Box(
             modifier = Modifier
                 .weight(0.4f)
+                .fillMaxHeight()
                 .background(labelBackgroundColor)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
-            contentAlignment = Alignment.CenterStart
+            contentAlignment = Alignment.TopStart
         ) {
             label()
         }
@@ -47,6 +52,7 @@ fun GroupedListItem(
         Box(
             modifier = Modifier
                 .weight(0.6f)
+                .fillMaxHeight()
                 .background(valueBackgroundColor)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             contentAlignment = Alignment.CenterStart
@@ -92,30 +98,31 @@ fun GroupedList(
 @Preview(showBackground = true)
 fun GroupedListItemSinglePreview() {
     ToteatTheme {
-        GroupedList(
-            modifier = Modifier.padding(16.dp),
-            items = listOf(
-                {
-                    GroupedListItem(
-                        label = {
-                            Text(
-                                text = "Mesa",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                            )
-                        },
-                        value = {
-                            Text(
-                                text = "Mesa B1",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Normal,
-                                color = Color.Black
-                            )
-                        }
+        GroupedListItem(
+            label = {
+                Column {
+                    Text(
+                        text = "Número",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Text(
+                        text = "de orden",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
                 }
-            )
+            },
+            value = {
+                Text(
+                    text = "01234567890",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Black
+                )
+            }
         )
     }
 }
@@ -130,12 +137,20 @@ fun GroupedListPreview() {
                 {
                     GroupedListItem(
                         label = {
-                            Text(
-                                text = "Mesa",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                            )
+                            Column {
+                                Text(
+                                    text = "Número",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                )
+                                Text(
+                                    text = "de orden",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Light,
+                                    color = Color.Black
+                                )
+                            }
                         },
                         value = {
                             Text(
