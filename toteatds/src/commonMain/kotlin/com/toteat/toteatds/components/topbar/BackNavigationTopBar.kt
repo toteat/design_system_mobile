@@ -9,6 +9,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BackNavigationTopBar(
+    title: String,
     onNavigateBackClick: () -> Unit
 ) {
     ToteatTopBar(
@@ -17,7 +18,7 @@ fun BackNavigationTopBar(
         },
         centerComponent = {
             Text(
-                text = "Mesa B1",
+                text = title,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )
@@ -30,6 +31,7 @@ fun BackNavigationTopBar(
 fun BackNavigationTopBarPreview() {
     ToteatTheme {
         BackNavigationTopBar(
+            title = "Mesa B1",
             onNavigateBackClick = {}
         )
     }
