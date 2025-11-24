@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.NeutralGray
+import com.toteat.toteatds.theme.NeutralGray100
 import com.toteat.toteatds.theme.NeutralGray400
 
 @Composable
@@ -25,7 +26,7 @@ fun ChipButton(
         color = if (isSelected) Color.Black else Color.Black,
         modifier = modifier
             .clip(CircleShape)
-            .background(if (isSelected) Color(0xFFE0D5C9) else NeutralGray)
+            .background(if (isSelected) Color(0xFFE0D5C9) else NeutralGray100)
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 8.dp)
     )
