@@ -19,7 +19,7 @@ fun BackNavigationTopBar(
         centerComponent = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
