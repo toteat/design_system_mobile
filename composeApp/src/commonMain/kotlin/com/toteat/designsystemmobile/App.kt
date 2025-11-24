@@ -69,6 +69,8 @@ import com.toteat.toteatds.components.buttons.switchButtonContainer
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
+import com.toteat.toteatds.components.tags.StatusTag
+import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatTextField
@@ -111,7 +113,8 @@ fun App() {
                 ComponentShowcaseItem(title = "Brand"),
                 ComponentShowcaseItem(title = "Toast"),
                 ComponentShowcaseItem(title = "Switch container"),
-                ComponentShowcaseItem(title = "Chip container")
+                ComponentShowcaseItem(title = "Chip container"),
+                ComponentShowcaseItem(title = "Tags")
             )
         }
         var toastMessage by remember { mutableStateOf<String?>(null) }
@@ -210,6 +213,7 @@ fun ComponentShowcaseSection(
                     "Toast" -> ToastShowcase()
                     "Switch container" -> SwitchButtonShowcase()
                     "Chip container" -> ChipButtonShowcase()
+                    "Tags" -> StatusTagShowcase()
 
                     else -> Text(
                         text = "Componentes próximamente...",
@@ -566,5 +570,30 @@ fun SegmentedTabsShowcase() {
             0 -> Text("Mostrando el contenido de Resumen de Cuenta...")
             1 -> Text("Mostrando el contenido de Información de Mesa...")
         }
+    }
+}
+
+@Composable
+fun StatusTagShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Status Tags", style = MaterialTheme.typography.titleMedium)
+        
+        Text("Pending", style = MaterialTheme.typography.bodyMedium)
+        StatusTag(variant = StatusTagVariant.Pending)
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        
+        Text("Confirmed", style = MaterialTheme.typography.bodyMedium)
+        StatusTag(variant = StatusTagVariant.Confirmed)
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        
+        Text("Ended", style = MaterialTheme.typography.bodyMedium)
+        StatusTag(variant = StatusTagVariant.Ended)
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        
+        Text("Cancelled", style = MaterialTheme.typography.bodyMedium)
+        StatusTag(variant = StatusTagVariant.Cancelled)
     }
 }
