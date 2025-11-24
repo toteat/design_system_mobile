@@ -2,8 +2,8 @@ name: Publish Test SNAPSHOT
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - 'feature/update_tag'
 
 jobs:
   publish-test:
