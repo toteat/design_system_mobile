@@ -21,12 +21,16 @@ fun ArrowBackIconButton(
 ) {
     IconButton(
         modifier = Modifier
+            .size(48.dp)
             .clip(CircleShape)
-            .size(30.dp)
             .background(color = MaterialTheme.colorScheme.onPrimary),
         onClick = { onNavigateBackClick() }
     ) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }
 

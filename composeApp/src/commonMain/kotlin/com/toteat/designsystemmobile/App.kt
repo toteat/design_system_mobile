@@ -36,7 +36,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -494,7 +493,7 @@ fun TopBarShowcase() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("Back Navigation", style = MaterialTheme.typography.titleMedium)
-        BackNavigationTopBar(onNavigateBackClick = {})
+        BackNavigationTopBar(title = "Mesa 1", onNavigateBackClick = {})
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Login", style = MaterialTheme.typography.titleMedium)
