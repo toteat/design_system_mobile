@@ -19,7 +19,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ChipButtonContainer(
     items: List<String>,
     onItemSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    itemModifier: (itemText: String) -> Modifier = { Modifier }
 ) {
     var selectedItem by remember { mutableStateOf(items.firstOrNull()) }
     Row(
@@ -28,13 +29,15 @@ fun ChipButtonContainer(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items.forEach { item ->
+            val modifierForItem = itemModifier(item)
             ChipButton(
                 text = item,
                 isSelected = item == selectedItem,
                 onClick = {
                     selectedItem = item
                     onItemSelected(item)
-                }
+                },
+                modifier = modifierForItem
             )
         }
     }

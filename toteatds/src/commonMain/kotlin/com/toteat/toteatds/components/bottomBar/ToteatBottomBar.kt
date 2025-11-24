@@ -44,7 +44,10 @@ fun ToteatBottomBar(
     onMyTablesClick: () -> Unit,
     onAllTablesClick: () -> Unit,
     onMoreClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    myTablesModifier: Modifier = Modifier,
+    allTablesModifier: Modifier = Modifier,
+    moreModifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
@@ -69,17 +72,20 @@ fun ToteatBottomBar(
             BottomBarItem(
                 type = ToteatBottomBarButtonType.Tables,
                 isSelected = selectedType == ToteatBottomBarButtonType.Tables,
-                onClick = onMyTablesClick
+                onClick = onMyTablesClick,
+                modifier = myTablesModifier
             )
             BottomBarItem(
                 type = ToteatBottomBarButtonType.AllTables,
                 isSelected = selectedType == ToteatBottomBarButtonType.AllTables,
-                onClick = onAllTablesClick
+                onClick = onAllTablesClick,
+                modifier = allTablesModifier
             )
             BottomBarItem(
                 type = ToteatBottomBarButtonType.ViewMore,
                 isSelected = selectedType == ToteatBottomBarButtonType.ViewMore,
-                onClick = onMoreClick
+                onClick = onMoreClick,
+                modifier = moreModifier
             )
         }
     }
