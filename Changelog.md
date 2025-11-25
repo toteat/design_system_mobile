@@ -19,9 +19,13 @@ Showroom View: Component presentation view for showcasing the library on a devic
 - Added github workflows
 - add chip button container
 
+
+
 ## [0.0.1] - 2025-10-7
-## [0.0.4] - 2025-11-18
 - Adding group list component
+- ## [0.0.8] - 2025-11-18
+- Adding group list component
+- add order detail component
 ### Added
 Initial Setup: Creation of the Kotlin Multiplatform library module (toteatds) with support for Android, iOS, and JVM.
 Main Theme: Implementation of ToteatTheme with a custom color system (LightColorScheme) and typography (Manrope).

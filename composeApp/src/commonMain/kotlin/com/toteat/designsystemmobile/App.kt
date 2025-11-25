@@ -69,6 +69,9 @@ import com.toteat.toteatds.components.buttons.switchButtonContainer
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
+import com.toteat.toteatds.components.list.GroupedOrderDetail
+import com.toteat.toteatds.components.list.OrderItem
+import com.toteat.toteatds.components.list.OrderItemExtra
 import com.toteat.toteatds.components.tags.StatusTag
 import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
@@ -114,6 +117,7 @@ fun App() {
                 ComponentShowcaseItem(title = "Toast"),
                 ComponentShowcaseItem(title = "Switch container"),
                 ComponentShowcaseItem(title = "Chip container"),
+                ComponentShowcaseItem(title = "Order detail"),
                 ComponentShowcaseItem(title = "Tags")
             )
         }
@@ -213,6 +217,7 @@ fun ComponentShowcaseSection(
                     "Toast" -> ToastShowcase()
                     "Switch container" -> SwitchButtonShowcase()
                     "Chip container" -> ChipButtonShowcase()
+                    "Order detail" -> OrderDetailShowcase()
                     "Tags" -> StatusTagShowcase()
 
                     else -> Text(
@@ -253,7 +258,6 @@ fun ButtonShowcase() {
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // --- Primary Buttons ---
         Text("Primary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             PrimaryButton(onClick = {}, text = "Default")
@@ -276,10 +280,8 @@ fun ButtonShowcase() {
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Botones de pago ---
         Text("Payment Buttons", style = MaterialTheme.typography.titleMedium)
 
-        // Rectangle button
         ToteatRectangleButton(
             title = "Pago total",
             subTitle = "de la cuenta",
@@ -287,7 +289,6 @@ fun ButtonShowcase() {
             onClick = {}
         )
 
-        // Two square buttons below
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -346,7 +347,6 @@ fun InputShowcase() {
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // --- Text Field ---
         Text("TextField", style = MaterialTheme.typography.titleMedium)
         val textState = rememberTextFieldState()
         ToteatTextField(
@@ -358,7 +358,6 @@ fun InputShowcase() {
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Password Field ---
         Text("Password", style = MaterialTheme.typography.titleMedium)
         val passwordState = rememberTextFieldState()
         val isPasswordVisible = remember { mutableStateOf(false) }
@@ -373,7 +372,6 @@ fun InputShowcase() {
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // --- Phone Number Field ---
         Text("Phone Number", style = MaterialTheme.typography.titleMedium)
         val phoneState = rememberTextFieldState()
         val dialCodes = listOf("+56", "+54", "+51", "+1")
@@ -465,7 +463,6 @@ fun BrandShowcase() {
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Logos
         Text("Logos", style = MaterialTheme.typography.titleMedium)
         Text("Original", style = MaterialTheme.typography.bodyMedium)
         ToteatLogoOriginal()
@@ -477,7 +474,6 @@ fun BrandShowcase() {
         ToteatLogoCreamOrange()
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        // Isotipos
         Text("Isotipos", style = MaterialTheme.typography.titleMedium)
         Text("Original", style = MaterialTheme.typography.bodyMedium)
         ToteatIsoOriginal()
@@ -542,7 +538,6 @@ fun MyShowroomScreen() {
 
 @Composable
 fun SegmentedTabsShowcase() {
-    // 1. Define las opciones y el estado de la selección
     val tabs = listOf("Resumen cuenta", "Información mesa")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -553,23 +548,91 @@ fun SegmentedTabsShowcase() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // 2. Llama a tu componente
         SegmentedTabs(
             items = tabs,
             selectedIndex = selectedTabIndex,
             onTabSelected = { index ->
-                // Cuando el usuario selecciona una pestaña, actualizamos el estado
                 selectedTabIndex = index
             }
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 3. (Opcional) Muestra un contenido diferente según la selección
         when (selectedTabIndex) {
             0 -> Text("Mostrando el contenido de Resumen de Cuenta...")
             1 -> Text("Mostrando el contenido de Información de Mesa...")
         }
+    }
+}
+@Composable
+fun OrderDetailShowcase() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        val items = listOf(
+            OrderItem(
+                name = "Copa de vino",
+                quantity = 2,
+                unitPrice = "$4.000",
+                totalPrice = "$8.000",
+                time = "21:12 hrs"
+            ),
+            OrderItem(
+                name = "Mocktail mojito",
+                quantity = 1,
+                unitPrice = "$6.000",
+                totalPrice = "$6.000",
+                time = "21:12 hrs"
+            ),
+            OrderItem(
+                name = "Lasagna vegetariana",
+                quantity = 1,
+                unitPrice = "$7.000",
+                totalPrice = "$7.000",
+                time = "21:12 hrs"
+            ),
+            OrderItem(
+                name = "Bowl mediterraneo",
+                quantity = 1,
+                unitPrice = "$6.000",
+                totalPrice = "$6.000",
+                time = "21:12 hrs"
+            ),
+            OrderItem(
+                name = "Risotto funghi",
+                quantity = 2,
+                unitPrice = "$8.000",
+                totalPrice = "$24.000",
+                time = "21:12 hrs",
+                extras = listOf(
+                    OrderItemExtra(
+                        name = "Extra plato 1:",
+                        description = "Queso",
+                        price = "$2.000"
+                    ),
+                    OrderItemExtra(
+                        name = "Extra plato 2:",
+                        description = "Filete",
+                        price = "$6.000"
+                    )
+                )
+            ),
+            OrderItem(
+                name = "Bowl mediterraneo",
+                quantity = 1,
+                unitPrice = "$6.000",
+                totalPrice = "$6.000",
+                time = "21:12 hrs"
+            )
+        )
+
+        GroupedOrderDetail(
+            items = items,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -580,19 +643,19 @@ fun StatusTagShowcase() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("Status Tags", style = MaterialTheme.typography.titleMedium)
-        
+
         Text("Pending", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Pending)
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
-        
+
         Text("Confirmed", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Confirmed)
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
-        
+
         Text("Ended", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Ended)
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
-        
+
         Text("Cancelled", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Cancelled)
     }
