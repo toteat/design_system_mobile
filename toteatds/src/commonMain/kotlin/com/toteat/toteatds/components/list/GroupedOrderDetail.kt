@@ -43,7 +43,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 private val HorizontalPadding = 12.dp
 private val PriceColumnWidth = 75.dp
 private val HourColumnWidth = 75.dp
-private val RowHeight = 55.dp
+private val RowHeight = 60.dp
 
 data class OrderItemExtra(
     val name: String,
@@ -149,7 +149,7 @@ private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f).padding(vertical = 4.dp)) {
+                Column(modifier = Modifier.weight(1f).padding(vertical = 2.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(item.name, style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, color = extended.neutral500)
                         if (item.quantity > 1) {
@@ -269,7 +269,7 @@ fun GroupedOrderDetailPreview() {
                 time = "21:12 hrs"
             ),
             OrderItem(
-                name = "Bowl mediterraneo",
+                name = "Bowl mediterraneo con jalea real y pasas al ron",
                 quantity = 1,
                 unitPrice = "$6.000",
                 totalPrice = "$6.000",

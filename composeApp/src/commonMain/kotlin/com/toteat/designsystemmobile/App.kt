@@ -63,10 +63,12 @@ import com.toteat.toteatds.components.buttons.PrimaryButton
 import com.toteat.toteatds.components.buttons.SecondaryButton
 import com.toteat.toteatds.components.buttons.TertiaryButton
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
+import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
 import com.toteat.toteatds.components.buttons.ToteatSquareButton
 import com.toteat.toteatds.components.buttons.switchButtonContainer
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
+import com.toteat.toteatds.components.icons.PrintIconButton
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.components.list.GroupedOrderDetail
@@ -278,6 +280,11 @@ fun ButtonShowcase() {
             TertiaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
         }
 
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToteatPrintButton(onClick = {}, text = "Default", leadingIcon = { PrintIconButton() }, modifier = Modifier.fillMaxWidth())
+
+        }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Payment Buttons", style = MaterialTheme.typography.titleMedium)
@@ -581,7 +588,7 @@ fun OrderDetailShowcase() {
                 time = "21:12 hrs"
             ),
             OrderItem(
-                name = "Mocktail mojito",
+                name = "Bowl mediterraneo con jalea real y pasas al ron",
                 quantity = 1,
                 unitPrice = "$6.000",
                 totalPrice = "$6.000",

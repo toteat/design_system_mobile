@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -19,16 +20,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray400
 import com.toteat.toteatds.theme.NeutralGray500
 import com.toteat.toteatds.theme.PrimaryLight
 import com.toteat.toteatds.theme.SecondaryNormal
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 private val ButtonShape = RoundedCornerShape(50)
+private val PrintButtonShape = RoundedCornerShape(12)
 private val ButtonHeight = 45.dp
+
+private val PrintButtonHeight = 74.dp
+
 private val ButtonBorderWidth = 1.dp
 
 @Composable
@@ -151,3 +158,50 @@ private fun RowScope.ButtonContent(
     }
 }
 
+
+@Composable
+fun ToteatPrintButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    text: String? = null,
+    leadingIcon: @Composable (() -> Unit)? = null
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val containerColor = when {
+        !enabled -> NeutralGray300
+        isPressed -> NeutralGray500
+        else -> MaterialTheme.colorScheme.background
+    }
+    val contentColor = MaterialTheme.colorScheme.onBackground
+    val borderColor =  MaterialTheme.colorScheme.onBackground
+
+
+    Button(
+        onClick = onClick,
+        modifier = modifier.height(PrintButtonHeight),
+        enabled = enabled,
+        shape = PrintButtonShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = contentColor,
+            disabledContainerColor = NeutralGray300,
+            disabledContentColor = NeutralGray500,
+
+        ),
+        border = BorderStroke(ButtonBorderWidth, borderColor),
+        interactionSource = interactionSource
+    ) {
+        ButtonContent(text = text, leadingIcon = leadingIcon)
+    }
+}
+
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
+@Composable
+fun printButtonPreview() {
+
+    ToteatPrintButton( text = "imprimir detalle", leadingIcon = { TotalPaymentsIcon() },
+        onClick = {},)
+}
