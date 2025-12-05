@@ -66,7 +66,7 @@ import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
 import com.toteat.toteatds.components.buttons.ToteatSquareButton
-import com.toteat.toteatds.components.buttons.switchButtonContainer
+import com.toteat.toteatds.components.buttons.SwitchButtonContainer
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.PrintIconButton
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
@@ -423,7 +423,7 @@ fun SwitchButtonShowcase(){
         .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally){
-        switchButtonContainer(title = "Terminal compartido",
+        SwitchButtonContainer(title = "Terminal compartido",
             subtitle = "Esta opción es para POS compartidas",
             checked = isChecked,
             onCheckedChange = { isChecked = it },

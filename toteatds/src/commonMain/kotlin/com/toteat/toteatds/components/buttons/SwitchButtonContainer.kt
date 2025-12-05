@@ -44,7 +44,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable
-fun switchButtonContainer(
+fun SwitchButtonContainer(
     title: String,
     subtitle: String,
     checked: Boolean,
@@ -184,11 +184,11 @@ private fun CustomSwitch(
 
 @Preview
 @Composable
-private fun switchButtonContainerPreview() {
+private fun SwitchButtonContainerPreview() {
     var isChecked by remember { mutableStateOf(false) }
     ToteatTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            switchButtonContainer(
+            SwitchButtonContainer(
                 title = "Terminal compartido",
                 subtitle = "Esta opción es para POS compartidas",
                 checked = isChecked,
@@ -201,11 +201,11 @@ private fun switchButtonContainerPreview() {
 
 @Preview
 @Composable
-private fun switchButtonContainerCheckedPreview() {
+private fun SwitchButtonContainerCheckedPreview() {
     var isChecked by remember { mutableStateOf(true) }
     ToteatTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            switchButtonContainer(
+            SwitchButtonContainer(
                 title = "Terminal compartido",
                 subtitle = "Esta opción es para POS compartidas",
                 checked = isChecked,
