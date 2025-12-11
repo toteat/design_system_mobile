@@ -1,23 +1,23 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.14] - 2025-12-11
 ### Added
 - Text Input Component: Added ToteatPasswordTextField, ToteatPhoneNumberField, and ToteatTextField components with success, warning, and error states.
-Showroom View: Component presentation view for showcasing the library on a device.
-Added
+- Showroom View: Component presentation view for showcasing the library on a device.
 - Button Component: Added PrimaryButton, SecondaryButton, and TertiaryButton components with normal, pressed, and disabled states.
-Showroom View: Component presentation view for showcasing the library on a device.
 - Build Logic module: Added the new module to centralize the module dependency management.
 - Dropdown Component: Added custom AppDropdown component with a text field anchor, a selectable list of options in a popup menu, and placeholder support.
-- MessageView  Component: Added a reusable component featuring an icon, a primary title, and a secondary message to display status or greetings.
+- MessageView Component: Added a reusable component featuring an icon, a primary title, and a secondary message to display status or greetings.
 - Logos and iso added to the brand components
 - Added TopBars
 - Squared and Rectangle button component added.
-- added Toast Component
+- Added Toast Component
 - Add table button
 - Added Segmented Tabs container
 - Added github workflows
-- add chip button container
+- Add chip button container
 
 
 
