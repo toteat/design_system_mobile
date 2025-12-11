@@ -42,11 +42,12 @@ fun ToteatTextFieldLayout(
 
     val textFieldStyleModifier = Modifier
         .fillMaxWidth()
+        .height(50.dp)
         .background(
             color = when {
                 isFocused -> MaterialTheme.colorScheme.background
                 enabled -> MaterialTheme.colorScheme.background
-                else -> MaterialTheme.colorScheme.outline // o un fill de disabled si tienes uno
+                else -> MaterialTheme.colorScheme.outline
             },
             shape = RoundedCornerShape(8.dp)
         )
@@ -61,7 +62,7 @@ fun ToteatTextFieldLayout(
             },
             shape = RoundedCornerShape(8.dp)
         )
-        .padding(12.dp)
+        .padding(horizontal = 12.dp, vertical = 8.dp)
     Column(
         modifier = modifier
     ) {
