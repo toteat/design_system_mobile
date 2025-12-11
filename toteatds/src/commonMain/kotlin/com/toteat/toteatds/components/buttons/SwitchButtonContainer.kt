@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyMediumRegular
+import com.toteat.toteatds.theme.tagLight
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_change
 import org.jetbrains.compose.resources.vectorResource
@@ -74,7 +75,7 @@ fun SwitchButtonContainer(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.secondary
                     )
                     icon?.let {
@@ -90,7 +91,7 @@ fun SwitchButtonContainer(
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMediumRegular,
+                    style = MaterialTheme.typography.tagLight,
                     color = MaterialTheme.colorScheme.secondary
                 )
             }
