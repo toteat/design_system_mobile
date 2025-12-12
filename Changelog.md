@@ -1,13 +1,18 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- SwitchButtonContainer: Fixed syntax errors and component structure
+- SwitchButtonContainer: Fixed layout distribution to prevent text wrapping issues
+- SwitchButtonContainer: Ensured switch stays fixed to the right
+- SwitchButtonContainer: Properly implemented enabled/disabled state with visual feedback (38% opacity)
+- SwitchButtonContainer: Improved text layout using weight modifier for proper space distribution
 
-## [0.0.14] - 2025-12-11
+### Changed
+- SwitchButtonContainer: Simplified component parameters, removed unused features
+- SwitchButtonContainer: Optimized layout using SpaceBetween arrangement
+
 ### Added
-- Text Input Component: Added ToteatPasswordTextField, ToteatPhoneNumberField, and ToteatTextField components with success, warning, and error states.
-- Showroom View: Component presentation view for showcasing the library on a device.
-- Button Component: Added PrimaryButton, SecondaryButton, and TertiaryButton components with normal, pressed, and disabled states.
-- Build Logic module: Added the new module to centralize the module dependency management.
 - Dropdown Component: Added custom AppDropdown component with a text field anchor, a selectable list of options in a popup menu, and placeholder support.
 - MessageView Component: Added a reusable component featuring an icon, a primary title, and a secondary message to display status or greetings.
 - Logos and iso added to the brand components

@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,15 +30,10 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
-import com.toteat.toteatds.theme.tagLight
-import designsystemmobile.toteatds.generated.resources.Res
-import designsystemmobile.toteatds.generated.resources.icon_change
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -50,8 +44,10 @@ fun SwitchButtonContainer(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    icon: ImageVector? = vectorResource(Res.drawable.icon_change),
+    enabled: Boolean = true,
 ) {
+    val contentAlpha = if (enabled) 1f else 0.38f
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -66,53 +62,43 @@ fun SwitchButtonContainer(
     ) {
         Row(
             modifier = Modifier
-                .clickable { onCheckedChange(!checked) }
+                .clickable(enabled = enabled) { onCheckedChange(!checked) }
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            // Columna de textos con weight para ocupar el espacio disponible
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 12.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.secondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
-                    )
-                    icon?.let {
-                        Spacer(Modifier.width(4.dp))
-                        Icon(
-                            imageVector = it,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-                }
-                Spacer(Modifier.height(2.dp))
                 Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.tagLight,
-                    color = MaterialTheme.colorScheme.secondary,
+                    text = title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary.copy(alpha = contentAlpha),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = contentAlpha),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
-            Spacer(Modifier.width(8.dp))
+
+            // Switch fijo a la derecha
             CustomSwitch(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
+                enabled = enabled,
                 checkedTrackColor = MaterialTheme.colorScheme.primary,
                 checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                checkedBorderColor = MaterialTheme.colorScheme.primary,
-                borderWidth = 1.dp
+                checkedBorderColor = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -123,6 +109,7 @@ private fun CustomSwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     width: Dp = 52.dp,
     height: Dp = 32.dp,
     thumbSize: Dp = 24.dp,
@@ -136,6 +123,7 @@ private fun CustomSwitch(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val thumbPadding = (height - thumbSize) / 2
+    val contentAlpha = if (enabled) 1f else 0.38f
 
     val thumbPosition by animateDpAsState(
         targetValue = if (checked) width - thumbSize - thumbPadding else thumbPadding,
@@ -143,17 +131,17 @@ private fun CustomSwitch(
     )
 
     val trackColor by animateColorAsState(
-        targetValue = if (checked) checkedTrackColor else uncheckedTrackColor,
+        targetValue = if (checked) checkedTrackColor.copy(alpha = contentAlpha) else uncheckedTrackColor.copy(alpha = contentAlpha),
         animationSpec = tween(durationMillis = 250), label = "TrackColor"
     )
 
     val thumbColor by animateColorAsState(
-        targetValue = if (checked) checkedThumbColor else uncheckedThumbColor,
+        targetValue = if (checked) checkedThumbColor.copy(alpha = contentAlpha) else uncheckedThumbColor.copy(alpha = contentAlpha),
         animationSpec = tween(durationMillis = 250), label = "ThumbColor"
     )
 
     val borderColor by animateColorAsState(
-        targetValue = if (checked) checkedBorderColor else uncheckedBorderColor,
+        targetValue = if (checked) checkedBorderColor.copy(alpha = contentAlpha) else uncheckedBorderColor.copy(alpha = contentAlpha),
         animationSpec = tween(durationMillis = 250), label = "BorderColor"
     )
 
@@ -162,7 +150,8 @@ private fun CustomSwitch(
             .size(width = width, height = height)
             .clickable(
                 interactionSource = interactionSource,
-                indication = null
+                indication = null,
+                enabled = enabled
             ) { onCheckedChange(!checked) }
     ) {
 
@@ -226,3 +215,31 @@ private fun SwitchButtonContainerCheckedPreview() {
         }
     }
 }
+
+@Preview
+@Composable
+private fun SwitchButtonContainerDisabledPreview() {
+    var isChecked by remember { mutableStateOf(true) }
+    ToteatTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                SwitchButtonContainer(
+                    title = "Terminal compartido",
+                    subtitle = "Esta opción está deshabilitada",
+                    checked = isChecked,
+                    onCheckedChange = { isChecked = it },
+                    enabled = false
+                )
+                Spacer(Modifier.height(16.dp))
+                SwitchButtonContainer(
+                    title = "Terminal compartido",
+                    subtitle = "Esta opción está deshabilitada",
+                    checked = false,
+                    onCheckedChange = { },
+                    enabled = false
+                )
+            }
+        }
+    }
+}
+
