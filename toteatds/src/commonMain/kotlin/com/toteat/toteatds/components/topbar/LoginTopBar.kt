@@ -8,6 +8,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.icons.CustomerServiceIcon
@@ -17,11 +19,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun LoginTopBar(
     onMenuIconClick: () -> Unit,
-    onCustomerServiceButtonClick: () -> Unit
+    onCustomerServiceButtonClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     ToteatTopBar(
+        modifier = modifier,
+        semanticLabel = "Barra de navegación de inicio de sesión",
         leftComponent = {
-            IconButton(onClick = { onMenuIconClick() }) {
+            IconButton(
+                onClick = onMenuIconClick,
+                modifier = Modifier.semantics {
+                    contentDescription = "Abrir menú"
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = null,
@@ -30,18 +40,23 @@ fun LoginTopBar(
             }
         },
         centerComponent = {
-            ToteatIsoCreamOrange(modifier = Modifier.size(26.dp).weight(1f))
-
+            ToteatIsoCreamOrange(
+                modifier = Modifier
+                    .size(26.dp)
+                    .semantics {
+                        contentDescription = "Logo de Toteat"
+                    }
+            )
         },
         rightComponent = {
-            CustomerServiceIcon(onIconClick = { onCustomerServiceButtonClick() })
+            CustomerServiceIcon(onIconClick = onCustomerServiceButtonClick)
         }
     )
 }
 
 @Composable
 @Preview
-fun LoginTopBarPreview() {
+private fun LoginTopBarPreview() {
     ToteatTheme {
         LoginTopBar(
             onMenuIconClick = {},
@@ -49,3 +64,4 @@ fun LoginTopBarPreview() {
         )
     }
 }
+

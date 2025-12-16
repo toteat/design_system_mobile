@@ -500,7 +500,14 @@ fun TopBarShowcase() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("Back Navigation", style = MaterialTheme.typography.titleMedium)
-        BackNavigationTopBar(title = "Mesa 1", onNavigateBackClick = {})
+        BackNavigationTopBar(title = "Mesa B1", onNavigateBackClick = {})
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Back Navigation - Título largo", style = MaterialTheme.typography.titleMedium)
+        BackNavigationTopBar(
+            title = "Mesa principal con nombre muy largo que debe truncarse",
+            onNavigateBackClick = {}
+        )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Login", style = MaterialTheme.typography.titleMedium)
@@ -508,20 +515,45 @@ fun TopBarShowcase() {
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Center content: Restaurant", style = MaterialTheme.typography.titleMedium)
-        CenterContentTopBar {
-            RestaurantNameTopBarItem(
-                restaurantName = "Kintaro ramen bar",
-                counter = "2"
-            )
-        }
+        CenterContentTopBar(
+            content = {
+                RestaurantNameTopBarItem(
+                    restaurantName = "Kintaro ramen bar",
+                    counter = "2"
+                )
+            }
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Center content: Restaurant - Nombre largo", style = MaterialTheme.typography.titleMedium)
+        CenterContentTopBar(
+            content = {
+                RestaurantNameTopBarItem(
+                    restaurantName = "Restaurante con nombre súper largo que debería mostrarse con marquee",
+                    counter = "99"
+                )
+            }
+        )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Center content: Process", style = MaterialTheme.typography.titleMedium)
-        CenterContentTopBar {
-            ProcessNameTopBarItem(
-                processName = "Checkout"
-            )
-        }
+        CenterContentTopBar(
+            content = {
+                ProcessNameTopBarItem(
+                    processName = "Checkout"
+                )
+            }
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Center content: Process - Nombre largo", style = MaterialTheme.typography.titleMedium)
+        CenterContentTopBar(
+            content = {
+                ProcessNameTopBarItem(
+                    processName = "Proceso de confirmación y pago completo de la cuenta"
+                )
+            }
+        )
     }
 }
 

@@ -15,21 +15,21 @@ enum class StatusTagVariant(
     Pending(
         backgroundColor = NeutralGray200,
         textColor = NeutralGray500,
-        defaultText = "PENDIENTE"
+        defaultText = "Pendiente"
     ),
     Confirmed(
         backgroundColor = NeutralGray400,
         textColor = NeutralGray,
-        defaultText = "CONFIRMADO"
+        defaultText = "Confirmado"
     ),
     Ended(
         backgroundColor = NeutralGray500,
         textColor = NeutralGray,
-        defaultText = "FINALIZADO"
+        defaultText = "Finalizado"
     ),
     Cancelled(
         backgroundColor = SecondaryNormal,
         textColor = NeutralGray,
-        defaultText = "CANCELADO"
+        defaultText = "Cancelado"
     )
 }

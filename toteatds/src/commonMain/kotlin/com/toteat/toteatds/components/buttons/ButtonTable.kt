@@ -3,12 +3,12 @@ package com.toteat.toteatds.components.buttons
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Schedule
@@ -22,6 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,13 +60,25 @@ fun ToteatButtonTable(
     val contentColor: Color = if (isOccupied) NeutralGray else NeutralGray400
     val titleColor: Color = if (isOccupied) NeutralGray else MaterialTheme.colorScheme.secondary
 
+    val statusText = if (isOccupied) "ocupada" else "disponible"
+    val accessibilityDescription = "$tableName $statusText, mesero: $waiterName, tiempo: $occupationTime"
+
     Card(
-        modifier = modifier.size(width = 108.dp, height = 80.dp),
+        modifier = modifier
+            .widthIn(min = 108.dp, max = 150.dp)
+            .heightIn(min = 80.dp, max = 100.dp)
+            .semantics {
+                role = Role.Button
+                contentDescription = accessibilityDescription
+                stateDescription = statusText
+            },
         onClick = onClick,
         enabled = isOccupied,
         colors = CardDefaults.cardColors(
             containerColor = containerColor,
-            contentColor = contentColor
+            contentColor = contentColor,
+            disabledContainerColor = containerColor,
+            disabledContentColor = contentColor
         )
     ) {
         Column(
@@ -82,12 +99,14 @@ fun ToteatButtonTable(
             ToteatButtonItemRow(
                 icon = Icons.Default.AccountCircle,
                 title = waiterName,
-                tint = contentColor
+                tint = contentColor,
+                contentDescription = "Mesero: $waiterName"
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.Schedule,
                 title = occupationTime,
-                tint = contentColor
+                tint = contentColor,
+                contentDescription = "Tiempo de ocupación: $occupationTime"
             )
         }
     }
@@ -97,11 +116,17 @@ fun ToteatButtonTable(
 private fun ToteatButtonItemRow(
     icon: ImageVector,
     title: String,
-    tint: Color
+    tint: Color,
+    contentDescription: String? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        modifier = Modifier.semantics(mergeDescendants = true) {
+            contentDescription?.let {
+                this.contentDescription = it
+            }
+        }
     ) {
         Icon(
             imageVector = icon,
@@ -115,16 +140,19 @@ private fun ToteatButtonItemRow(
             style = MaterialTheme.typography.helperBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f, fill = false)
         )
     }
 }
 
 @Composable
 @Preview
-fun ToteatButtonTablePreview() {
+private fun ToteatButtonTablePreview() {
     ToteatTheme {
-        Column {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             ToteatButtonTable(
                 tableName = "Mesa S7",
                 waiterName = "Jaime",
@@ -132,7 +160,7 @@ fun ToteatButtonTablePreview() {
                 tableStatus = ButtonTableStatus.OCCUPIED,
                 onClick = {}
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
             ToteatButtonTable(
                 tableName = "Mesa S10",
                 waiterName = "Disponible",
@@ -140,12 +168,20 @@ fun ToteatButtonTablePreview() {
                 tableStatus = ButtonTableStatus.AVAILABLE,
                 onClick = {}
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
             ToteatButtonTable(
-                tableName = "Mesa S10",
-                waiterName = "No Disponible",
-                occupationTime = "-",
-                tableStatus = ButtonTableStatus.AVAILABLE,
+                tableName = "Mesa VIP A1",
+                waiterName = "María González",
+                occupationTime = "14:30 hrs",
+                tableStatus = ButtonTableStatus.OCCUPIED,
+                onClick = {}
+            )
+
+            ToteatButtonTable(
+                tableName = "M1",
+                waiterName = "Ana",
+                occupationTime = "10:15",
+                tableStatus = ButtonTableStatus.OCCUPIED,
                 onClick = {}
             )
         }

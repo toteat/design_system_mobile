@@ -1,25 +1,20 @@
 package com.toteat.toteatds.components.bottomBar
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.ToteatTheme
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_room
@@ -44,102 +39,128 @@ fun ToteatBottomBar(
     onMyTablesClick: () -> Unit,
     onAllTablesClick: () -> Unit,
     onMoreClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    myTablesModifier: Modifier = Modifier,
-    allTablesModifier: Modifier = Modifier,
-    moreModifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .dropShadow(
-                shape = RoundedCornerShape(3.dp),
-                shadow = Shadow(
-                    radius = 6.dp,
-                    color = Color(0x40000000),
-                    offset = DpOffset(x = 0.dp, y = -1.dp)
-                )
-            )
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BottomBarItem(
-                type = ToteatBottomBarButtonType.Tables,
-                isSelected = selectedType == ToteatBottomBarButtonType.Tables,
-                onClick = onMyTablesClick,
-                modifier = myTablesModifier
-            )
-            BottomBarItem(
-                type = ToteatBottomBarButtonType.AllTables,
-                isSelected = selectedType == ToteatBottomBarButtonType.AllTables,
-                onClick = onAllTablesClick,
-                modifier = allTablesModifier
-            )
-            BottomBarItem(
-                type = ToteatBottomBarButtonType.ViewMore,
-                isSelected = selectedType == ToteatBottomBarButtonType.ViewMore,
-                onClick = onMoreClick,
-                modifier = moreModifier
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomBarItem(
-    type: ToteatBottomBarButtonType,
-    isSelected: Boolean,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val activeColor = MaterialTheme.colorScheme.primary
-    val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant
-
-    val iconColor = if (isSelected) activeColor else inactiveColor
-    val textColor = if (isSelected) activeColor else inactiveColor
-
-    Column(
-        modifier = modifier.noRippleClick(onClick),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    NavigationBar(
+        modifier = modifier.semantics {
+            contentDescription = "Barra de navegación principal"
+        },
+        containerColor = NeutralGray,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        tonalElevation = 3.dp,
+        windowInsets = WindowInsets(0.dp)
     ) {
-        Icon(
-            imageVector = vectorResource(type.iconRes),
-            contentDescription = type.text,
-            modifier = Modifier.size(20.dp),
-            tint = iconColor
+        NavigationBarItem(
+            selected = selectedType == ToteatBottomBarButtonType.Tables,
+            onClick = onMyTablesClick,
+            icon = {
+                Icon(
+                    imageVector = vectorResource(ToteatBottomBarButtonType.Tables.iconRes),
+                    contentDescription = null
+                )
+            },
+            label = {
+                ToteatBottomBarButtonType.Tables.text?.let {
+                    Text(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                indicatorColor = Color.Transparent
+            ),
+            modifier = Modifier.semantics {
+                contentDescription = "${ToteatBottomBarButtonType.Tables.text}, ${
+                    if (selectedType == ToteatBottomBarButtonType.Tables) "seleccionado" else "no seleccionado"
+                }"
+            }
         )
-        type.text?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyLarge,
-                color = textColor
-            )
-        }
+
+        NavigationBarItem(
+            selected = selectedType == ToteatBottomBarButtonType.AllTables,
+            onClick = onAllTablesClick,
+            icon = {
+                Icon(
+                    imageVector = vectorResource(ToteatBottomBarButtonType.AllTables.iconRes),
+                    contentDescription = null
+                )
+            },
+            label = {
+                ToteatBottomBarButtonType.AllTables.text?.let {
+                    Text(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                indicatorColor = Color.Transparent
+            ),
+            modifier = Modifier.semantics {
+                contentDescription = "${ToteatBottomBarButtonType.AllTables.text}, ${
+                    if (selectedType == ToteatBottomBarButtonType.AllTables) "seleccionado" else "no seleccionado"
+                }"
+            }
+        )
+
+        NavigationBarItem(
+            selected = selectedType == ToteatBottomBarButtonType.ViewMore,
+            onClick = onMoreClick,
+            icon = {
+                Icon(
+                    imageVector = vectorResource(ToteatBottomBarButtonType.ViewMore.iconRes),
+                    contentDescription = null
+                )
+            },
+            label = {
+                ToteatBottomBarButtonType.ViewMore.text?.let {
+                    Text(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                indicatorColor = Color.Transparent
+            ),
+            modifier = Modifier.semantics {
+                contentDescription = "${ToteatBottomBarButtonType.ViewMore.text}, ${
+                    if (selectedType == ToteatBottomBarButtonType.ViewMore) "seleccionado" else "no seleccionado"
+                }"
+            }
+        )
     }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-fun ToteatBottomBarPreview() {
+private fun ToteatBottomBarPreview() {
     ToteatTheme {
-        androidx.compose.runtime.remember {
-            androidx.compose.runtime.mutableStateOf(
-                ToteatBottomBarButtonType.AllTables
-            )
-        }.value.let { selected ->
-            ToteatBottomBar(
-                selectedType = selected,
-                onMyTablesClick = {},
-                onAllTablesClick = {},
-                onMoreClick = {}
-            )
+        val selectedState = androidx.compose.runtime.remember {
+            androidx.compose.runtime.mutableStateOf<ToteatBottomBarButtonType>(ToteatBottomBarButtonType.Tables)
         }
+
+        ToteatBottomBar(
+            selectedType = selectedState.value,
+            onMyTablesClick = { selectedState.value = ToteatBottomBarButtonType.Tables },
+            onAllTablesClick = { selectedState.value = ToteatBottomBarButtonType.AllTables },
+            onMoreClick = { selectedState.value = ToteatBottomBarButtonType.ViewMore }
+        )
     }
 }

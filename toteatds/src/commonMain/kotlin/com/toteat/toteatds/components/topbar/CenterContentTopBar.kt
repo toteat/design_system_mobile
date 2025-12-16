@@ -5,10 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
@@ -25,8 +31,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun CenterContentTopBar(
     content: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    semanticLabel: String = "Barra de navegación superior"
 ) {
     ToteatTopBar(
+        modifier = modifier,
+        semanticLabel = semanticLabel,
         centerComponent = {
             content()
         }
@@ -36,22 +46,31 @@ fun CenterContentTopBar(
 @Composable
 fun RestaurantNameTopBarItem(
     restaurantName: String,
-    counter: String
+    counter: String,
+    modifier: Modifier = Modifier
 ) {
     Row(
+        modifier = modifier
+            .width(IntrinsicSize.Max)
+            .semantics(mergeDescendants = true) {
+                contentDescription = "Restaurante $restaurantName, $counter pedidos pendientes"
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = restaurantName,
-            modifier = Modifier.basicMarquee(
-                iterations = Int.MAX_VALUE,
-                spacing = MarqueeSpacing(8.dp)
-            ),
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .basicMarquee(
+                    iterations = Int.MAX_VALUE,
+                    spacing = MarqueeSpacing(8.dp)
+                ),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
         )
         Box(
             modifier = Modifier
@@ -78,24 +97,31 @@ fun RestaurantNameTopBarItem(
 @Composable
 fun ProcessNameTopBarItem(
     processName: String,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = processName,
-        modifier = Modifier.basicMarquee(
-            iterations = Int.MAX_VALUE,
-            spacing = MarqueeSpacing(8.dp)
-        ),
+        modifier = modifier
+            .basicMarquee(
+                iterations = Int.MAX_VALUE,
+                spacing = MarqueeSpacing(8.dp)
+            )
+            .semantics {
+                heading()
+                contentDescription = processName
+            },
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSecondary,
         maxLines = 1,
-        overflow = TextOverflow.Ellipsis
+        overflow = TextOverflow.Ellipsis,
+        textAlign = TextAlign.Center
     )
 }
 
 
 @Composable
 @Preview
-fun CenterContentTopBarPreview() {
+private fun CenterContentTopBarRestaurantPreview() {
     ToteatTheme {
         CenterContentTopBar(
             content = {
@@ -110,7 +136,22 @@ fun CenterContentTopBarPreview() {
 
 @Composable
 @Preview
-fun CenterContentTopBar2Preview() {
+private fun CenterContentTopBarRestaurantLongNamePreview() {
+    ToteatTheme {
+        CenterContentTopBar(
+            content = {
+                RestaurantNameTopBarItem(
+                    restaurantName = "Restaurante con nombre súper largo que debería mostrarse con marquee",
+                    counter = "99"
+                )
+            }
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun CenterContentTopBarProcessPreview() {
     ToteatTheme {
         CenterContentTopBar(
             content = {
@@ -121,3 +162,18 @@ fun CenterContentTopBar2Preview() {
         )
     }
 }
+
+@Composable
+@Preview
+private fun CenterContentTopBarProcessLongNamePreview() {
+    ToteatTheme {
+        CenterContentTopBar(
+            content = {
+                ProcessNameTopBarItem(
+                    processName = "Proceso de confirmación y pago completo de la cuenta"
+                )
+            }
+        )
+    }
+}
+
