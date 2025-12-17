@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Schedule
@@ -65,8 +63,7 @@ fun ToteatButtonTable(
 
     Card(
         modifier = modifier
-            .widthIn(min = 108.dp, max = 150.dp)
-            .heightIn(min = 80.dp, max = 100.dp)
+            .size(width = 108.dp, height = 96.dp)
             .semantics {
                 role = Role.Button
                 contentDescription = accessibilityDescription

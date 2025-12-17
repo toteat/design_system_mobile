@@ -1,8 +1,11 @@
 package com.toteat.toteatds.components.textfields
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -90,16 +93,62 @@ fun ToteatTextField(
     }
 }
 
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-@Preview
-fun ToteatTextFieldPreview() {
+private fun ToteatTextFieldPreview() {
     ToteatTheme {
-        ToteatTextField(
-            state = rememberTextFieldState(),
-            modifier = Modifier.width(300.dp),
-            placeHolder = "Test",
-            title = "Email",
-            helperText = "Enter an email"
-        )
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Estado normal
+            ToteatTextField(
+                state = rememberTextFieldState(),
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu email",
+                title = "Email",
+                helperText = "Tu correo electrónico"
+            )
+
+            // Estado con error
+            ToteatTextField(
+                state = rememberTextFieldState("invalid@"),
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu email",
+                title = "Email",
+                helperText = "Email inválido",
+                isError = true
+            )
+
+            // Estado con éxito
+            ToteatTextField(
+                state = rememberTextFieldState("usuario@toteat.cl"),
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu email",
+                title = "Email",
+                helperText = "Email válido",
+                isSuccess = true
+            )
+
+            // Estado con advertencia
+            ToteatTextField(
+                state = rememberTextFieldState("test@test.com"),
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu email",
+                title = "Email",
+                helperText = "Usa tu email corporativo",
+                isWarning = true
+            )
+
+            // Estado deshabilitado
+            ToteatTextField(
+                state = rememberTextFieldState("disabled@toteat.cl"),
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu email",
+                title = "Email (deshabilitado)",
+                helperText = "Campo deshabilitado",
+                enabled = false
+            )
+        }
     }
 }

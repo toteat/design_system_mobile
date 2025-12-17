@@ -1,11 +1,13 @@
 package com.toteat.toteatds.components.bottomBar
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,7 +16,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.ToteatTheme
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_room
@@ -41,15 +42,22 @@ fun ToteatBottomBar(
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar(
-        modifier = modifier.semantics {
-            contentDescription = "Barra de navegación principal"
-        },
-        containerColor = NeutralGray,
-        contentColor = MaterialTheme.colorScheme.onSurface,
-        tonalElevation = 3.dp,
-        windowInsets = WindowInsets(0.dp)
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shadowElevation = 16.dp,
+        color = Color.White
     ) {
+        NavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics {
+                    contentDescription = "Barra de navegación principal"
+                },
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            tonalElevation = 0.dp,
+            windowInsets = WindowInsets(0.dp)
+        ) {
         NavigationBarItem(
             selected = selectedType == ToteatBottomBarButtonType.Tables,
             onClick = onMyTablesClick,
@@ -145,7 +153,8 @@ fun ToteatBottomBar(
                 }"
             }
         )
-    }
+        } // NavigationBar
+    } // Surface
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)

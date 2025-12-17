@@ -1,17 +1,25 @@
 package com.toteat.toteatds.components.textfields
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.TextObfuscationMode
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -19,8 +27,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.icons.StatusTrailingIcon
 import com.toteat.toteatds.components.icons.VisibilityToggleIcon
+import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.headingMediumRegular
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ToteatPasswordTextField(
@@ -98,3 +108,64 @@ fun ToteatPasswordTextField(
         )
     }
 }
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun ToteatPasswordTextFieldPreview() {
+    ToteatTheme {
+        var isVisible by remember { mutableStateOf(false) }
+
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Estado normal
+            ToteatPasswordTextField(
+                state = rememberTextFieldState(),
+                isPasswordVisible = isVisible,
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu contraseña",
+                title = "Contraseña",
+                helperText = "Mínimo 8 caracteres",
+                onToggleVisibilityCLick = { isVisible = !isVisible }
+            )
+
+            // Con error
+            ToteatPasswordTextField(
+                state = rememberTextFieldState("123"),
+                isPasswordVisible = false,
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu contraseña",
+                title = "Contraseña",
+                helperText = "Contraseña muy corta",
+                isError = true,
+                onToggleVisibilityCLick = {}
+            )
+
+            // Con éxito
+            ToteatPasswordTextField(
+                state = rememberTextFieldState("MiPassword123!"),
+                isPasswordVisible = false,
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu contraseña",
+                title = "Contraseña",
+                helperText = "Contraseña válida",
+                isSuccess = true,
+                onToggleVisibilityCLick = {}
+            )
+
+            // Deshabilitado
+            ToteatPasswordTextField(
+                state = rememberTextFieldState("password"),
+                isPasswordVisible = false,
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "Ingresa tu contraseña",
+                title = "Contraseña (deshabilitada)",
+                helperText = "Campo bloqueado",
+                enabled = false,
+                onToggleVisibilityCLick = {}
+            )
+        }
+    }
+}
+

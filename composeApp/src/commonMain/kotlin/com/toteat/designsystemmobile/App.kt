@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
@@ -338,13 +339,27 @@ fun ButtonShowcase() {
 
 @Composable
 fun ChipButtonShowcase() {
+    var selectedItem by remember { mutableStateOf<String?>("Salon") }
 
+    Column(
+        modifier = Modifier.padding(vertical = 24.dp, horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Estado normal", style = MaterialTheme.typography.titleSmall)
         ChipButtonContainer(
-            items = listOf("Salon", "Bar", "Terraza", "Vip", "los tres"),
-            onItemSelected = {},
-            modifier = Modifier.padding(vertical = 24.dp, horizontal = 24.dp)
+            items = listOf("Salon", "Bar", "Terraza", "Vip"),
+            selectedItem = selectedItem,
+            onItemSelected = { selectedItem = it }
         )
 
+        Text("Estado deshabilitado", style = MaterialTheme.typography.titleSmall)
+        ChipButtonContainer(
+            items = listOf("Salon", "Bar", "Terraza", "Vip"),
+            selectedItem = "Bar",
+            onItemSelected = {},
+            enabled = false
+        )
+    }
 }
 
 
@@ -361,6 +376,7 @@ fun InputShowcase() {
             title = "Email",
             placeHolder = "user@toteat.com",
             helperText = "Ingrese su correo",
+            keyboardType = KeyboardType.Email,
             isSuccess = true
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)

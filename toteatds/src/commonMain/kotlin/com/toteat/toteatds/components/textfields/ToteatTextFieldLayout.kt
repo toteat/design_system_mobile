@@ -17,6 +17,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.extended
@@ -45,9 +48,8 @@ fun ToteatTextFieldLayout(
         .height(50.dp)
         .background(
             color = when {
-                isFocused -> MaterialTheme.colorScheme.background
-                enabled -> MaterialTheme.colorScheme.background
-                else -> MaterialTheme.colorScheme.outline
+                !enabled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
+                else -> MaterialTheme.colorScheme.background
             },
             shape = RoundedCornerShape(8.dp)
         )
@@ -58,11 +60,20 @@ fun ToteatTextFieldLayout(
                 isError -> MaterialTheme.colorScheme.error
                 isFocused -> MaterialTheme.colorScheme.onTertiary
                 isWarning -> MaterialTheme.colorScheme.extended.isWarning
+                !enabled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.38f)
                 else -> MaterialTheme.colorScheme.outline
             },
             shape = RoundedCornerShape(8.dp)
         )
         .padding(horizontal = 12.dp, vertical = 8.dp)
+        .semantics {
+            if (title != null) {
+                contentDescription = title
+            }
+            if (isError && helperText != null) {
+                error(helperText)
+            }
+        }
     Column(
         modifier = modifier
     ) {
@@ -70,7 +81,11 @@ fun ToteatTextFieldLayout(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onTertiary
+                color = if (enabled) {
+                    MaterialTheme.colorScheme.onTertiary
+                } else {
+                    MaterialTheme.colorScheme.onTertiary.copy(alpha = 0.38f)
+                }
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -80,7 +95,13 @@ fun ToteatTextFieldLayout(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = helperText,
-                color = MaterialTheme.colorScheme.extended.neutral400,
+                color = when {
+                    !enabled -> MaterialTheme.colorScheme.extended.neutral400.copy(alpha = 0.38f)
+                    isError -> MaterialTheme.colorScheme.error
+                    isWarning -> MaterialTheme.colorScheme.extended.isWarning
+                    isSuccess -> MaterialTheme.colorScheme.extended.isSuccess
+                    else -> MaterialTheme.colorScheme.extended.neutral400
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.End
             )
