@@ -2,6 +2,43 @@
 
 ## [Unreleased]
 
+## [0.0.18] - 2025-12-17
+### Changed
+- **ToteatBottomBar**: Replaced custom dropShadow with native Material3 Surface shadowElevation (12.dp) for better cross-platform shadow rendering
+- **ToteatBottomBar**: Improved shadow visibility and separation from content
+- **ArrowBackIconButton**: Enhanced with full accessibility support including semantic roles, contentDescription, and minimumInteractiveComponentSize
+- **ArrowBackIconButton**: Added enabled/disabled state with proper visual feedback (38% opacity for disabled)
+- **ArrowBackIconButton**: Fixed icon color to use secondary (orange) as per design system
+- **ArrowBackIconButton**: Improved API with modifier and enabled parameters for better flexibility
+- **ChipButton**: Enhanced with complete accessibility including semantic roles, selected state, and contentDescription
+- **ChipButton**: Added enabled/disabled state with proper opacity (38% for disabled text, 50% for disabled background)
+- **ChipButton**: Improved touch targets with minimumInteractiveComponentSize (48.dp)
+- **ChipButton**: Restored original colors: TertiaryNormal for selected, NeutralGray100 for unselected
+- **ChipButtonContainer**: Refactored to controlled component pattern - selectedItem now managed externally
+- **ChipButtonContainer**: Added enabled parameter that propagates to all child chips
+- **ChipButtonContainer**: Enhanced with semantic contentDescription for the container
+- **ChipButtonContainer**: Updated showcase in App.kt with proper state management
+- **ToteatTextFieldLayout**: Enhanced with semantic contentDescription using field title
+- **ToteatTextFieldLayout**: Added error semantics that announce error messages to screen readers
+- **ToteatTextFieldLayout**: Improved disabled state visual feedback (12% background opacity, 38% border/text opacity)
+- **ToteatTextFieldLayout**: Enhanced helper text color management based on state (error, warning, success, disabled)
+- **ToteatTextField**: Enhanced preview showing 5 states (normal, error, success, warning, disabled)
+- **ToteatPasswordTextField**: Enhanced preview showing 4 states with interactive visibility toggle
+- **ToteatPhoneNumberField**: Added semantic role (DropdownList) and contentDescription to dial code selector
+- **ToteatPhoneNumberField**: Enhanced preview showing 4 states with interactive dial code selection
+- **ModifierExtensions**: Fixed naming conflicts by renaming Shadow to DropShadowConfig and DpOffset to DropShadowOffset
+
+### Added
+- **ChipButton**: Added preview showing all 4 states (unselected, selected, disabled unselected, disabled selected)
+- **ChipButtonContainer**: Added comprehensive preview with normal and disabled states
+- **ArrowBackIconButton**: Added preview showing enabled and disabled states
+- **TextField Components**: All text field components now have complete accessibility documentation in previews
+
+### Fixed
+- **ArrowBackIconButton**: Fixed icon visibility issue by using proper IconButtonDefaults.iconButtonColors with transparent container
+- **ChipButtonContainer**: Fixed implementation in App.kt to use new controlled component API
+- **ModifierExtensions**: Resolved compilation errors caused by naming conflicts with Compose native types
+
 ## [0.0.17] - 2025-12-16
 ### Fixed
 - SwitchButtonContainer: Fixed syntax errors and component structure
