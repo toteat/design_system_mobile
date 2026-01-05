@@ -26,7 +26,7 @@ fun DifferentAmountPaymentsIcon(
 
 @Composable
 @Preview
-fun DifferentAmountPaymentsIconPreview() {
+private fun DifferentAmountPaymentsIconPreview() {
     ToteatTheme {
         DifferentAmountPaymentsIcon()
     }

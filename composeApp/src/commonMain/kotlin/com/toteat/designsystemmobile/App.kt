@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -60,9 +61,9 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoCreamOrange
 import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.buttons.ButtonTableStatus
 import com.toteat.toteatds.components.buttons.ChipButtonContainer
-import com.toteat.toteatds.components.buttons.PrimaryButton
-import com.toteat.toteatds.components.buttons.SecondaryButton
-import com.toteat.toteatds.components.buttons.TertiaryButton
+import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
+import com.toteat.toteatds.components.buttons.ToteatSecondaryButton
+import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
@@ -263,27 +264,27 @@ fun ButtonShowcase() {
     ) {
         Text("Primary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            PrimaryButton(onClick = {}, text = "Default")
-            PrimaryButton(onClick = {}, text = "Disabled", enabled = false)
+            ToteatPrimaryButton(onClick = {}, text = "Default")
+            ToteatPrimaryButton(onClick = {}, text = "Disabled", enabled = false)
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            SecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null) })
-            SecondaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.Add, null) })
+            ToteatSecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null, modifier = Modifier.size(32.dp)) })
+            ToteatSecondaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.Add, null, modifier = Modifier.size(32.dp)) })
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
-            TertiaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.RocketLaunch, null) })
+            ToteatTertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null, modifier = Modifier.size(32.dp)) })
+            ToteatTertiaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.RocketLaunch, null, modifier = Modifier.size(32.dp)) })
         }
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ToteatPrintButton(onClick = {}, text = "Default", leadingIcon = { PrintIconButton() }, modifier = Modifier.fillMaxWidth())
+            ToteatPrintButton(onClick = {}, text = "Default", leadingIcon = { PrintIconButton(size = 32.dp) }, modifier = Modifier.fillMaxWidth())
 
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
@@ -293,7 +294,7 @@ fun ButtonShowcase() {
         ToteatRectangleButton(
             title = "Pago total",
             subTitle = "de la cuenta",
-            icon = { TotalPaymentsIcon() },
+            icon = { TotalPaymentsIcon(size = 32.dp) },
             onClick = {}
         )
 
@@ -304,14 +305,14 @@ fun ButtonShowcase() {
             ToteatSquareButton(
                 title = "Dividir pago",
                 subTitle = "En partes iguales",
-                icon = { SplitPaymentIcon() },
+                icon = { SplitPaymentIcon(size = 32.dp) },
                 onClick = {}
             )
             Spacer(modifier = Modifier.width(24.dp))
             ToteatSquareButton(
                 title = "Pagos por",
                 subTitle = "montos diferentes",
-                icon = { DifferentAmountPaymentsIcon() },
+                icon = { DifferentAmountPaymentsIcon(size = 32.dp) },
                 onClick = {}
             )
         }

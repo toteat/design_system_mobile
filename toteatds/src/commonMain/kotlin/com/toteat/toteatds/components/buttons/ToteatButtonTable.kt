@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -33,6 +34,12 @@ import com.toteat.toteatds.theme.NeutralGray400
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.helperBold
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.occupation_time_description
+import designsystemmobile.toteatds.generated.resources.table_available
+import designsystemmobile.toteatds.generated.resources.table_occupied
+import designsystemmobile.toteatds.generated.resources.waiter_description
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class ButtonTableStatus {
@@ -45,8 +52,9 @@ fun ToteatButtonTable(
     waiterName: String,
     occupationTime: String,
     tableStatus: ButtonTableStatus,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    testTag: String? = null
 ) {
     val isOccupied = tableStatus == ButtonTableStatus.OCCUPIED
     val containerColor = if (isOccupied) {
@@ -58,8 +66,8 @@ fun ToteatButtonTable(
     val contentColor: Color = if (isOccupied) NeutralGray else NeutralGray400
     val titleColor: Color = if (isOccupied) NeutralGray else MaterialTheme.colorScheme.secondary
 
-    val statusText = if (isOccupied) "ocupada" else "disponible"
-    val accessibilityDescription = "$tableName $statusText, mesero: $waiterName, tiempo: $occupationTime"
+    val statusText = if (isOccupied) stringResource(Res.string.table_occupied) else stringResource(Res.string.table_available)
+    val accessibilityDescription = "$tableName $statusText"
 
     Card(
         modifier = modifier
@@ -68,7 +76,8 @@ fun ToteatButtonTable(
                 role = Role.Button
                 contentDescription = accessibilityDescription
                 stateDescription = statusText
-            },
+            }
+            .then(if (testTag != null) Modifier.testTag("toteat_button_table_$testTag") else Modifier),
         onClick = onClick,
         enabled = isOccupied,
         colors = CardDefaults.cardColors(
@@ -97,13 +106,13 @@ fun ToteatButtonTable(
                 icon = Icons.Default.AccountCircle,
                 title = waiterName,
                 tint = contentColor,
-                contentDescription = "Mesero: $waiterName"
+                contentDescription = stringResource(Res.string.waiter_description, waiterName)
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.Schedule,
                 title = occupationTime,
                 tint = contentColor,
-                contentDescription = "Tiempo de ocupación: $occupationTime"
+                contentDescription = stringResource(Res.string.occupation_time_description, occupationTime)
             )
         }
     }
