@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.icons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle

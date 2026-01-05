@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyLargeRegular
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.rectangle_button_description
 import org.jetbrains.compose.resources.stringResource
@@ -40,7 +40,7 @@ fun ToteatRectangleButton(
     subTitle: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    testTag: String? = null,
+    testTag: String = "",
     icon: @Composable () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -56,7 +56,7 @@ fun ToteatRectangleButton(
             .heightIn(max = 128.dp)
             .fillMaxWidth()
             .semantics { contentDescription = description }
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         interactionSource = interactionSource,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, borderColor)

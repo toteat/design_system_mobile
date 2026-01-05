@@ -537,7 +537,6 @@ fun TopBarShowcase() {
             content = {
                 RestaurantNameTopBarItem(
                     restaurantName = "Kintaro ramen bar",
-                    counter = "2"
                 )
             },
             testTag = "center_content_restaurant_topbar"
@@ -549,7 +548,6 @@ fun TopBarShowcase() {
             content = {
                 RestaurantNameTopBarItem(
                     restaurantName = "Restaurante con nombre súper largo que debería mostrarse con marquee",
-                    counter = "99"
                 )
             },
             testTag = "center_content_restaurant_long_topbar"

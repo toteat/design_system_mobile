@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.buttons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -54,7 +54,7 @@ fun ToteatButtonTable(
     tableStatus: ButtonTableStatus,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    testTag: String? = null
+    testTag: String = ""
 ) {
     val isOccupied = tableStatus == ButtonTableStatus.OCCUPIED
     val containerColor = if (isOccupied) {
@@ -77,7 +77,7 @@ fun ToteatButtonTable(
                 contentDescription = accessibilityDescription
                 stateDescription = statusText
             }
-            .then(if (testTag != null) Modifier.testTag("toteat_button_table_$testTag") else Modifier),
+            .then(Modifier.setTestTag(testTag)),
         onClick = onClick,
         enabled = isOccupied,
         colors = CardDefaults.cardColors(

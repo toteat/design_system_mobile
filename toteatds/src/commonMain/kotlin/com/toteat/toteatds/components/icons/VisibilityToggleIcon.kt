@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.icons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

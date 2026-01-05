@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray500
+import com.toteat.toteatds.utils.setTestTag
 
 private val PrintButtonShape = RoundedCornerShape(12)
 private val PrintButtonHeight = 74.dp
@@ -37,7 +37,7 @@ fun ToteatPrintButton(
     enabled: Boolean = true,
     text: String? = null,
     contentDescription: String? = null,
-    testTag: String? = null,
+    testTag: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
@@ -56,7 +56,7 @@ fun ToteatPrintButton(
         onClick = onClick,
         modifier = modifier
             .height(PrintButtonHeight)
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .semantics {
                 if (contentDescription != null) {
                     this.contentDescription = contentDescription

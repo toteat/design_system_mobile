@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.error
@@ -23,6 +24,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.utils.setTestTag
 
 @Composable
 fun ToteatTextFieldLayout(
@@ -33,14 +35,16 @@ fun ToteatTextFieldLayout(
     isWarning: Boolean = false,
     helperText: String? = null,
     enabled: Boolean = true,
-    onFocusChanged: (Boolean) -> Unit = {},
+    onFocusChange: (Boolean) -> Unit = {},
+    testTag: String = "",
     textField: @Composable (Modifier, MutableInteractionSource) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
+    val currentOnFocusChange by rememberUpdatedState(onFocusChange)
 
     LaunchedEffect(isFocused) {
-        onFocusChanged(isFocused)
+        currentOnFocusChange(isFocused)
     }
 
     val textFieldStyleModifier = Modifier
@@ -76,6 +80,7 @@ fun ToteatTextFieldLayout(
         }
     Column(
         modifier = modifier
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
         title?.let {
             Text(

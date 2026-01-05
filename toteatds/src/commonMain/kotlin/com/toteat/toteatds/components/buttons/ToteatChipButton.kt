@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.buttons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -37,7 +37,7 @@ fun ToteatChipButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    testTag: String? = null
+    testTag: String = ""
 ) {
     val selectedText = stringResource(Res.string.chip_selected)
     val notSelectedText = stringResource(Res.string.chip_not_selected)
@@ -73,7 +73,7 @@ fun ToteatChipButton(
                     "$text, $notSelectedText"
                 }
             }
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .padding(horizontal = 16.dp, vertical = 8.dp))
 }
 

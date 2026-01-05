@@ -1,23 +1,16 @@
 package com.toteat.toteatds.components.topbar
 
 import androidx.compose.foundation.MarqueeSpacing
-import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -25,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
-import com.toteat.toteatds.theme.extended
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.restaurant_description
 import org.jetbrains.compose.resources.stringResource
@@ -35,7 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun CenterContentTopBar(
     modifier: Modifier = Modifier,
     semanticLabel: String = "Barra de navegación superior",
-    testTag: String? = null,
+    testTag: String = "",
     content: @Composable () -> Unit
 ) {
     ToteatTopBar(
@@ -51,10 +43,9 @@ fun CenterContentTopBar(
 @Composable
 fun RestaurantNameTopBarItem(
     restaurantName: String,
-    counter: String,
     modifier: Modifier = Modifier
 ) {
-    val description = stringResource(Res.string.restaurant_description, restaurantName, counter)
+    val description = stringResource(Res.string.restaurant_description, restaurantName)
 
     Row(
         modifier = modifier
@@ -115,7 +106,6 @@ private fun CenterContentTopBarRestaurantPreview() {
             content = {
                 RestaurantNameTopBarItem(
                     restaurantName = "Kintaro ramen bar",
-                    counter = "2"
                 )
             }
         )
@@ -130,7 +120,6 @@ private fun CenterContentTopBarRestaurantLongNamePreview() {
             content = {
                 RestaurantNameTopBarItem(
                     restaurantName = "Restaurante con nombre súper largo que debería mostrarse con marquee",
-                    counter = "99"
                 )
             }
         )

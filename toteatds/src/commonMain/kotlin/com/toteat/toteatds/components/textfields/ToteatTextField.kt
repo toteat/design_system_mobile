@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.textfields
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +40,8 @@ fun ToteatTextField(
     singleLine: Boolean = true,
     enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
-    onFocusChanged: (Boolean) -> Unit = {}
+    onFocusChange: (Boolean) -> Unit = {},
+    testTag: String = ""
 ) {
     ToteatTextFieldLayout(
         modifier = modifier,
@@ -49,7 +51,8 @@ fun ToteatTextField(
         isWarning = isWarning,
         helperText = helperText,
         enabled = enabled,
-        onFocusChanged = onFocusChanged
+        onFocusChange = onFocusChange,
+        testTag = testTag
     ) { styleModifier, interactionSource ->
         BasicTextField(
             state = state,

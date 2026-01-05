@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.topbar
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +22,7 @@ fun BackNavigationTopBar(
     title: String,
     onNavigateBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    testTag: String? = null
+    testTag: String = ""
 ) {
     ToteatTopBar(
         modifier = modifier,

@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.brand.logo
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable

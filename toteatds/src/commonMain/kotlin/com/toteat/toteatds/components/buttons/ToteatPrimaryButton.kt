@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.PrimaryLight
+import com.toteat.toteatds.utils.setTestTag
 
 private val ButtonShape = RoundedCornerShape(50)
 private val ButtonHeight = 48.dp
@@ -36,7 +36,7 @@ fun ToteatPrimaryButton(
     enabled: Boolean = true,
     text: String? = null,
     contentDescription: String? = null,
-    testTag: String? = null,
+    testTag: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
@@ -54,7 +54,7 @@ fun ToteatPrimaryButton(
         onClick = onClick,
         modifier = modifier
             .height(ButtonHeight)
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .semantics {
                 if (contentDescription != null) {
                     this.contentDescription = contentDescription

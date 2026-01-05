@@ -153,8 +153,8 @@ fun ToteatBottomBar(
                 }"
             }
         )
-        } // NavigationBar
-    } // Surface
+        }
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)

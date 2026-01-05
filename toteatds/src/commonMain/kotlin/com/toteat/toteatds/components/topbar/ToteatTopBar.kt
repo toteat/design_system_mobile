@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.topbar
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -33,7 +33,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ToteatTopBar(
     modifier: Modifier = Modifier,
     semanticLabel: String = stringResource(Res.string.topbar_semantic_label),
-    testTag: String? = null,
+    testTag: String = "",
     leftComponent: (@Composable RowScope.() -> Unit)? = null,
     rightComponent: (@Composable RowScope.() -> Unit)? = null,
     centerComponent: @Composable RowScope.() -> Unit
@@ -47,7 +47,7 @@ fun ToteatTopBar(
             .semantics {
                 contentDescription = semanticLabel
             }
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -78,7 +78,6 @@ fun ToteatTopBar(
 private fun ToteatTopBarPreview() {
     ToteatTheme {
         Column {
-            // Con todos los componentes
             ToteatTopBar(
                 leftComponent = {
                     IconButton(onClick = {}) {
@@ -107,7 +106,6 @@ private fun ToteatTopBarPreview() {
                 }
             )
 
-            // Solo con componente central
             ToteatTopBar(
                 centerComponent = {
                     Text(
@@ -118,7 +116,6 @@ private fun ToteatTopBarPreview() {
                 }
             )
 
-            // Con texto largo
             ToteatTopBar(
                 leftComponent = {
                     IconButton(onClick = {}) {

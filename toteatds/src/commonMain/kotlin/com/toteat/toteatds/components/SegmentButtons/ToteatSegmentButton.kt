@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.SegmentButtons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

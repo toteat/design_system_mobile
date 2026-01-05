@@ -45,7 +45,8 @@ fun ToteatPasswordTextField(
     isError: Boolean = false,
     enabled: Boolean = true,
     onToggleVisibilityCLick: () -> Unit = {},
-    onFocusChanged: (Boolean) -> Unit = {}
+    onFocusChange: (Boolean) -> Unit = {},
+    testTag: String = ""
 ) {
     ToteatTextFieldLayout(
         modifier = modifier,
@@ -55,7 +56,8 @@ fun ToteatPasswordTextField(
         isError = isError,
         helperText = helperText,
         enabled = enabled,
-        onFocusChanged = onFocusChanged
+        onFocusChange = onFocusChange,
+        testTag = testTag
     ) { styleModifier, interactionSource ->
         BasicSecureTextField(
             state = state,
@@ -168,4 +170,3 @@ private fun ToteatPasswordTextFieldPreview() {
         }
     }
 }
-

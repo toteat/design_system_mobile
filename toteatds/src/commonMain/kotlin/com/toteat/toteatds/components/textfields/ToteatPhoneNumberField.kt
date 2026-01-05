@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.textfields
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,6 +48,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ToteatPhoneNumberField(
     state: TextFieldState,
+    selectedDialCode: String,
+    dialCodeOptions: List<String>,
+    onDialCodeChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeHolder: String? = null,
     title: String? = null,
@@ -56,10 +60,8 @@ fun ToteatPhoneNumberField(
     isWarning: Boolean = false,
     enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Phone,
-    selectedDialCode: String,
-    dialCodeOptions: List<String>,
-    onDialCodeChange: (String) -> Unit,
-    onFocusChanged: (Boolean) -> Unit = {}
+    onFocusChange: (Boolean) -> Unit = {},
+    testTag: String = ""
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -71,7 +73,8 @@ fun ToteatPhoneNumberField(
         isWarning = isWarning,
         helperText = helperText,
         enabled = enabled,
-        onFocusChanged = onFocusChanged
+        onFocusChange = onFocusChange,
+        testTag = testTag
     ) { styleModifier, interactionSource ->
         BasicTextField(
             state = state,
@@ -229,5 +232,3 @@ private fun ToteatPhoneNumberFieldPreview() {
         }
     }
 }
-
-

@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.topbar
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -26,7 +27,7 @@ fun LoginTopBar(
     onMenuIconClick: () -> Unit,
     onCustomerServiceButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    testTag: String? = null
+    testTag: String = ""
 ) {
     val menuDescription = stringResource(Res.string.menu_open_description)
     val logoDescription = stringResource(Res.string.toteat_logo_description)

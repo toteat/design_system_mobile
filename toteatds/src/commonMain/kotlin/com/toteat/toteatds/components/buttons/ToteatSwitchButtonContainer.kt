@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.buttons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -31,7 +32,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -58,7 +58,7 @@ fun ToteatSwitchButtonContainer(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    testTag: String? = null
+    testTag: String = ""
 ) {
     val contentAlpha = if (enabled) 1f else 0.38f
     val switchState =
@@ -83,7 +83,7 @@ fun ToteatSwitchButtonContainer(
                 .semantics { contentDescription = description }
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .fillMaxWidth()
-                .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

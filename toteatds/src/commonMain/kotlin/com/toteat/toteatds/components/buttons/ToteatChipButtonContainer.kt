@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.buttons
+import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -38,7 +38,7 @@ fun ToteatChipButtonContainer(
     onItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    testTag: String? = null,
+    testTag: String = "",
     itemModifier: (itemText: String) -> Modifier = { Modifier }
 ) {
     val containerDescription = stringResource(Res.string.chip_container_description)
@@ -49,7 +49,7 @@ fun ToteatChipButtonContainer(
             .semantics {
                 contentDescription = containerDescription
             }
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items.forEach { item ->

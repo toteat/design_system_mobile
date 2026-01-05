@@ -22,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +30,7 @@ import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyLargeRegular
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.square_button_description
 import org.jetbrains.compose.resources.stringResource
@@ -42,7 +42,7 @@ fun ToteatSquareButton(
     subTitle: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    testTag: String? = null,
+    testTag: String = "",
     icon: @Composable () -> Unit
 ) {
 
@@ -60,7 +60,7 @@ fun ToteatSquareButton(
             .heightIn(max = 128.dp)
             .width(150.dp)
             .semantics { contentDescription = description }
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         interactionSource = interactionSource,
         colors = CardDefaults
             .cardColors(containerColor = MaterialTheme.colorScheme.background),
