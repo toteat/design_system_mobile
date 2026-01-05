@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-01-05
+### Changed
+- **ToteatDropDown**: Renamed component from AppDropdown to ToteatDropDown for consistency with design system naming conventions
+- **ToteatDropDown**: Replaced List<String> with ImmutableList<String> to avoid unstable collections warning in Compose
+- **ToteatDropDown**: Optimized Card padding to use lambda-based modifier for deferred state reads, improving performance during animations
+- **ToteatDropDown**: Added setTestTag for UI testing support
+- **ToteatDropDown**: Enhanced accessibility with contentDescription and semantic properties
+- **ToteatDropDown**: Implemented localization support using Res instead of hardcoded strings
+- **ToteatDropDown**: Fixed dropdown behavior to allow opening/closing by clicking the component, and improved interaction handling
+- **ToteatToastMessage**: Enhanced with full accessibility support including contentDescription and semantic roles
+- **ToteatToastMessage**: Added setTestTag for UI testing support
+- **ToteatToastMessage**: Implemented localization support using Res for all text content
+
+### Fixed
+- **App.kt**: Resolved unresolved reference to 'collections' by adding proper import for ImmutableList
+- **ToteatDropDown**: Fixed dropdown not opening after previous changes, restored original design behavior
+- **ToteatDropDown**: Removed error styling that was causing red appearance, maintained previous design
+
+### Added
+- **ToteatDropDown**: Added comprehensive accessibility features following design system guidelines
+- **ToteatToastMessage**: Added localization and accessibility improvements to match other components
+
 ## [0.0.18] - 2025-12-17
 ### Changed
 - **ToteatBottomBar**: Replaced custom dropShadow with native Material3 Surface shadowElevation (12.dp) for better cross-platform shadow rendering
