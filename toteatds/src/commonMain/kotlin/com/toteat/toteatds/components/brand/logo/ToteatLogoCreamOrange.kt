@@ -22,6 +22,6 @@ fun ToteatLogoCreamOrange(
 
 @Composable
 @Preview
-fun ToteatLogoCreamOrangePreview() {
+private fun ToteatLogoCreamOrangePreview() {
     ToteatLogoCreamOrange()
 }

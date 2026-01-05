@@ -1,5 +1,4 @@
 package com.toteat.toteatds.components.list
-import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,20 +23,25 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.utils.setTestTag
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun GroupedListItem(
-    label: @Composable () -> Unit,
-    value: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     labelBackgroundColor: Color = MaterialTheme.colorScheme.extended.neutral100,
-    valueBackgroundColor: Color = Color.White,
+    valueBackgroundColor: Color = MaterialTheme.colorScheme.surface,
+    testTag: String = "",
+    label: @Composable () -> Unit,
+    value: @Composable () -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
+            .setTestTag(testTag)
     ) {
         Box(
             modifier = Modifier
@@ -69,7 +73,8 @@ fun GroupedList(
     cornerRadius: Dp = 12.dp,
     borderColor: Color = MaterialTheme.colorScheme.outline,
     borderWidth: Dp = 1.dp,
-    items: List<@Composable () -> Unit>
+    testTag: String = "",
+    items: ImmutableList<@Composable () -> Unit>
 ) {
     val shape = ListItemPosition.Single.getShape(cornerRadius)
 
@@ -81,6 +86,7 @@ fun GroupedList(
                 color = borderColor,
                 shape = shape
             )
+            .setTestTag(testTag)
     ) {
         items.forEachIndexed { index, item ->
             item()
@@ -97,7 +103,7 @@ fun GroupedList(
 
 @Composable
 @Preview(showBackground = true)
-fun GroupedListItemSinglePreview() {
+private fun GroupedListItemSinglePreview() {
     ToteatTheme {
         GroupedListItem(
             label = {
@@ -111,7 +117,7 @@ fun GroupedListItemSinglePreview() {
                     Text(
                         text = "de orden",
                         style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Light,
                         color = Color.Black
                     )
                 }
@@ -134,7 +140,7 @@ fun GroupedListPreview() {
     ToteatTheme {
         GroupedList(
             modifier = Modifier.padding(16.dp),
-            items = listOf(
+            items = persistentListOf(
                 {
                     GroupedListItem(
                         label = {

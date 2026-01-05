@@ -49,7 +49,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
+import com.toteat.toteatds.components.segmentbuttons.SegmentedTabs
 import com.toteat.toteatds.components.bottombar.ToteatBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
@@ -644,7 +644,7 @@ fun MyShowroomScreen() {
 
 @Composable
 fun SegmentedTabsShowcase() {
-    val tabs = listOf("Resumen cuenta", "Información mesa")
+    val tabs = persistentListOf("Resumen cuenta", "Información mesa")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Column(
@@ -657,7 +657,7 @@ fun SegmentedTabsShowcase() {
         SegmentedTabs(
             items = tabs,
             selectedIndex = selectedTabIndex,
-            onTabSelected = { index ->
+            onTabSelect = { index ->
                 selectedTabIndex = index
             }
         )
@@ -679,7 +679,7 @@ fun OrderDetailShowcase() {
             .padding(4.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        val items = listOf(
+        val items = persistentListOf(
             OrderItem(
                 name = "Copa de vino",
                 quantity = 2,
@@ -714,7 +714,7 @@ fun OrderDetailShowcase() {
                 unitPrice = "$8.000",
                 totalPrice = "$24.000",
                 time = "21:12 hrs",
-                extras = listOf(
+                extras = persistentListOf(
                     OrderItemExtra(
                         name = "Extra plato 1:",
                         description = "Queso",

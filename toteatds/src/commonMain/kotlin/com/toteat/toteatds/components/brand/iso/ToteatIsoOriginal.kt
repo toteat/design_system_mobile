@@ -22,6 +22,6 @@ fun ToteatIsoOriginal(
 
 @Composable
 @Preview
-fun ToteatIsoOriginalPreview() {
+private fun ToteatIsoOriginalPreview() {
     ToteatIsoOriginal()
 }

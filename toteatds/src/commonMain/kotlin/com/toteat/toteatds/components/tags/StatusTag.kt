@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,15 +23,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.toteat.toteatds.theme.ToteatTheme
+import com.toteat.toteatds.utils.setTestTag
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.status_tag_description
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun StatusTag(
     variant: StatusTagVariant,
     modifier: Modifier = Modifier,
-    text: String? = null
+    text: String? = null,
+    testTag: String = ""
 ) {
-    val displayText = text ?: variant.defaultText
+    val defaultText = stringResource(variant.defaultTextRes)
+    val displayText = text ?: defaultText
+    val statusDescription = stringResource(Res.string.status_tag_description, displayText)
 
     Box(
         modifier = modifier
@@ -41,8 +50,10 @@ fun StatusTag(
                 shape = RoundedCornerShape(50)
             )
             .semantics {
-                contentDescription = "Estado: $displayText"
+                role = Role.Image
+                contentDescription = statusDescription
             }
+            .setTestTag(testTag)
             .padding(horizontal = 12.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {

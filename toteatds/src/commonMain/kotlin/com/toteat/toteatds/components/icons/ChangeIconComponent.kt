@@ -1,19 +1,19 @@
 package com.toteat.toteatds.components.icons
-import com.toteat.toteatds.utils.setTestTag
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_change
+import designsystemmobile.toteatds.generated.resources.icon_change
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -23,11 +23,13 @@ fun ChangeIconComponent(
     size: Dp = 48.dp,
     tint: Color = MaterialTheme.colorScheme.extended.neutral500
 ) {
-    Image(
-        modifier = modifier.size(size),
+    val contentDescription = stringResource(Res.string.icon_change)
+    
+    Icon(
         imageVector = vectorResource(Res.drawable.icon_change),
-        contentDescription = null,
-        colorFilter = ColorFilter.tint(tint)
+        contentDescription = contentDescription,
+        modifier = modifier.size(size),
+        tint = tint
     )
 }
 

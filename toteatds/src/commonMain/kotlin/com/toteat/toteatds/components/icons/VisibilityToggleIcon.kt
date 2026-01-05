@@ -1,5 +1,4 @@
 package com.toteat.toteatds.components.icons
-import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -10,6 +9,9 @@ import androidx.compose.ui.graphics.Color
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_eye_close
 import designsystemmobile.toteatds.generated.resources.icon_eye_open
+import designsystemmobile.toteatds.generated.resources.icon_hide_password
+import designsystemmobile.toteatds.generated.resources.icon_show_password
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -25,10 +27,13 @@ fun VisibilityToggleIcon(
         vectorResource(Res.drawable.icon_eye_close)
     }
     
+    val hidePasswordText = stringResource(Res.string.icon_hide_password)
+    val showPasswordText = stringResource(Res.string.icon_show_password)
+    
     val contentDescription = if (isVisible) {
-        "Ocultar contraseña"
+        hidePasswordText
     } else {
-        "Mostrar contraseña"
+        showPasswordText
     }
 
     IconButton(

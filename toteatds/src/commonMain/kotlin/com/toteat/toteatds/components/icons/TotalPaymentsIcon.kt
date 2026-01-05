@@ -1,15 +1,16 @@
 package com.toteat.toteatds.components.icons
-import com.toteat.toteatds.utils.setTestTag
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.icon_total_payment
 import designsystemmobile.toteatds.generated.resources.total_payment_icon
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -18,16 +19,18 @@ fun TotalPaymentsIcon(
     modifier: Modifier = Modifier,
     size: Dp = 48.dp
 ) {
-    Image(
-        modifier = modifier.size(size),
+    val contentDescription = stringResource(Res.string.icon_total_payment)
+    
+    Icon(
         imageVector = vectorResource(Res.drawable.total_payment_icon),
-        contentDescription = null
+        contentDescription = contentDescription,
+        modifier = modifier.size(size)
     )
 }
 
 @Composable
 @Preview
-fun TotalPaymentsIconPreview() {
+private fun TotalPaymentsIconPreview() {
     ToteatTheme {
         TotalPaymentsIcon()
     }

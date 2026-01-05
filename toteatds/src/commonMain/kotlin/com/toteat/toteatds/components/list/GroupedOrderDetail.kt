@@ -1,5 +1,4 @@
 package com.toteat.toteatds.components.list
-import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,6 +38,22 @@ import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyLargeRegular
 import com.toteat.toteatds.theme.bodyMediumRegular
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.utils.setTestTag
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.order_detail_collapse_extras
+import designsystemmobile.toteatds.generated.resources.order_detail_consumption
+import designsystemmobile.toteatds.generated.resources.order_detail_entry_time
+import designsystemmobile.toteatds.generated.resources.order_detail_expand_extras
+import designsystemmobile.toteatds.generated.resources.order_detail_price
+import designsystemmobile.toteatds.generated.resources.order_detail_products
+import designsystemmobile.toteatds.generated.resources.order_detail_show_less
+import designsystemmobile.toteatds.generated.resources.order_detail_show_more
+import designsystemmobile.toteatds.generated.resources.order_detail_time
+import designsystemmobile.toteatds.generated.resources.order_detail_total_price
+import designsystemmobile.toteatds.generated.resources.order_detail_unit_price
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val HorizontalPadding = 12.dp
@@ -58,16 +73,17 @@ data class OrderItem(
     val unitPrice: String? = null,
     val totalPrice: String,
     val time: String,
-    val extras: List<OrderItemExtra> = emptyList()
+    val extras: ImmutableList<OrderItemExtra> = persistentListOf()
 )
 
 @Composable
 fun GroupedOrderDetail(
-    items: List<OrderItem>,
+    items: ImmutableList<OrderItem>,
     modifier: Modifier = Modifier,
     maxCollapsedItems: Int = 4,
     itemModifier: (OrderItem) -> Modifier = { Modifier },
-    verMasModifier: Modifier = Modifier
+    viewMoreModifier: Modifier = Modifier,
+    testTag: String = ""
 ) {
     var showAll by remember { mutableStateOf(false) }
     val hasMore = items.size > maxCollapsedItems
@@ -78,6 +94,7 @@ fun GroupedOrderDetail(
             .fillMaxWidth()
             .background(NeutralGray, RoundedCornerShape(14.dp))
             .border(1.dp, NeutralGray200, RoundedCornerShape(14.dp))
+            .setTestTag(testTag)
     ) {
         OrderDetailHeader()
 
@@ -89,10 +106,10 @@ fun GroupedOrderDetail(
         }
 
         if (hasMore) {
-            VerMasRow(
+            ViewMoreRow(
                 expanded = showAll,
                 onClick = { showAll = !showAll },
-                modifier = verMasModifier
+                modifier = viewMoreModifier
             )
         }
     }
@@ -101,6 +118,13 @@ fun GroupedOrderDetail(
 @Composable
 private fun OrderDetailHeader() {
     val extended = MaterialTheme.colorScheme.extended
+    val consumptionText = stringResource(Res.string.order_detail_consumption)
+    val productsText = stringResource(Res.string.order_detail_products)
+    val priceText = stringResource(Res.string.order_detail_price)
+    val totalPriceText = stringResource(Res.string.order_detail_total_price)
+    val timeText = stringResource(Res.string.order_detail_time)
+    val entryTimeText = stringResource(Res.string.order_detail_entry_time)
+    
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -110,22 +134,22 @@ private fun OrderDetailHeader() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text("Consumo", style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = extended.neutral500)
-            Text("Productos", style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral500)
+            Text(consumptionText, style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = extended.neutral500)
+            Text(productsText, style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral500)
         }
 
         Box(Modifier.width(1.dp).fillMaxHeight().background(NeutralGray200))
 
         Column(Modifier.width(PriceColumnWidth), horizontalAlignment = Alignment.Start) {
-            Text("Precio", style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
-            Text("total", style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
+            Text(priceText, style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
+            Text(totalPriceText, style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
         }
 
         Box(Modifier.width(1.dp).fillMaxHeight().background(NeutralGray200))
 
         Column(Modifier.width(HourColumnWidth), horizontalAlignment = Alignment.Start) {
-            Text("Hora", style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
-            Text("ingreso", style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
+            Text(timeText, style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
+            Text(entryTimeText, style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral500, modifier = Modifier.padding(start = 12.dp))
         }
     }
 }
@@ -134,6 +158,9 @@ private fun OrderDetailHeader() {
 private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier) {
     val extended = MaterialTheme.colorScheme.extended
     var isExpanded by remember { mutableStateOf(false) }
+    val expandText = stringResource(Res.string.order_detail_expand_extras)
+    val collapseText = stringResource(Res.string.order_detail_collapse_extras)
+    val unitPriceText = item.unitPrice?.let { stringResource(Res.string.order_detail_unit_price, it) }
 
     Column(
         modifier = Modifier
@@ -158,9 +185,9 @@ private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier) {
                             Text("x${item.quantity}", style = MaterialTheme.typography.bodyLargeRegular, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = PrimaryNormal)
                         }
                     }
-                    item.unitPrice?.let {
+                    unitPriceText?.let {
                         Spacer(Modifier.height(2.dp))
-                        Text("Precio unitario: $it", style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral400)
+                        Text(it, style = MaterialTheme.typography.bodyMediumRegular, fontSize = 11.sp, color = extended.neutral400)
                     }
                 }
 
@@ -168,7 +195,7 @@ private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier) {
                     Spacer(Modifier.width(6.dp))
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = null,
+                        contentDescription = if (isExpanded) collapseText else expandText,
                         tint = PrimaryNormal,
                         modifier = Modifier.size(24.dp)
                     )
@@ -220,8 +247,12 @@ private fun ExtraItemRow(extra: OrderItemExtra) {
 }
 
 @Composable
-private fun VerMasRow(expanded: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun ViewMoreRow(expanded: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val extended = MaterialTheme.colorScheme.extended
+    val showMoreText = stringResource(Res.string.order_detail_show_more)
+    val showLessText = stringResource(Res.string.order_detail_show_less)
+    val text = if (expanded) showLessText else showMoreText
+    
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -231,11 +262,11 @@ private fun VerMasRow(expanded: Boolean, onClick: () -> Unit, modifier: Modifier
             .padding(horizontal = 15.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(if (expanded) "Ver menos" else "Ver más", style = MaterialTheme.typography.bodyMediumRegular, fontSize = 12.sp, color = extended.neutral400)
+        Text(text, style = MaterialTheme.typography.bodyMediumRegular, fontSize = 12.sp, color = extended.neutral400)
         Spacer(Modifier.weight(1f))
         Icon(
             imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-            contentDescription = null,
+            contentDescription = text,
             tint = extended.neutral400,
             modifier = Modifier.size(24.dp)
         )
@@ -245,9 +276,9 @@ private fun VerMasRow(expanded: Boolean, onClick: () -> Unit, modifier: Modifier
 
 @Preview(showBackground = true)
 @Composable
-fun GroupedOrderDetailPreview() {
+private fun GroupedOrderDetailPreview() {
     ToteatTheme {
-        val items = listOf(
+        val items = persistentListOf(
             OrderItem(
                 name = "Copa de vino",
                 quantity = 2,
@@ -282,7 +313,7 @@ fun GroupedOrderDetailPreview() {
                 unitPrice = "$8.000",
                 totalPrice = "$24.000",
                 time = "21:12 hrs",
-                extras = listOf(
+                extras = persistentListOf(
                     OrderItemExtra(
                         name = "Extra plato 1:",
                         description = "Queso",

@@ -19,6 +19,9 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.icon_arrow_back
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -27,6 +30,8 @@ fun ArrowBackIconButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
+    val arrowBackDescription = stringResource(Res.string.icon_arrow_back)
+    
     IconButton(
         onClick = onNavigateBackClick,
         enabled = enabled,
@@ -43,7 +48,7 @@ fun ArrowBackIconButton(
             )
             .semantics {
                 role = Role.Button
-                contentDescription = "Navegar hacia atrás"
+                contentDescription = arrowBackDescription
             },
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = androidx.compose.ui.graphics.Color.Transparent,

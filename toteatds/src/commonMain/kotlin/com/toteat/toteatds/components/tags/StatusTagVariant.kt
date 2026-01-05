@@ -6,30 +6,36 @@ import com.toteat.toteatds.theme.NeutralGray200
 import com.toteat.toteatds.theme.NeutralGray400
 import com.toteat.toteatds.theme.NeutralGray500
 import com.toteat.toteatds.theme.SecondaryNormal
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.status_tag_cancelled
+import designsystemmobile.toteatds.generated.resources.status_tag_confirmed
+import designsystemmobile.toteatds.generated.resources.status_tag_ended
+import designsystemmobile.toteatds.generated.resources.status_tag_pending
+import org.jetbrains.compose.resources.StringResource
 
 enum class StatusTagVariant(
     val backgroundColor: Color,
     val textColor: Color,
-    val defaultText: String
+    val defaultTextRes: StringResource
 ) {
     Pending(
         backgroundColor = NeutralGray200,
         textColor = NeutralGray500,
-        defaultText = "Pendiente"
+        defaultTextRes = Res.string.status_tag_pending
     ),
     Confirmed(
         backgroundColor = NeutralGray400,
         textColor = NeutralGray,
-        defaultText = "Confirmado"
+        defaultTextRes = Res.string.status_tag_confirmed
     ),
     Ended(
         backgroundColor = NeutralGray500,
         textColor = NeutralGray,
-        defaultText = "Finalizado"
+        defaultTextRes = Res.string.status_tag_ended
     ),
     Cancelled(
         backgroundColor = SecondaryNormal,
         textColor = NeutralGray,
-        defaultText = "Cancelado"
+        defaultTextRes = Res.string.status_tag_cancelled
     )
 }

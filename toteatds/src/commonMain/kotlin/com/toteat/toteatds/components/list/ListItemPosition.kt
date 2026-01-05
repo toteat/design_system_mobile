@@ -1,5 +1,4 @@
 package com.toteat.toteatds.components.list
-import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Shape
