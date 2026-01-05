@@ -14,22 +14,31 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.icons.CustomerServiceIcon
 import com.toteat.toteatds.theme.ToteatTheme
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.login_topbar_semantic_label
+import designsystemmobile.toteatds.generated.resources.menu_open_description
+import designsystemmobile.toteatds.generated.resources.toteat_logo_description
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoginTopBar(
     onMenuIconClick: () -> Unit,
     onCustomerServiceButtonClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    testTag: String? = null
 ) {
+    val menuDescription = stringResource(Res.string.menu_open_description)
+    val logoDescription = stringResource(Res.string.toteat_logo_description)
+
     ToteatTopBar(
         modifier = modifier,
-        semanticLabel = "Barra de navegación de inicio de sesión",
+        semanticLabel = stringResource(Res.string.login_topbar_semantic_label),
         leftComponent = {
             IconButton(
                 onClick = onMenuIconClick,
                 modifier = Modifier.semantics {
-                    contentDescription = "Abrir menú"
+                    contentDescription = menuDescription
                 }
             ) {
                 Icon(
@@ -44,13 +53,14 @@ fun LoginTopBar(
                 modifier = Modifier
                     .size(26.dp)
                     .semantics {
-                        contentDescription = "Logo de Toteat"
+                        contentDescription = logoDescription
                     }
             )
         },
         rightComponent = {
             CustomerServiceIcon(onIconClick = onCustomerServiceButtonClick)
-        }
+        },
+        testTag = testTag
     )
 }
 
@@ -64,4 +74,3 @@ private fun LoginTopBarPreview() {
         )
     }
 }
-

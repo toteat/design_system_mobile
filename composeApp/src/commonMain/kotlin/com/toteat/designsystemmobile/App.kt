@@ -517,18 +517,19 @@ fun TopBarShowcase() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("Back Navigation", style = MaterialTheme.typography.titleMedium)
-        BackNavigationTopBar(title = "Mesa B1", onNavigateBackClick = {})
+        BackNavigationTopBar(title = "Mesa B1", onNavigateBackClick = {}, testTag = "back_navigation_topbar")
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Back Navigation - Título largo", style = MaterialTheme.typography.titleMedium)
         BackNavigationTopBar(
             title = "Mesa principal con nombre muy largo que debe truncarse",
-            onNavigateBackClick = {}
+            onNavigateBackClick = {},
+            testTag = "back_navigation_topbar_long_title"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Login", style = MaterialTheme.typography.titleMedium)
-        LoginTopBar(onMenuIconClick = {}, onCustomerServiceButtonClick = {})
+        LoginTopBar(onMenuIconClick = {}, onCustomerServiceButtonClick = {}, testTag = "login_topbar")
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Center content: Restaurant", style = MaterialTheme.typography.titleMedium)
@@ -538,7 +539,8 @@ fun TopBarShowcase() {
                     restaurantName = "Kintaro ramen bar",
                     counter = "2"
                 )
-            }
+            },
+            testTag = "center_content_restaurant_topbar"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
@@ -549,7 +551,8 @@ fun TopBarShowcase() {
                     restaurantName = "Restaurante con nombre súper largo que debería mostrarse con marquee",
                     counter = "99"
                 )
-            }
+            },
+            testTag = "center_content_restaurant_long_topbar"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
@@ -559,7 +562,8 @@ fun TopBarShowcase() {
                 ProcessNameTopBarItem(
                     processName = "Checkout"
                 )
-            }
+            },
+            testTag = "center_content_process_topbar"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
@@ -569,7 +573,8 @@ fun TopBarShowcase() {
                 ProcessNameTopBarItem(
                     processName = "Proceso de confirmación y pago completo de la cuenta"
                 )
-            }
+            },
+            testTag = "center_content_process_long_topbar"
         )
     }
 }

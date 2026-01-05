@@ -16,4 +16,10 @@
     <string name="switch_disabled_subtitle">Esta opción está deshabilitada</string>
     <string name="rectangle_button_description">%s, %s</string>
     <string name="square_button_description">%s, %s</string>
+    <string name="topbar_semantic_label">Barra de navegación superior</string>
+    <string name="login_topbar_semantic_label">Barra de navegación de inicio de sesión</string>
+    <string name="back_navigation_semantic_label">Barra de navegación con retroceso: %s</string>
+    <string name="menu_open_description">Abrir menú</string>
+    <string name="toteat_logo_description">Logo de Toteat</string>
+    <string name="restaurant_description">Restaurante %s, %s pedidos pendientes</string>
 </resources>

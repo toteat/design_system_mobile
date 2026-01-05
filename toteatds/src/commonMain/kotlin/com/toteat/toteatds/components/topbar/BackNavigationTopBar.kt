@@ -11,17 +11,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.toteat.toteatds.components.icons.ArrowBackIconButton
 import com.toteat.toteatds.theme.ToteatTheme
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.back_navigation_semantic_label
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BackNavigationTopBar(
     title: String,
     onNavigateBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    testTag: String? = null
 ) {
     ToteatTopBar(
         modifier = modifier,
-        semanticLabel = "Barra de navegación con retroceso: $title",
+        semanticLabel = stringResource(Res.string.back_navigation_semantic_label, title),
         leftComponent = {
             ArrowBackIconButton(onNavigateBackClick = onNavigateBackClick)
         },
@@ -40,7 +44,8 @@ fun BackNavigationTopBar(
                         heading()
                     }
             )
-        }
+        },
+        testTag = testTag
     )
 }
 
@@ -76,4 +81,3 @@ private fun BackNavigationTopBarVeryLongTitlePreview() {
         )
     }
 }
-

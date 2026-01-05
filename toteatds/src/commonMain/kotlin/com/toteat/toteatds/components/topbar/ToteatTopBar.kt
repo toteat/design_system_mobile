@@ -19,16 +19,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.topbar_semantic_label
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ToteatTopBar(
     modifier: Modifier = Modifier,
-    semanticLabel: String = "Barra de navegación superior",
+    semanticLabel: String = stringResource(Res.string.topbar_semantic_label),
+    testTag: String? = null,
     leftComponent: (@Composable RowScope.() -> Unit)? = null,
     rightComponent: (@Composable RowScope.() -> Unit)? = null,
     centerComponent: @Composable RowScope.() -> Unit
@@ -41,7 +46,8 @@ fun ToteatTopBar(
             .padding(horizontal = 12.dp)
             .semantics {
                 contentDescription = semanticLabel
-            },
+            }
+            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -52,7 +58,7 @@ fun ToteatTopBar(
             leftComponent?.invoke(this@Row)
         }
         Box(
-            modifier = Modifier.weight(2f),
+            modifier = Modifier.weight(3f),
             contentAlignment = Alignment.Center
         ) {
             centerComponent.invoke(this@Row)
@@ -135,4 +141,3 @@ private fun ToteatTopBarPreview() {
         }
     }
 }
-

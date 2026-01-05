@@ -26,20 +26,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.restaurant_description
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CenterContentTopBar(
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    semanticLabel: String = "Barra de navegación superior"
+    semanticLabel: String = "Barra de navegación superior",
+    testTag: String? = null,
+    content: @Composable () -> Unit
 ) {
     ToteatTopBar(
         modifier = modifier,
         semanticLabel = semanticLabel,
         centerComponent = {
             content()
-        }
+        },
+        testTag = testTag
     )
 }
 
@@ -49,11 +54,13 @@ fun RestaurantNameTopBarItem(
     counter: String,
     modifier: Modifier = Modifier
 ) {
+    val description = stringResource(Res.string.restaurant_description, restaurantName, counter)
+
     Row(
         modifier = modifier
             .width(IntrinsicSize.Max)
             .semantics(mergeDescendants = true) {
-                contentDescription = "Restaurante $restaurantName, $counter pedidos pendientes"
+                contentDescription = description
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -72,25 +79,6 @@ fun RestaurantNameTopBarItem(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center
         )
-        Box(
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(color = MaterialTheme.colorScheme.extended.neutral400)
-                .then(
-                    if (counter.length <= 1) {
-                        Modifier.requiredSize(22.dp)
-                    } else {
-                        Modifier.height(22.dp).padding(horizontal = 6.dp)
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = counter,
-                color = MaterialTheme.colorScheme.onSecondary,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
     }
 }
 
@@ -176,4 +164,3 @@ private fun CenterContentTopBarProcessLongNamePreview() {
         )
     }
 }
-
