@@ -5,4 +5,15 @@
     <string name="waiter_description">Mesero: %s</string>
     <string name="occupation_time_description">Tiempo de ocupación: %s</string>
     <string name="print_detail">imprimir detalle</string>
+    <string name="chip_selected">seleccionado</string>
+    <string name="chip_not_selected">no seleccionado</string>
+    <string name="chip_container_description">Lista de opciones seleccionables</string>
+    <string name="switch_on">activado</string>
+    <string name="switch_off">desactivado</string>
+    <string name="switch_description">%s, %s, switch %s</string>
+    <string name="switch_title">Terminal compartido</string>
+    <string name="switch_subtitle">Esta opción es para POS compartidas</string>
+    <string name="switch_disabled_subtitle">Esta opción está deshabilitada</string>
+    <string name="rectangle_button_description">%s, %s</string>
+    <string name="square_button_description">%s, %s</string>
 </resources>

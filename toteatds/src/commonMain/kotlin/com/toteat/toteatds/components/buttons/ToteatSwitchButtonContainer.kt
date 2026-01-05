@@ -1,4 +1,5 @@
 package com.toteat.toteatds.components.buttons
+
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -30,23 +31,39 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.switch_description
+import designsystemmobile.toteatds.generated.resources.switch_off
+import designsystemmobile.toteatds.generated.resources.switch_on
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.toteat.toteatds.components.icons.ChangeIconComponent
 
 
 @Composable
-fun SwitchButtonContainer(
+fun ToteatSwitchButtonContainer(
     title: String,
     subtitle: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    testTag: String? = null
 ) {
     val contentAlpha = if (enabled) 1f else 0.38f
+    val switchState =
+        if (checked) stringResource(Res.string.switch_on) else stringResource(Res.string.switch_off)
+    val description = stringResource(Res.string.switch_description, title, subtitle, switchState)
 
     Surface(
         modifier = modifier
@@ -63,24 +80,34 @@ fun SwitchButtonContainer(
         Row(
             modifier = Modifier
                 .clickable(enabled = enabled) { onCheckedChange(!checked) }
+                .semantics { contentDescription = description }
                 .padding(horizontal = 16.dp, vertical = 12.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Columna de textos con weight para ocupar el espacio disponible
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 12.dp)
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary.copy(alpha = contentAlpha),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.secondary.copy(alpha = contentAlpha),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    ChangeIconComponent(
+                        size = 12.dp,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = subtitle,
@@ -91,7 +118,6 @@ fun SwitchButtonContainer(
                 )
             }
 
-            // Switch fijo a la derecha
             CustomSwitch(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
@@ -108,17 +134,17 @@ fun SwitchButtonContainer(
 private fun CustomSwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    checkedTrackColor: Color,
+    checkedThumbColor: Color,
+    checkedBorderColor: Color,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     width: Dp = 52.dp,
     height: Dp = 32.dp,
     thumbSize: Dp = 24.dp,
     borderWidth: Dp = 0.dp,
-    checkedTrackColor: Color,
-    checkedThumbColor: Color,
     uncheckedTrackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     uncheckedThumbColor: Color = MaterialTheme.colorScheme.outline,
-    checkedBorderColor: Color,
     uncheckedBorderColor: Color = MaterialTheme.colorScheme.outline
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -131,23 +157,30 @@ private fun CustomSwitch(
     )
 
     val trackColor by animateColorAsState(
-        targetValue = if (checked) checkedTrackColor.copy(alpha = contentAlpha) else uncheckedTrackColor.copy(alpha = contentAlpha),
+        targetValue = if (checked) checkedTrackColor.copy(alpha = contentAlpha) else uncheckedTrackColor.copy(
+            alpha = contentAlpha
+        ),
         animationSpec = tween(durationMillis = 250), label = "TrackColor"
     )
 
     val thumbColor by animateColorAsState(
-        targetValue = if (checked) checkedThumbColor.copy(alpha = contentAlpha) else uncheckedThumbColor.copy(alpha = contentAlpha),
+        targetValue = if (checked) checkedThumbColor.copy(alpha = contentAlpha) else uncheckedThumbColor.copy(
+            alpha = contentAlpha
+        ),
         animationSpec = tween(durationMillis = 250), label = "ThumbColor"
     )
 
     val borderColor by animateColorAsState(
-        targetValue = if (checked) checkedBorderColor.copy(alpha = contentAlpha) else uncheckedBorderColor.copy(alpha = contentAlpha),
+        targetValue = if (checked) checkedBorderColor.copy(alpha = contentAlpha) else uncheckedBorderColor.copy(
+            alpha = contentAlpha
+        ),
         animationSpec = tween(durationMillis = 250), label = "BorderColor"
     )
 
     Canvas(
         modifier = modifier
             .size(width = width, height = height)
+            .semantics { role = Role.Switch; selected = checked }
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
@@ -188,7 +221,7 @@ private fun SwitchButtonContainerPreview() {
     var isChecked by remember { mutableStateOf(false) }
     ToteatTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            SwitchButtonContainer(
+            ToteatSwitchButtonContainer(
                 title = "Terminal compartido",
                 subtitle = "Esta opción es para POS compartidas",
                 checked = isChecked,
@@ -205,7 +238,7 @@ private fun SwitchButtonContainerCheckedPreview() {
     var isChecked by remember { mutableStateOf(true) }
     ToteatTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            SwitchButtonContainer(
+            ToteatSwitchButtonContainer(
                 title = "Terminal compartido",
                 subtitle = "Esta opción es para POS compartidas",
                 checked = isChecked,
@@ -223,7 +256,7 @@ private fun SwitchButtonContainerDisabledPreview() {
     ToteatTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             Column(modifier = Modifier.padding(16.dp)) {
-                SwitchButtonContainer(
+                ToteatSwitchButtonContainer(
                     title = "Terminal compartido",
                     subtitle = "Esta opción está deshabilitada",
                     checked = isChecked,
@@ -231,7 +264,7 @@ private fun SwitchButtonContainerDisabledPreview() {
                     enabled = false
                 )
                 Spacer(Modifier.height(16.dp))
-                SwitchButtonContainer(
+                ToteatSwitchButtonContainer(
                     title = "Terminal compartido",
                     subtitle = "Esta opción está deshabilitada",
                     checked = false,
@@ -242,4 +275,3 @@ private fun SwitchButtonContainerDisabledPreview() {
         }
     }
 }
-

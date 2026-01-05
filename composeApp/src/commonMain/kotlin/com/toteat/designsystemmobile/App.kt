@@ -60,7 +60,6 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoBlackAndCream
 import com.toteat.toteatds.components.brand.logo.ToteatLogoCreamOrange
 import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.buttons.ButtonTableStatus
-import com.toteat.toteatds.components.buttons.ChipButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
 import com.toteat.toteatds.components.buttons.ToteatSecondaryButton
 import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
@@ -68,7 +67,8 @@ import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
 import com.toteat.toteatds.components.buttons.ToteatSquareButton
-import com.toteat.toteatds.components.buttons.SwitchButtonContainer
+import com.toteat.toteatds.components.buttons.ToteatSwitchButtonContainer
+import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.PrintIconButton
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
@@ -347,14 +347,14 @@ fun ChipButtonShowcase() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Estado normal", style = MaterialTheme.typography.titleSmall)
-        ChipButtonContainer(
+        ToteatChipButtonContainer(
             items = listOf("Salon", "Bar", "Terraza", "Vip"),
             selectedItem = selectedItem,
             onItemSelected = { selectedItem = it }
         )
 
         Text("Estado deshabilitado", style = MaterialTheme.typography.titleSmall)
-        ChipButtonContainer(
+        ToteatChipButtonContainer(
             items = listOf("Salon", "Bar", "Terraza", "Vip"),
             selectedItem = "Bar",
             onItemSelected = {},
@@ -440,7 +440,7 @@ fun SwitchButtonShowcase(){
         .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally){
-        SwitchButtonContainer(title = "Terminal compartido",
+        ToteatSwitchButtonContainer(title = "Terminal compartido",
             subtitle = "Esta opción es para POS compartidas",
             checked = isChecked,
             onCheckedChange = { isChecked = it },
