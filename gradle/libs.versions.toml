@@ -16,6 +16,7 @@ junit = "4.13.2"
 kotlin = "2.2.20"
 kotlinx-coroutines = "1.10.2"
 kotlinStdlib = "2.2.20"
+kotlinx-collections-immutable = "0.3.8"
 runner = "1.5.2"
 core = "1.5.0"
 icons = "1.6.10"
@@ -58,7 +59,8 @@ android-tools-common = { group = "com.android.tools", name = "common", version.r
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-jetbrains-compose-material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "material-icons"}
+jetbrains-compose-material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "material-icons" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

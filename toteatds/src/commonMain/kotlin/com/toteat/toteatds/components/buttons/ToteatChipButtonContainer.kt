@@ -1,5 +1,4 @@
 package com.toteat.toteatds.components.buttons
-import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -16,26 +15,19 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.chip_container_description
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Contenedor horizontal scrollable de chips buttons.
- *
- * @param items Lista de textos para los chips
- * @param selectedItem Item actualmente seleccionado (null si ninguno está seleccionado)
- * @param onItemSelected Callback cuando se selecciona un item
- * @param modifier Modificador para el contenedor
- * @param enabled Si los chips están habilitados o no
- * @param itemModifier Modificador personalizado para cada item basado en su texto
- */
 @Composable
 fun ToteatChipButtonContainer(
-    items: List<String>,
+    items: ImmutableList<String>,
     selectedItem: String?,
-    onItemSelected: (String) -> Unit,
+    onItemSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     testTag: String = "",
@@ -58,7 +50,7 @@ fun ToteatChipButtonContainer(
                 text = item,
                 isSelected = item == selectedItem,
                 onClick = {
-                    onItemSelected(item)
+                    onItemSelect(item)
                 },
                 enabled = enabled,
                 modifier = modifierForItem
@@ -78,15 +70,15 @@ private fun ToteatChipButtonContainerPreview() {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ToteatChipButtonContainer(
-                items = listOf("Salon", "Bar", "Terraza", "Vip", "Los Tres Chiflados"),
+                items = persistentListOf("Salon", "Bar", "Terraza", "Vip", "Los Tres Chiflados"),
                 selectedItem = selectedItem,
-                onItemSelected = { selectedItem = it }
+                onItemSelect = { selectedItem = it }
             )
 
             ToteatChipButtonContainer(
-                items = listOf("Salon", "Bar", "Terraza", "Vip"),
+                items = persistentListOf("Salon", "Bar", "Terraza", "Vip"),
                 selectedItem = "Bar",
-                onItemSelected = {},
+                onItemSelect = {},
                 enabled = false
             )
         }

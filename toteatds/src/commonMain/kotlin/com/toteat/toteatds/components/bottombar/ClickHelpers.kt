@@ -1,5 +1,4 @@
-package com.toteat.toteatds.components.bottomBar
-import com.toteat.toteatds.utils.setTestTag
+package com.toteat.toteatds.components.bottombar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

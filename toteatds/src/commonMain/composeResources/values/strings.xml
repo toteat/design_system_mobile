@@ -22,4 +22,14 @@
     <string name="menu_open_description">Abrir menú</string>
     <string name="toteat_logo_description">Logo de Toteat</string>
     <string name="restaurant_description">Restaurante %s, %s pedidos pendientes</string>
+    <string name="bottom_bar_main_description">Barra de navegación principal</string>
+    <string name="bottom_bar_my_tables">Mis mesas</string>
+    <string name="bottom_bar_all_tables">Todas las mesas</string>
+    <string name="bottom_bar_view_more">Ver más</string>
+    <string name="dropdown_select_placeholder">Seleccionar</string>
+    <string name="dropdown_description">%s, dropdown</string>
+    <string name="dropdown_expanded">expandido</string>
+    <string name="dropdown_collapsed">colapsado</string>
+    <string name="dropdown_option_description">%s, opción %d de %d</string>
+    <string name="dropdown_option_selected">seleccionada</string>
 </resources>

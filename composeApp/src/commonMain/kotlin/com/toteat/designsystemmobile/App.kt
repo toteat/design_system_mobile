@@ -49,10 +49,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.components.DropDowns.AppDropdown
 import com.toteat.toteatds.components.SegmentButtons.SegmentedTabs
-import com.toteat.toteatds.components.bottomBar.ToteatBottomBar
-import com.toteat.toteatds.components.bottomBar.ToteatBottomBarButtonType
+import com.toteat.toteatds.components.bottombar.ToteatBottomBar
+import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
@@ -60,15 +59,16 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoBlackAndCream
 import com.toteat.toteatds.components.brand.logo.ToteatLogoCreamOrange
 import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.buttons.ButtonTableStatus
-import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
-import com.toteat.toteatds.components.buttons.ToteatSecondaryButton
-import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
+import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
+import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
+import com.toteat.toteatds.components.buttons.ToteatSecondaryButton
 import com.toteat.toteatds.components.buttons.ToteatSquareButton
 import com.toteat.toteatds.components.buttons.ToteatSwitchButtonContainer
-import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
+import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
+import com.toteat.toteatds.components.dropdown.ToteatDropDown
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.PrintIconButton
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
@@ -89,6 +89,7 @@ import com.toteat.toteatds.components.topbar.LoginTopBar
 import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
 import com.toteat.toteatds.components.topbar.RestaurantNameTopBarItem
 import com.toteat.toteatds.theme.ToteatTheme
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -105,7 +106,6 @@ fun App() {
         var selectedItem by remember {
             mutableStateOf<ToteatBottomBarButtonType>(ToteatBottomBarButtonType.AllTables)
         }
-
 
 
         val componentList = remember {
@@ -271,20 +271,51 @@ fun ButtonShowcase() {
 
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ToteatSecondaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.Add, null, modifier = Modifier.size(32.dp)) })
-            ToteatSecondaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.Add, null, modifier = Modifier.size(32.dp)) })
+            ToteatSecondaryButton(
+                onClick = {},
+                text = "Default",
+                leadingIcon = { Icon(Icons.Default.Add, null, modifier = Modifier.size(32.dp)) })
+            ToteatSecondaryButton(
+                onClick = {},
+                text = "Disabled",
+                enabled = false,
+                leadingIcon = { Icon(Icons.Default.Add, null, modifier = Modifier.size(32.dp)) })
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Tertiary", style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ToteatTertiaryButton(onClick = {}, text = "Default", leadingIcon = { Icon(Icons.Default.RocketLaunch, null, modifier = Modifier.size(32.dp)) })
-            ToteatTertiaryButton(onClick = {}, text = "Disabled", enabled = false, leadingIcon = { Icon(Icons.Default.RocketLaunch, null, modifier = Modifier.size(32.dp)) })
+            ToteatTertiaryButton(
+                onClick = {},
+                text = "Default",
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.RocketLaunch,
+                        null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                })
+            ToteatTertiaryButton(
+                onClick = {},
+                text = "Disabled",
+                enabled = false,
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.RocketLaunch,
+                        null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                })
         }
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ToteatPrintButton(onClick = {}, text = "Default", leadingIcon = { PrintIconButton(size = 32.dp) }, modifier = Modifier.fillMaxWidth())
+            ToteatPrintButton(
+                onClick = {},
+                text = "Default",
+                leadingIcon = { PrintIconButton(size = 32.dp) },
+                modifier = Modifier.fillMaxWidth()
+            )
 
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
@@ -348,16 +379,16 @@ fun ChipButtonShowcase() {
     ) {
         Text("Estado normal", style = MaterialTheme.typography.titleSmall)
         ToteatChipButtonContainer(
-            items = listOf("Salon", "Bar", "Terraza", "Vip"),
+            items = persistentListOf("Salon", "Bar", "Terraza", "Vip"),
             selectedItem = selectedItem,
-            onItemSelected = { selectedItem = it }
+            onItemSelect = { selectedItem = it }
         )
 
         Text("Estado deshabilitado", style = MaterialTheme.typography.titleSmall)
         ToteatChipButtonContainer(
-            items = listOf("Salon", "Bar", "Terraza", "Vip"),
+            items = persistentListOf("Salon", "Bar", "Terraza", "Vip"),
             selectedItem = "Bar",
-            onItemSelected = {},
+            onItemSelect = {},
             enabled = false
         )
     }
@@ -416,44 +447,51 @@ fun InputShowcase() {
 @Composable
 fun DropdownShowcase() {
     var selectedOption by remember { mutableStateOf("") }
-    val options = listOf("Mesero 1", "Mesero 2", "Mesero 3")
+    val options = persistentListOf("Mesero 1", "Mesero 2", "Mesero 3")
 
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        AppDropdown(
+        ToteatDropDown(
             label = "Meseros turno",
             options = options,
             selectedOption = selectedOption,
-            onOptionSelected = { selectedOption = it }
+            onOptionSelect = { selectedOption = it }
         )
     }
 }
 
 @Composable
-fun SwitchButtonShowcase(){
-    var isChecked by remember { mutableStateOf(true)}
+fun SwitchButtonShowcase() {
+    var isChecked by remember { mutableStateOf(true) }
 
-    Column(modifier = Modifier.padding(16.dp)
-        .fillMaxSize()
-        .background(Color.White),
+    Column(
+        modifier = Modifier.padding(16.dp)
+            .fillMaxSize()
+            .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally){
-        ToteatSwitchButtonContainer(title = "Terminal compartido",
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ToteatSwitchButtonContainer(
+            title = "Terminal compartido",
             subtitle = "Esta opción es para POS compartidas",
             checked = isChecked,
             onCheckedChange = { isChecked = it },
-            modifier = Modifier.padding(16.dp))
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
+
 @Composable
 fun ToastShowcase() {
-    Column(modifier = Modifier.fillMaxSize()
-        .background(Color.White)
-        .padding(vertical = 16.dp),
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(Color.White)
+            .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         ToteatToastMessage(
             title = "Error",
             message = "This is an error message.",
@@ -517,7 +555,11 @@ fun TopBarShowcase() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("Back Navigation", style = MaterialTheme.typography.titleMedium)
-        BackNavigationTopBar(title = "Mesa B1", onNavigateBackClick = {}, testTag = "back_navigation_topbar")
+        BackNavigationTopBar(
+            title = "Mesa B1",
+            onNavigateBackClick = {},
+            testTag = "back_navigation_topbar"
+        )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Back Navigation - Título largo", style = MaterialTheme.typography.titleMedium)
@@ -529,7 +571,11 @@ fun TopBarShowcase() {
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Login", style = MaterialTheme.typography.titleMedium)
-        LoginTopBar(onMenuIconClick = {}, onCustomerServiceButtonClick = {}, testTag = "login_topbar")
+        LoginTopBar(
+            onMenuIconClick = {},
+            onCustomerServiceButtonClick = {},
+            testTag = "login_topbar"
+        )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Center content: Restaurant", style = MaterialTheme.typography.titleMedium)
@@ -543,7 +589,10 @@ fun TopBarShowcase() {
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
-        Text("Center content: Restaurant - Nombre largo", style = MaterialTheme.typography.titleMedium)
+        Text(
+            "Center content: Restaurant - Nombre largo",
+            style = MaterialTheme.typography.titleMedium
+        )
         CenterContentTopBar(
             content = {
                 RestaurantNameTopBarItem(
@@ -593,8 +642,6 @@ fun MyShowroomScreen() {
 }
 
 
-
-
 @Composable
 fun SegmentedTabsShowcase() {
     val tabs = listOf("Resumen cuenta", "Información mesa")
@@ -623,6 +670,7 @@ fun SegmentedTabsShowcase() {
         }
     }
 }
+
 @Composable
 fun OrderDetailShowcase() {
     Column(
