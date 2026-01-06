@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-01-06
+### Fixed
+- **GroupedOrderDetail**: Corrected string placeholder format from `%s` to `%1$s` in `order_detail_unit_price` to properly display dynamic unit price values from backend
+
 ## [0.1.0] - 2026-01-05
 ### Changed
 - **ToteatDropDown**: Renamed component from AppDropdown to ToteatDropDown for consistency with design system naming conventions

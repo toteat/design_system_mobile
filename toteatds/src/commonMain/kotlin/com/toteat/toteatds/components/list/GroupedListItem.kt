@@ -32,7 +32,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun GroupedListItem(
     modifier: Modifier = Modifier,
     labelBackgroundColor: Color = MaterialTheme.colorScheme.extended.neutral100,
-    valueBackgroundColor: Color = MaterialTheme.colorScheme.surface,
+    valueBackgroundColor: Color = Color.White,
     testTag: String = "",
     label: @Composable () -> Unit,
     value: @Composable () -> Unit

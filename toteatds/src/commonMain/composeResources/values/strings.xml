@@ -60,7 +60,7 @@
     <string name="order_detail_total_price">total</string>
     <string name="order_detail_time">Hora</string>
     <string name="order_detail_entry_time">ingreso</string>
-    <string name="order_detail_unit_price">Precio unitario: %s</string>
+    <string name="order_detail_unit_price">Precio unitario: %1$s</string>
     <string name="order_detail_show_more">Ver más</string>
     <string name="order_detail_show_less">Ver menos</string>
     <string name="order_detail_expand">Expandir</string>
