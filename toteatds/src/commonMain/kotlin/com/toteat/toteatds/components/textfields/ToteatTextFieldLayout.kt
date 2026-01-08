@@ -60,10 +60,7 @@ fun ToteatTextFieldLayout(
         .border(
             width = 1.dp,
             color = when {
-                isSuccess -> MaterialTheme.colorScheme.extended.isSuccess
-                isError -> MaterialTheme.colorScheme.error
                 isFocused -> MaterialTheme.colorScheme.onTertiary
-                isWarning -> MaterialTheme.colorScheme.extended.isWarning
                 !enabled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.38f)
                 else -> MaterialTheme.colorScheme.outline
             },

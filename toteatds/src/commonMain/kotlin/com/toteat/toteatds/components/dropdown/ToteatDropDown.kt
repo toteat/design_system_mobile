@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
@@ -36,8 +35,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyMediumRegular
 import com.toteat.toteatds.theme.extended
@@ -114,32 +111,16 @@ fun ToteatDropDown(
             )
         }
 
-        if (expanded) {
-            val textFieldHeightInDp = with(density) { textFieldSize.height.toDp() }
+        if (expanded && textFieldSize.width > 0) {
             val textFieldWidthInDp = with(density) { textFieldSize.width.toDp() }
             val selectedText = stringResource(Res.string.dropdown_option_selected)
 
-            Popup(
-                alignment = Alignment.TopStart,
-                onDismissRequest = { expanded = false },
-                properties = PopupProperties(
-                    focusable = true,
-                    dismissOnBackPress = true,
-                    dismissOnClickOutside = true
-                )
-            ) {
+            Box(modifier = Modifier.padding(top = 8.dp)) {
                 Card(
-                    modifier = Modifier
-                        .width(textFieldWidthInDp)
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
-                            val topOffset = with(density) { (textFieldHeightInDp + 8.dp).toPx() }.toInt()
-                            layout(placeable.width, placeable.height) {
-                                placeable.place(0, topOffset)
-                            }
-                        },
+                    modifier = Modifier.width(textFieldWidthInDp),
                     shape = MaterialTheme.shapes.medium,
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.background
                     )
@@ -165,7 +146,7 @@ fun ToteatDropDown(
                                     .background(
                                         color = if (isSelected) MaterialTheme.colorScheme.tertiaryContainer else Color.Transparent
                                     )
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 10.dp, vertical = 10.dp)
                                     .semantics {
                                         role = Role.Button
                                         contentDescription = optionDescription
