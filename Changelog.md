@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.2] - 2026-01-08
+### Added
+- **OrderListTicketIcon**: Added new icon component for order list tickets with customizable size, tint, and content description, following design system accessibility guidelines
 
 ## [0.1.1] - 2026-01-06
 ### Fixed
