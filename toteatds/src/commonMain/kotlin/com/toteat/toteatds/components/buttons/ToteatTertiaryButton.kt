@@ -2,6 +2,7 @@ package com.toteat.toteatds.components.buttons
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -23,12 +24,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.NeutralGray400
-import com.toteat.toteatds.theme.PrimaryLight
+import com.toteat.toteatds.theme.PrimaryNormal
+import com.toteat.toteatds.theme.SecondaryNormal
 import com.toteat.toteatds.utils.setTestTag
 
 private val ButtonShape = RoundedCornerShape(50)
 private val ButtonHeight = 48.dp
-private val ButtonBorderWidth = 1.dp
+private val ButtonBorderWidth = 1.5.dp
 
 @Composable
 fun ToteatTertiaryButton(
@@ -43,13 +45,14 @@ fun ToteatTertiaryButton(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    val isHovered by interactionSource.collectIsHoveredAsState()
 
     val contentColor = when {
         !enabled -> NeutralGray400
-        isPressed -> PrimaryLight
-        else -> MaterialTheme.colorScheme.primary
+        isPressed -> PrimaryNormal
+        isHovered -> PrimaryNormal
+        else -> SecondaryNormal
     }
-    val borderColor = if (enabled) contentColor else NeutralGray400
 
     OutlinedButton(
         onClick = onClick,
@@ -70,7 +73,7 @@ fun ToteatTertiaryButton(
             contentColor = contentColor,
             disabledContentColor = NeutralGray400
         ),
-        border = BorderStroke(ButtonBorderWidth, borderColor),
+        border = BorderStroke(ButtonBorderWidth, contentColor),
         interactionSource = interactionSource
     ) {
         ButtonContent(text = text, leadingIcon = leadingIcon, trailingIcon = trailingIcon)

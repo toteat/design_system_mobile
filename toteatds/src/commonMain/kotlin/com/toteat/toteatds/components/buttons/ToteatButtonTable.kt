@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Schedule
@@ -63,15 +64,16 @@ fun ToteatButtonTable(
         MaterialTheme.colorScheme.extended.neutral100
     }
 
-    val contentColor: Color = if (isOccupied) NeutralGray else NeutralGray400
-    val titleColor: Color = if (isOccupied) NeutralGray else MaterialTheme.colorScheme.secondary
+    val textColor: Color = if (isOccupied) NeutralGray else NeutralGray400
+    val titleColor: Color = if (isOccupied) NeutralGray else MaterialTheme.colorScheme.extended.neutral500
+    val iconColor: Color = if (isOccupied) NeutralGray else NeutralGray400
 
     val statusText = if (isOccupied) stringResource(Res.string.table_occupied) else stringResource(Res.string.table_available)
     val accessibilityDescription = "$tableName $statusText"
 
     Card(
         modifier = modifier
-            .size(width = 108.dp, height = 96.dp)
+            .size(width = 106.dp, height = 80.dp)
             .semantics {
                 role = Role.Button
                 contentDescription = accessibilityDescription
@@ -80,11 +82,12 @@ fun ToteatButtonTable(
             .then(Modifier.setTestTag(testTag)),
         onClick = onClick,
         enabled = isOccupied,
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = containerColor,
-            contentColor = contentColor,
+            contentColor = textColor,
             disabledContainerColor = containerColor,
-            disabledContentColor = contentColor
+            disabledContentColor = textColor
         )
     ) {
         Column(
@@ -105,13 +108,15 @@ fun ToteatButtonTable(
             ToteatButtonItemRow(
                 icon = Icons.Default.AccountCircle,
                 title = waiterName,
-                tint = contentColor,
+                iconTint = iconColor,
+                textTint = textColor,
                 contentDescription = stringResource(Res.string.waiter_description, waiterName)
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.Schedule,
                 title = occupationTime,
-                tint = contentColor,
+                iconTint = iconColor,
+                textTint = textColor,
                 contentDescription = stringResource(Res.string.occupation_time_description, occupationTime)
             )
         }
@@ -122,7 +127,8 @@ fun ToteatButtonTable(
 private fun ToteatButtonItemRow(
     icon: ImageVector,
     title: String,
-    tint: Color,
+    iconTint: Color,
+    textTint: Color,
     contentDescription: String? = null
 ) {
     Row(
@@ -137,12 +143,12 @@ private fun ToteatButtonItemRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = tint,
+            tint = iconTint,
             modifier = Modifier.size(16.dp)
         )
         Text(
             text = title,
-            color = tint,
+            color = textTint,
             style = MaterialTheme.typography.helperBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
