@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4] - 2026-01-12
+### Fixed
+- **OrderListTicketIcon**: Corrected function name from `OrderListIcon` to `OrderListTicketIcon` for consistency
+- **OrderListTicketIcon**: Fixed string resource reference from `order_l` to `order_list_ticket`
+- **OrderListTicketIcon**: Fixed drawable resource reference from `total_payment_icon` to `order_list_ticket`
+- **strings.xml**: Added missing `order_list_ticket` string resource for accessibility
+
 ## [0.1.3] - 2026-01-08
 ### Added
 - **OrderListTicketIcon**: Added new icon component for order list tickets with customizable size, tint, and content description, following design system accessibility guidelines
