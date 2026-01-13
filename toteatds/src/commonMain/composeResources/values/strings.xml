@@ -78,4 +78,9 @@
     <string name="status_tag_cancelled">Cancelado</string>
     <string name="status_tag_description">Estado: %s</string>
     <string name="order_list_ticket">order_list_ticket</string>
+    <string name="action_bottom_sheet_description">Panel de acciones</string>
+    <string name="action_item_description">Acción: %s</string>
+    <string name="action_type_profile">Mi Perfil</string>
+    <string name="action_type_settings">Configuración</string>
+    <string name="action_type_switch_user">Cambiar usuario</string>
 </resources>

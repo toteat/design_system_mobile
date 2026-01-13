@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.5] - 2026-01-13
+### Changed
+- **ToteatActionBottomSheet**: Refactored to use fixed predefined icons instead of composable parameters
+  - Changed from `ToteatActionItem` (with composable icon) to `ToteatActionConfig` (with action type)
+  - Introduced `ToteatActionType` sealed class with predefined action types (Profile, Settings, SwitchUser)
+  - Each action type includes fixed icon resource (DrawableResource) and label resource (StringResource)
+  - Icons now use `vectorResource()` for better performance and consistency
+  - Simplified component API - users only specify action type, enabled state, and isSelected flag
+  - Icons are centered within 84x84dp tiles using `Box` with `fillMaxWidth()` and `height(TileSize)`
+  - Icon size standardized to 28dp with proper color tinting based on state
+
+### Added
+- **icon_profile.xml**: New drawable resource for "Mi Perfil" action (person icon)
+- **icon_settings.xml**: New drawable resource for "Configuración" action (settings gear icon)
+- **icon_switch_user.xml**: New drawable resource for "Cambiar usuario" action (exit/switch icon)
+- **strings.xml**: Added `action_type_profile`, `action_type_settings`, and `action_type_switch_user` for localization
+
 ## [0.1.4] - 2026-01-12
 ### Fixed
 - **OrderListTicketIcon**: Corrected function name from `OrderListIcon` to `OrderListTicketIcon` for consistency
