@@ -45,6 +45,8 @@
     <string name="icon_customer_service">Servicio al cliente</string>
     <string name="icon_arrow_back">Navegar hacia atrás</string>
     <string name="icon_print">Imprimir</string>
+    <string name="icon_user">usuario</string>
+    <string name="icon_config">configuración</string>
     <string name="icon_split_payment">Dividir pago</string>
     <string name="icon_total_payment">Pago total</string>
     <string name="icon_different_payment">Pagos por montos diferentes</string>

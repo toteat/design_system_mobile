@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.6] - 2026-01-20
+### Added
+- **ConfigButtonSheet**: New icon component using `group_bottom_view` drawable for configuration actions
+- **ChangueBottomSheet**: New icon component using `change_icon` drawable for change/switch actions
+- **UserIconBottomSheet**: New icon component using `user_icon_bottom_sheet` drawable for user profile actions
+- **strings.xml**: Added `icon_config` string resource ("configuración") for accessibility
+- All bottom sheet icon components follow consistent design with customizable size (default 48.dp) and modifier parameters
+
 ## [0.1.5] - 2026-01-13
 ### Changed
 - **ToteatActionBottomSheet**: Refactored to use fixed predefined icons instead of composable parameters
