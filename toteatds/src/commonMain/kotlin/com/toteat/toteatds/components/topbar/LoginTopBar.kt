@@ -29,26 +29,11 @@ fun LoginTopBar(
     modifier: Modifier = Modifier,
     testTag: String = ""
 ) {
-    val menuDescription = stringResource(Res.string.menu_open_description)
     val logoDescription = stringResource(Res.string.toteat_logo_description)
 
     ToteatTopBar(
         modifier = modifier,
         semanticLabel = stringResource(Res.string.login_topbar_semantic_label),
-        leftComponent = {
-            IconButton(
-                onClick = onMenuIconClick,
-                modifier = Modifier.semantics {
-                    contentDescription = menuDescription
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        },
         centerComponent = {
             ToteatIsoCreamOrange(
                 modifier = Modifier
