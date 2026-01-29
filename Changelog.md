@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.7] - 2026-01-29
+### Changed
+- **Library Version**: Bumped version to 0.1.7 in gradle.properties
+
+### Removed
+- **LoginTopBar**: Removed unused menu button component from left section
+  - Removed leftComponent parameter with Menu IconButton
+  - Removed menu icon click handler functionality
+  - Removed menu_open_description string resource reference
+
 ## [0.1.6] - 2026-01-20
 ### Added
 - **ConfigButtonSheet**: New icon component using `group_bottom_view` drawable for configuration actions
