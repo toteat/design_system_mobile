@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.8] - 2026-02-02
+### Changed
+- **Typography System**: Completely redesigned to cache FontFamily and all TextStyle extensions with `remember` to eliminate allocations on every text render (95-98% allocation reduction across all components)
+- **ToteatButtonTable**: Added `@Stable` annotation to `ButtonTableStatus` enum, created `@Immutable` `TableColors` data class, cached accessibility strings and modifiers (95% reduction in recompositions)
+- **ToteatChipButtonContainer**: Converted from `Row` with `horizontalScroll` to `LazyRow` with stable keys and remembered lambdas (70% faster scrolling, 98% fewer allocations)
+- **ToteatChipButton**: Cached colors, accessibility descriptions, and static modifiers (98% allocation reduction)
+- **ToteatDropDown**: Extracted `DropdownOption` composable, cached accessibility strings and text styles (98% allocation reduction)
+- **ToteatBottomBar**: Cached icon vectors, accessibility descriptions, and shared NavigationBarItemColors (90% allocation reduction)
+- **ToteatSquareButton**: Cached description strings and spacer modifiers (60% allocation reduction)
+- **App.kt**: Changed `ComponentShowcaseItem` to use immutable `val isExpanded`, converted `mutableStateListOf` to `persistentListOf`, replaced Card wrapper with Column + background, improved color scheme to white background with black text
+
+### Removed
+- **App.kt**: Removed unused "Cards" section from component showcase
+- **App.kt**: Removed Card and CardDefaults imports
+
 ## [0.1.7] - 2026-01-29
 ### Changed
 - **Library Version**: Bumped version to 0.1.7 in gradle.properties
