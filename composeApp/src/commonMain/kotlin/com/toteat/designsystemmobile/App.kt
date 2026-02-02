@@ -3,8 +3,8 @@ package com.toteat.designsystemmobile
 import WelcomeMessage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,8 +26,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.WavingHand
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -95,7 +93,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 data class ComponentShowcaseItem(
     val title: String,
-    var isExpanded: Boolean = false
+    val isExpanded: Boolean = false
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,22 +105,23 @@ fun App() {
             mutableStateOf<ToteatBottomBarButtonType>(ToteatBottomBarButtonType.AllTables)
         }
 
-
-        val componentList = remember {
-            mutableStateListOf(
-                ComponentShowcaseItem(title = "Buttons"),
-                ComponentShowcaseItem(title = "TopBars"),
-                ComponentShowcaseItem(title = "Dropdowns"),
-                ComponentShowcaseItem(title = "Inputs"),
-                ComponentShowcaseItem(title = "Cards"),
-                ComponentShowcaseItem(title = "Segmented Tabs"),
-                ComponentShowcaseItem(title = "MessageView"),
-                ComponentShowcaseItem(title = "Brand"),
-                ComponentShowcaseItem(title = "Toast"),
-                ComponentShowcaseItem(title = "Switch container"),
-                ComponentShowcaseItem(title = "Chip container"),
-                ComponentShowcaseItem(title = "Order detail"),
-                ComponentShowcaseItem(title = "Tags")
+        // Use immutable list with state instead of mutableStateListOf
+        var componentList by remember {
+            mutableStateOf(
+                persistentListOf(
+                    ComponentShowcaseItem(title = "Buttons"),
+                    ComponentShowcaseItem(title = "TopBars"),
+                    ComponentShowcaseItem(title = "Dropdowns"),
+                    ComponentShowcaseItem(title = "Inputs"),
+                    ComponentShowcaseItem(title = "Segmented Tabs"),
+                    ComponentShowcaseItem(title = "MessageView"),
+                    ComponentShowcaseItem(title = "Brand"),
+                    ComponentShowcaseItem(title = "Toast"),
+                    ComponentShowcaseItem(title = "Switch container"),
+                    ComponentShowcaseItem(title = "Chip container"),
+                    ComponentShowcaseItem(title = "Order detail"),
+                    ComponentShowcaseItem(title = "Tags")
+                )
             )
         }
         var toastMessage by remember { mutableStateOf<String?>(null) }
@@ -169,11 +168,15 @@ fun App() {
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    itemsIndexed(componentList) { index, item ->
+                    itemsIndexed(
+                        items = componentList,
+                        key = { _, item -> item.title }  // Use title as stable key
+                    ) { index, item ->
                         ComponentShowcaseSection(
                             item = item,
                             onClick = {
-                                componentList[index] = item.copy(isExpanded = !item.isExpanded)
+                                // Update immutable list by replacing the item at index
+                                componentList = componentList.set(index, item.copy(isExpanded = !item.isExpanded))
                             }
                         )
                     }
@@ -197,39 +200,42 @@ fun ComponentShowcaseSection(
     item: ComponentShowcaseItem,
     onClick: () -> Unit
 ) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-    ) {
-        Column {
-            SectionHeader(
-                title = item.title,
-                isExpanded = item.isExpanded,
-                onClick = onClick
+    val shape = MaterialTheme.shapes.medium
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                shape = shape
             )
+            .background(
+                color = Color.White,  // Fondo blanco para mejor contraste
+                shape = shape
+            )
+    ) {
+        SectionHeader(
+            title = item.title,
+            isExpanded = item.isExpanded,
+            onClick = onClick
+        )
 
-            AnimatedVisibility(visible = item.isExpanded) {
-                when (item.title) {
-                    "Buttons" -> ButtonShowcase()
-                    "TopBars" -> TopBarShowcase()
-                    "Inputs" -> InputShowcase()
-                    "Dropdowns" -> DropdownShowcase()
-                    "Segmented Tabs" -> SegmentedTabsShowcase()
-                    "MessageView" -> MyShowroomScreen()
-                    "Brand" -> BrandShowcase()
-                    "Toast" -> ToastShowcase()
-                    "Switch container" -> SwitchButtonShowcase()
-                    "Chip container" -> ChipButtonShowcase()
-                    "Order detail" -> OrderDetailShowcase()
-                    "Tags" -> StatusTagShowcase()
-
-                    else -> Text(
-                        text = "Componentes próximamente...",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
+        AnimatedVisibility(visible = item.isExpanded) {
+            HorizontalDivider()
+            when (item.title) {
+                "Buttons" -> ButtonShowcase()
+                "TopBars" -> TopBarShowcase()
+                "Inputs" -> InputShowcase()
+                "Dropdowns" -> DropdownShowcase()
+                "Segmented Tabs" -> SegmentedTabsShowcase()
+                "MessageView" -> MyShowroomScreen()
+                "Brand" -> BrandShowcase()
+                "Toast" -> ToastShowcase()
+                "Switch container" -> SwitchButtonShowcase()
+                "Chip container" -> ChipButtonShowcase()
+                "Order detail" -> OrderDetailShowcase()
+                "Tags" -> StatusTagShowcase()
             }
         }
     }
@@ -237,7 +243,10 @@ fun ComponentShowcaseSection(
 
 @Composable
 fun SectionHeader(title: String, isExpanded: Boolean, onClick: () -> Unit) {
-    val rotationAngle by animateFloatAsState(targetValue = if (isExpanded) 180f else 0f)
+    val rotationAngle by animateFloatAsState(
+        targetValue = if (isExpanded) 180f else 0f,
+        label = "sectionHeaderRotation"
+    )
 
     Row(
         modifier = Modifier
@@ -247,11 +256,16 @@ fun SectionHeader(title: String, isExpanded: Boolean, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = title, style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.Black  // Texto negro para contraste con fondo blanco
+        )
         Icon(
             imageVector = Icons.Default.KeyboardArrowDown,
-            contentDescription = "Expand section",
-            modifier = Modifier.rotate(rotationAngle)
+            contentDescription = if (isExpanded) "Collapse section" else "Expand section",
+            modifier = Modifier.rotate(rotationAngle),
+            tint = Color.Black.copy(alpha = 0.6f)  // Icono gris oscuro
         )
     }
 }

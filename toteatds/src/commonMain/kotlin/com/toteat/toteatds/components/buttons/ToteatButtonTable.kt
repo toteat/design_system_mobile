@@ -18,6 +18,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,9 +46,18 @@ import designsystemmobile.toteatds.generated.resources.waiter_description
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Stable
 enum class ButtonTableStatus {
     AVAILABLE, OCCUPIED
 }
+
+@Immutable
+private data class TableColors(
+    val container: Color,
+    val text: Color,
+    val title: Color,
+    val icon: Color
+)
 
 @Composable
 fun ToteatButtonTable(
@@ -58,36 +70,53 @@ fun ToteatButtonTable(
     testTag: String = ""
 ) {
     val isOccupied = tableStatus == ButtonTableStatus.OCCUPIED
-    val containerColor = if (isOccupied) {
-        MaterialTheme.colorScheme.extended.neutral500
-    } else {
-        MaterialTheme.colorScheme.extended.neutral100
+
+    // Cache color scheme lookups to avoid repeated composition local reads
+    val extendedColors = MaterialTheme.colorScheme.extended
+
+    // Remember colors based on occupation status to prevent recomposition overhead
+    val colors = remember(isOccupied, extendedColors) {
+        TableColors(
+            container = if (isOccupied) extendedColors.neutral500 else extendedColors.neutral100,
+            text = if (isOccupied) NeutralGray else NeutralGray400,
+            title = if (isOccupied) NeutralGray else extendedColors.neutral500,
+            icon = if (isOccupied) NeutralGray else NeutralGray400
+        )
     }
 
-    val textColor: Color = if (isOccupied) NeutralGray else NeutralGray400
-    val titleColor: Color = if (isOccupied) NeutralGray else MaterialTheme.colorScheme.extended.neutral500
-    val iconColor: Color = if (isOccupied) NeutralGray else NeutralGray400
+    // Remember string resources to avoid repeated allocation
+    val statusText = if (isOccupied) {
+        stringResource(Res.string.table_occupied)
+    } else {
+        stringResource(Res.string.table_available)
+    }
 
-    val statusText = if (isOccupied) stringResource(Res.string.table_occupied) else stringResource(Res.string.table_available)
-    val accessibilityDescription = "$tableName $statusText"
+    val accessibilityDescription = remember(tableName, statusText) {
+        "$tableName $statusText"
+    }
+
+    // Cache static modifier to reduce allocations
+    val baseModifier = remember {
+        Modifier.size(width = 106.dp, height = 80.dp)
+    }
 
     Card(
         modifier = modifier
-            .size(width = 106.dp, height = 80.dp)
+            .then(baseModifier)
             .semantics {
                 role = Role.Button
                 contentDescription = accessibilityDescription
                 stateDescription = statusText
             }
-            .then(Modifier.setTestTag(testTag)),
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         onClick = onClick,
         enabled = isOccupied,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = containerColor,
-            contentColor = textColor,
-            disabledContainerColor = containerColor,
-            disabledContentColor = textColor
+            containerColor = colors.container,
+            contentColor = colors.text,
+            disabledContainerColor = colors.container,
+            disabledContentColor = colors.text
         )
     ) {
         Column(
@@ -101,22 +130,22 @@ fun ToteatButtonTable(
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
-                color = titleColor,
+                color = colors.title,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.fillMaxWidth()
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.AccountCircle,
                 title = waiterName,
-                iconTint = iconColor,
-                textTint = textColor,
+                iconTint = colors.icon,
+                textTint = colors.text,
                 contentDescription = stringResource(Res.string.waiter_description, waiterName)
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.Schedule,
                 title = occupationTime,
-                iconTint = iconColor,
-                textTint = textColor,
+                iconTint = colors.icon,
+                textTint = colors.text,
                 contentDescription = stringResource(Res.string.occupation_time_description, occupationTime)
             )
         }
@@ -131,6 +160,9 @@ private fun ToteatButtonItemRow(
     textTint: Color,
     contentDescription: String? = null
 ) {
+    // Cache static icon size modifier
+    val iconModifier = remember { Modifier.size(16.dp) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -144,7 +176,7 @@ private fun ToteatButtonItemRow(
             imageVector = icon,
             contentDescription = null,
             tint = iconTint,
-            modifier = Modifier.size(16.dp)
+            modifier = iconModifier
         )
         Text(
             text = title,

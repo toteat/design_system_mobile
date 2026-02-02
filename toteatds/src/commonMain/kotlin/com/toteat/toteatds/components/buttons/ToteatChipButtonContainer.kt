@@ -1,10 +1,9 @@
 package com.toteat.toteatds.components.buttons
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,23 +34,32 @@ fun ToteatChipButtonContainer(
 ) {
     val containerDescription = stringResource(Res.string.chip_container_description)
 
-    Row(
+    LazyRow(
         modifier = modifier
-            .horizontalScroll(rememberScrollState())
             .semantics {
                 contentDescription = containerDescription
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items.forEach { item ->
-            val modifierForItem = itemModifier(item)
+        items(
+            items = items,
+            key = { item -> item }  // Use string as stable key
+        ) { item ->
+            // Remember onClick lambda to avoid recreation on every recomposition
+            val onClick = remember(item, enabled) {
+                { onItemSelect(item) }
+            }
+
+            // Remember the modifier for this item
+            val modifierForItem = remember(item) {
+                itemModifier(item)
+            }
+
             ToteatChipButton(
                 text = item,
                 isSelected = item == selectedItem,
-                onClick = {
-                    onItemSelect(item)
-                },
+                onClick = onClick,
                 enabled = enabled,
                 modifier = modifierForItem
             )

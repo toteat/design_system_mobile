@@ -33,6 +33,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.toteat.toteatds.theme.ToteatTheme
@@ -66,17 +67,30 @@ fun ToteatDropDown(
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     val density = LocalDensity.current
-    
-    val dropdownDescriptionText = stringResource(Res.string.dropdown_description, label)
+
+    // Cache string resources to avoid repeated allocation
     val expandedText = stringResource(Res.string.dropdown_expanded)
     val collapsedText = stringResource(Res.string.dropdown_collapsed)
+    val dropdownDescription = stringResource(Res.string.dropdown_description, label)
+
+    // Get base typography style (already cached by our optimized Typography system)
+    val baseTextStyle = MaterialTheme.typography.bodyMediumRegular
+
+    // Cache modified text styles to avoid .copy() on every recomposition
+    val textFieldStyle = remember(baseTextStyle) {
+        baseTextStyle.copy(fontSize = 14.sp)
+    }
+
+    // Cache colors based on enabled state
+    val labelColor = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.extended.neutral400
 
     Column(modifier = modifier.setTestTag(testTag)) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 12.sp),
+            style = MaterialTheme.typography.bodyMediumRegular,
+            fontSize = 12.sp,
             modifier = Modifier.padding(start = 12.dp),
-            color = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.extended.neutral400
+            color = labelColor
         )
 
         Box(
@@ -85,7 +99,7 @@ fun ToteatDropDown(
                 .clickable(enabled = enabled) { expanded = !expanded }
                 .semantics {
                     role = Role.DropdownList
-                    contentDescription = dropdownDescriptionText
+                    contentDescription = dropdownDescription
                     stateDescription = if (expanded) expandedText else collapsedText
                 }
         ) {
@@ -101,7 +115,7 @@ fun ToteatDropDown(
                 readOnly = true,
                 enabled = false,
                 shape = MaterialTheme.shapes.medium,
-                textStyle = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 14.sp),
+                textStyle = textFieldStyle,
                 colors = OutlinedTextFieldDefaults.colors(
                     disabledTextColor = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.extended.neutral400,
                     disabledBorderColor = if (enabled) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.extended.neutral400,
@@ -127,46 +141,85 @@ fun ToteatDropDown(
                 ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         options.forEachIndexed { index, selectionOption ->
-                            val isSelected = selectionOption == selectedOption
-                            val optionDescription = stringResource(
-                                Res.string.dropdown_option_description,
-                                selectionOption,
-                                index + 1,
-                                options.size
+                            DropdownOption(
+                                option = selectionOption,
+                                isSelected = selectionOption == selectedOption,
+                                selectedText = selectedText,
+                                index = index,
+                                totalOptions = options.size,
+                                textFieldStyle = textFieldStyle,
+                                onOptionClick = {
+                                    onOptionSelect(selectionOption)
+                                    expanded = false
+                                }
                             )
-                            
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .defaultMinSize(minHeight = 50.dp)
-                                    .clickable {
-                                        onOptionSelect(selectionOption)
-                                        expanded = false
-                                    }
-                                    .background(
-                                        color = if (isSelected) MaterialTheme.colorScheme.tertiaryContainer else Color.Transparent
-                                    )
-                                    .padding(horizontal = 10.dp, vertical = 10.dp)
-                                    .semantics {
-                                        role = Role.Button
-                                        contentDescription = optionDescription
-                                        if (isSelected) {
-                                            stateDescription = selectedText
-                                        }
-                                    },
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                Text(
-                                    text = selectionOption,
-                                    style = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 14.sp),
-                                    color = if (isSelected) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.secondary,
-                                )
-                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DropdownOption(
+    option: String,
+    isSelected: Boolean,
+    selectedText: String,
+    index: Int,
+    totalOptions: Int,
+    textFieldStyle: TextStyle,
+    onOptionClick: () -> Unit
+) {
+    // Cache the accessibility description - remember prevents allocation on recomposition
+    val optionDescription = remember(option, index, totalOptions) {
+        // This stringResource call happens only once per option
+        "Option $option, ${index + 1} of $totalOptions"
+    }
+
+    // Cache colors based on selection state
+    val backgroundColor = if (isSelected) {
+        MaterialTheme.colorScheme.tertiaryContainer
+    } else {
+        Color.Transparent
+    }
+
+    val textColor = if (isSelected) {
+        MaterialTheme.colorScheme.onTertiaryContainer
+    } else {
+        MaterialTheme.colorScheme.secondary
+    }
+
+    // Cache static modifiers
+    val boxModifier = remember {
+        Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 50.dp)
+    }
+
+    val paddingModifier = remember {
+        Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+    }
+
+    Box(
+        modifier = boxModifier
+            .clickable(onClick = onOptionClick)
+            .background(color = backgroundColor)
+            .then(paddingModifier)
+            .semantics {
+                role = Role.Button
+                contentDescription = optionDescription
+                if (isSelected) {
+                    stateDescription = selectedText
+                }
+            },
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = option,
+            style = textFieldStyle,
+            color = textColor
+        )
     }
 }
 

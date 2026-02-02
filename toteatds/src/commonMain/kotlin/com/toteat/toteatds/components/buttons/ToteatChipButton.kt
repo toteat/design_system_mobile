@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -42,23 +43,42 @@ fun ToteatChipButton(
     val selectedText = stringResource(Res.string.chip_selected)
     val notSelectedText = stringResource(Res.string.chip_not_selected)
 
+    // Cache colors to avoid recreating Color instances
+    val textColor = remember(enabled) {
+        if (!enabled) NeutralGray.copy(alpha = 0.38f) else Color.Black
+    }
+
+    val backgroundColor = remember(enabled, isSelected) {
+        when {
+            !enabled -> NeutralGray300.copy(alpha = 0.5f)
+            isSelected -> TertiaryNormal
+            else -> NeutralGray100
+        }
+    }
+
+    // Cache accessibility description to avoid string concatenation on every recomposition
+    val accessibilityDescription = remember(text, isSelected, selectedText, notSelectedText) {
+        if (isSelected) "$text, $selectedText" else "$text, $notSelectedText"
+    }
+
+    // Cache static modifiers
+    val baseModifier = remember {
+        Modifier
+            .minimumInteractiveComponentSize()
+            .clip(CircleShape)
+    }
+
+    val paddingModifier = remember {
+        Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+    }
+
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        color = when {
-            !enabled -> NeutralGray.copy(alpha = 0.38f)
-            else -> Color.Black
-        },
+        color = textColor,
         modifier = modifier
-            .minimumInteractiveComponentSize()
-            .clip(CircleShape)
-            .background(
-                color = when {
-                    !enabled -> NeutralGray300.copy(alpha = 0.5f)
-                    isSelected -> TertiaryNormal
-                    else -> NeutralGray100
-                }
-            )
+            .then(baseModifier)
+            .background(color = backgroundColor)
             .clickable(
                 enabled = enabled,
                 onClick = onClick,
@@ -67,14 +87,11 @@ fun ToteatChipButton(
             .semantics {
                 role = Role.Button
                 selected = isSelected
-                contentDescription = if (isSelected) {
-                    "$text, $selectedText"
-                } else {
-                    "$text, $notSelectedText"
-                }
+                contentDescription = accessibilityDescription
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
-            .padding(horizontal = 16.dp, vertical = 8.dp))
+            .then(paddingModifier)
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)

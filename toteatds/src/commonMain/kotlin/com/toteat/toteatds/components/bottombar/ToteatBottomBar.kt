@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
@@ -59,12 +60,43 @@ fun ToteatBottomBar(
     modifier: Modifier = Modifier,
     testTag: String = ""
 ) {
+    // Cache string resources (these don't change)
     val tablesText = stringResource(ToteatBottomBarButtonType.Tables.textRes)
     val allTablesText = stringResource(ToteatBottomBarButtonType.AllTables.textRes)
     val viewMoreText = stringResource(ToteatBottomBarButtonType.ViewMore.textRes)
     val selectedText = stringResource(Res.string.chip_selected)
     val notSelectedText = stringResource(Res.string.chip_not_selected)
     val mainDescription = stringResource(Res.string.bottom_bar_main_description)
+
+    // Cache icons to avoid repeated vectorResource calls
+    val tablesIcon = vectorResource(ToteatBottomBarButtonType.Tables.iconRes)
+    val allTablesIcon = vectorResource(ToteatBottomBarButtonType.AllTables.iconRes)
+    val viewMoreIcon = vectorResource(ToteatBottomBarButtonType.ViewMore.iconRes)
+
+    // Get color scheme (already cached by MaterialTheme)
+    val colorScheme = MaterialTheme.colorScheme
+
+    // Create NavigationBarItemColors (called in @Composable context)
+    val itemColors = NavigationBarItemDefaults.colors(
+        selectedIconColor = colorScheme.primary,
+        selectedTextColor = colorScheme.primary,
+        unselectedIconColor = colorScheme.onSurfaceVariant,
+        unselectedTextColor = colorScheme.onSurfaceVariant,
+        indicatorColor = Color.Transparent
+    )
+
+    // Cache accessibility descriptions to avoid string concatenation on every recomposition
+    val tablesDescription = remember(tablesText, selectedType, selectedText, notSelectedText) {
+        "$tablesText, ${if (selectedType == ToteatBottomBarButtonType.Tables) selectedText else notSelectedText}"
+    }
+
+    val allTablesDescription = remember(allTablesText, selectedType, selectedText, notSelectedText) {
+        "$allTablesText, ${if (selectedType == ToteatBottomBarButtonType.AllTables) selectedText else notSelectedText}"
+    }
+
+    val viewMoreDescription = remember(viewMoreText, selectedType, selectedText, notSelectedText) {
+        "$viewMoreText, ${if (selectedType == ToteatBottomBarButtonType.ViewMore) selectedText else notSelectedText}"
+    }
 
     Surface(
         modifier = modifier
@@ -89,7 +121,7 @@ fun ToteatBottomBar(
                 onClick = onMyTablesClick,
                 icon = {
                     Icon(
-                        imageVector = vectorResource(ToteatBottomBarButtonType.Tables.iconRes),
+                        imageVector = tablesIcon,
                         contentDescription = null
                     )
                 },
@@ -100,17 +132,9 @@ fun ToteatBottomBar(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = Color.Transparent
-                ),
+                colors = itemColors,
                 modifier = Modifier.semantics {
-                    contentDescription = "$tablesText, ${
-                        if (selectedType == ToteatBottomBarButtonType.Tables) selectedText else notSelectedText
-                    }"
+                    contentDescription = tablesDescription
                 }
             )
 
@@ -119,7 +143,7 @@ fun ToteatBottomBar(
                 onClick = onAllTablesClick,
                 icon = {
                     Icon(
-                        imageVector = vectorResource(ToteatBottomBarButtonType.AllTables.iconRes),
+                        imageVector = allTablesIcon,
                         contentDescription = null
                     )
                 },
@@ -130,17 +154,9 @@ fun ToteatBottomBar(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = Color.Transparent
-                ),
+                colors = itemColors,
                 modifier = Modifier.semantics {
-                    contentDescription = "$allTablesText, ${
-                        if (selectedType == ToteatBottomBarButtonType.AllTables) selectedText else notSelectedText
-                    }"
+                    contentDescription = allTablesDescription
                 }
             )
 
@@ -149,7 +165,7 @@ fun ToteatBottomBar(
                 onClick = onMoreClick,
                 icon = {
                     Icon(
-                        imageVector = vectorResource(ToteatBottomBarButtonType.ViewMore.iconRes),
+                        imageVector = viewMoreIcon,
                         contentDescription = null
                     )
                 },
@@ -160,17 +176,9 @@ fun ToteatBottomBar(
                         overflow = TextOverflow.Ellipsis
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = Color.Transparent
-                ),
+                colors = itemColors,
                 modifier = Modifier.semantics {
-                    contentDescription = "$viewMoreText, ${
-                        if (selectedType == ToteatBottomBarButtonType.ViewMore) selectedText else notSelectedText
-                    }"
+                    contentDescription = viewMoreDescription
                 }
             )
         }
