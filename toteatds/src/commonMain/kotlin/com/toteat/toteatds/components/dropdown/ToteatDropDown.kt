@@ -9,9 +9,8 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -130,14 +129,11 @@ fun ToteatDropDown(
             val selectedText = stringResource(Res.string.dropdown_option_selected)
 
             Box(modifier = Modifier.padding(top = 8.dp)) {
-                Card(
+                Surface(
                     modifier = Modifier.width(textFieldWidthInDp),
                     shape = MaterialTheme.shapes.medium,
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    )
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         options.forEachIndexed { index, selectionOption ->
@@ -349,13 +345,11 @@ private fun ToteatDropDownExpandedPreview() {
                 Box(
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    Card(
+                    Surface(
                         modifier = Modifier.width(textFieldWidthInDp),
                         shape = MaterialTheme.shapes.medium,
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.background
-                        )
+                        color = MaterialTheme.colorScheme.background
                     ) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             options.forEach { selectionOption ->

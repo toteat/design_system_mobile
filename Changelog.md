@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.1.9] - 2026-02-03
+### Changed
+- **ToteatButtonTable**: Replaced `Card` with `Surface` for maximum rendering performance on low-end POS devices (3GB RAM)
+  - Removed elevation/shadow rendering (~42-63ms savings per 21 buttons)
+  - Reduced corner radius from 8dp to 4dp
+  - Removed unused `border` property from `TableColors`
+  - Removed `performanceMode` parameter (simplified API - always uses optimized rendering)
+  - Removed unused imports (`Card`, `CardDefaults`, `border`, `stateDescription`)
+  - Shape is now a static `val` instead of per-call remembered value
+- **ToteatSwitchButtonContainer**: Major performance optimization
+  - Removed shadow rendering (4.dp elevation eliminated)
+  - Replaced 4 concurrent animations with single `animateFloatAsState` (75% fewer recompositions)
+  - Cached Color.copy() values with `@Immutable` `SwitchColors` data class (eliminates GC pressure during animations)
+  - Reduced animation duration from 250ms to 200ms for snappier feel
+  - Static `ContainerShape` val instead of per-call allocation
+- **ToteatBottomBar**: Removed 16.dp `shadowElevation` (always-visible component, constant GPU cost)
+- **ToteatDropDown**: Replaced `Card` with `Surface`, removed 10.dp elevation
+
+### Removed
+- **ToteatButtonTable**: Removed `Card` component usage in favor of lightweight `Surface`
+- **ToteatSwitchButtonContainer**: Removed `shadow` modifier and border animation
+- **ToteatDropDown**: Removed `Card` and `CardDefaults` imports
+
 ## [0.1.8] - 2026-02-02
 ### Changed
 - **Typography System**: Completely redesigned to cache FontFamily and all TextStyle extensions with `remember` to eliminate allocations on every text render (95-98% allocation reduction across all components)

@@ -102,8 +102,8 @@ fun ToteatBottomBar(
         modifier = modifier
             .fillMaxWidth()
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        shadowElevation = 16.dp,
-        color = Color.White
+        color = Color.White,
+        tonalElevation = 0.dp
     ) {
         NavigationBar(
             modifier = Modifier

@@ -12,10 +12,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -29,7 +28,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,6 +57,8 @@ private data class TableColors(
     val icon: Color
 )
 
+private val ButtonShape = RoundedCornerShape(4.dp)
+
 @Composable
 fun ToteatButtonTable(
     tableName: String,
@@ -71,10 +71,8 @@ fun ToteatButtonTable(
 ) {
     val isOccupied = tableStatus == ButtonTableStatus.OCCUPIED
 
-    // Cache color scheme lookups to avoid repeated composition local reads
     val extendedColors = MaterialTheme.colorScheme.extended
 
-    // Remember colors based on occupation status to prevent recomposition overhead
     val colors = remember(isOccupied, extendedColors) {
         TableColors(
             container = if (isOccupied) extendedColors.neutral500 else extendedColors.neutral100,
@@ -84,7 +82,6 @@ fun ToteatButtonTable(
         )
     }
 
-    // Remember string resources to avoid repeated allocation
     val statusText = if (isOccupied) {
         stringResource(Res.string.table_occupied)
     } else {
@@ -95,29 +92,22 @@ fun ToteatButtonTable(
         "$tableName $statusText"
     }
 
-    // Cache static modifier to reduce allocations
     val baseModifier = remember {
         Modifier.size(width = 106.dp, height = 80.dp)
     }
 
-    Card(
+    Surface(
         modifier = modifier
             .then(baseModifier)
             .semantics {
                 role = Role.Button
                 contentDescription = accessibilityDescription
-                stateDescription = statusText
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         onClick = onClick,
         enabled = isOccupied,
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colors.container,
-            contentColor = colors.text,
-            disabledContainerColor = colors.container,
-            disabledContentColor = colors.text
-        )
+        shape = ButtonShape,
+        color = colors.container
     ) {
         Column(
             modifier = Modifier
@@ -160,7 +150,6 @@ private fun ToteatButtonItemRow(
     textTint: Color,
     contentDescription: String? = null
 ) {
-    // Cache static icon size modifier
     val iconModifier = remember { Modifier.size(16.dp) }
 
     Row(
@@ -225,7 +214,7 @@ private fun ToteatButtonTablePreview() {
                 tableName = "M1",
                 waiterName = "Ana",
                 occupationTime = "10:15",
-                tableStatus = ButtonTableStatus.OCCUPIED,
+                tableStatus = ButtonTableStatus.AVAILABLE,
                 onClick = {}
             )
         }

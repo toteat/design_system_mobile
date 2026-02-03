@@ -1,8 +1,7 @@
 package com.toteat.toteatds.components.buttons
 import com.toteat.toteatds.utils.setTestTag
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -21,17 +20,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -40,6 +39,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import com.toteat.toteatds.theme.ToteatTheme
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.switch_description
@@ -48,6 +48,16 @@ import designsystemmobile.toteatds.generated.resources.switch_on
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import com.toteat.toteatds.components.icons.ChangeIconComponent
+
+private val ContainerShape = RoundedCornerShape(16.dp)
+
+@Immutable
+private data class SwitchColors(
+    val trackOn: Color,
+    val trackOff: Color,
+    val thumbOn: Color,
+    val thumbOff: Color
+)
 
 
 @Composable
@@ -66,16 +76,10 @@ fun ToteatSwitchButtonContainer(
     val description = stringResource(Res.string.switch_description, title, subtitle, switchState)
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .shadow(
-                elevation = 4.dp,
-                shape = RoundedCornerShape(16.dp),
-                clip = false
-            ),
-        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.fillMaxWidth(),
+        shape = ContainerShape,
         color = MaterialTheme.colorScheme.background,
-        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant)
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier
@@ -123,8 +127,7 @@ fun ToteatSwitchButtonContainer(
                 onCheckedChange = onCheckedChange,
                 enabled = enabled,
                 checkedTrackColor = MaterialTheme.colorScheme.primary,
-                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                checkedBorderColor = MaterialTheme.colorScheme.primary
+                checkedThumbColor = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
@@ -136,46 +139,38 @@ private fun CustomSwitch(
     onCheckedChange: (Boolean) -> Unit,
     checkedTrackColor: Color,
     checkedThumbColor: Color,
-    checkedBorderColor: Color,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     width: Dp = 52.dp,
     height: Dp = 32.dp,
     thumbSize: Dp = 24.dp,
-    borderWidth: Dp = 0.dp,
     uncheckedTrackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    uncheckedThumbColor: Color = MaterialTheme.colorScheme.outline,
-    uncheckedBorderColor: Color = MaterialTheme.colorScheme.outline
+    uncheckedThumbColor: Color = MaterialTheme.colorScheme.outline
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val thumbPadding = (height - thumbSize) / 2
     val contentAlpha = if (enabled) 1f else 0.38f
 
-    val thumbPosition by animateDpAsState(
-        targetValue = if (checked) width - thumbSize - thumbPadding else thumbPadding,
-        animationSpec = tween(durationMillis = 250), label = "ThumbPosition"
+    // Cache colors to avoid .copy() allocations during animation
+    val colors = remember(checkedTrackColor, uncheckedTrackColor, checkedThumbColor, uncheckedThumbColor, contentAlpha) {
+        SwitchColors(
+            trackOn = checkedTrackColor.copy(alpha = contentAlpha),
+            trackOff = uncheckedTrackColor.copy(alpha = contentAlpha),
+            thumbOn = checkedThumbColor.copy(alpha = contentAlpha),
+            thumbOff = uncheckedThumbColor.copy(alpha = contentAlpha)
+        )
+    }
+
+    // Single animation drives all visual changes (reduces 4 animations to 1)
+    val progress by animateFloatAsState(
+        targetValue = if (checked) 1f else 0f,
+        animationSpec = tween(durationMillis = 200),
+        label = "SwitchProgress"
     )
 
-    val trackColor by animateColorAsState(
-        targetValue = if (checked) checkedTrackColor.copy(alpha = contentAlpha) else uncheckedTrackColor.copy(
-            alpha = contentAlpha
-        ),
-        animationSpec = tween(durationMillis = 250), label = "TrackColor"
-    )
-
-    val thumbColor by animateColorAsState(
-        targetValue = if (checked) checkedThumbColor.copy(alpha = contentAlpha) else uncheckedThumbColor.copy(
-            alpha = contentAlpha
-        ),
-        animationSpec = tween(durationMillis = 250), label = "ThumbColor"
-    )
-
-    val borderColor by animateColorAsState(
-        targetValue = if (checked) checkedBorderColor.copy(alpha = contentAlpha) else uncheckedBorderColor.copy(
-            alpha = contentAlpha
-        ),
-        animationSpec = tween(durationMillis = 250), label = "BorderColor"
-    )
+    // Pre-calculate positions
+    val thumbStartX = thumbPadding
+    val thumbEndX = width - thumbSize - thumbPadding
 
     Canvas(
         modifier = modifier
@@ -187,27 +182,25 @@ private fun CustomSwitch(
                 enabled = enabled
             ) { onCheckedChange(!checked) }
     ) {
+        val cornerRadius = CornerRadius(height.toPx() / 2)
+
+        // Interpolate colors based on single progress value
+        val trackColor = lerp(colors.trackOff, colors.trackOn, progress)
+        val thumbColor = lerp(colors.thumbOff, colors.thumbOn, progress)
 
         drawRoundRect(
             color = trackColor,
-            cornerRadius = CornerRadius(height.toPx() / 2)
+            cornerRadius = cornerRadius
         )
 
-
-        if (borderWidth > 0.dp) {
-            drawRoundRect(
-                color = borderColor,
-                cornerRadius = CornerRadius(height.toPx() / 2),
-                style = Stroke(width = borderWidth.toPx())
-            )
-        }
-
+        // Interpolate thumb position
+        val thumbX = lerp(thumbStartX.toPx(), thumbEndX.toPx(), progress)
 
         drawCircle(
             color = thumbColor,
             radius = thumbSize.toPx() / 2,
             center = Offset(
-                x = thumbPosition.toPx() + (thumbSize.toPx() / 2),
+                x = thumbX + (thumbSize.toPx() / 2),
                 y = size.height / 2
             )
         )
