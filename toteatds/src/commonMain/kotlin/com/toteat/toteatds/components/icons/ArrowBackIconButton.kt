@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_arrow_back
 import org.jetbrains.compose.resources.stringResource
@@ -28,7 +29,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ArrowBackIconButton(
     onNavigateBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    testTag: String = ""
 ) {
     val arrowBackDescription = stringResource(Res.string.icon_arrow_back)
     
@@ -36,6 +38,7 @@ fun ArrowBackIconButton(
         onClick = onNavigateBackClick,
         enabled = enabled,
         modifier = modifier
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .minimumInteractiveComponentSize()
             .size(48.dp)
             .clip(CircleShape)

@@ -20,19 +20,24 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.restaurant_description
+import designsystemmobile.toteatds.generated.resources.topbar_semantic_label
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CenterContentTopBar(
     modifier: Modifier = Modifier,
-    semanticLabel: String = "Barra de navegación superior",
+    semanticLabel: String = "",
     testTag: String = "",
     content: @Composable () -> Unit
 ) {
+    val resolvedLabel = semanticLabel.ifEmpty {
+        stringResource(Res.string.topbar_semantic_label)
+    }
+
     ToteatTopBar(
         modifier = modifier,
-        semanticLabel = semanticLabel,
+        semanticLabel = resolvedLabel,
         centerComponent = {
             content()
         },

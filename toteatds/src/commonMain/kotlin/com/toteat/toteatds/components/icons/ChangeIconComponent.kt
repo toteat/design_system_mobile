@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_change
 import designsystemmobile.toteatds.generated.resources.icon_change
@@ -21,14 +22,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ChangeIconComponent(
     modifier: Modifier = Modifier,
     size: Dp = 48.dp,
-    tint: Color = MaterialTheme.colorScheme.extended.neutral500
+    tint: Color = MaterialTheme.colorScheme.extended.neutral500,
+    testTag: String = ""
 ) {
     val contentDescription = stringResource(Res.string.icon_change)
     
     Icon(
         imageVector = vectorResource(Res.drawable.icon_change),
         contentDescription = contentDescription,
-        modifier = modifier.size(size),
+        modifier = modifier
+            .size(size)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         tint = tint
     )
 }
