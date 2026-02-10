@@ -1,6 +1,6 @@
 package com.toteat.designsystemmobile
 
-import WelcomeMessage
+import com.toteat.toteatds.components.messageview.WelcomeMessage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -437,13 +437,13 @@ fun InputShowcase() {
             placeHolder = "••••••••",
             helperText = "Mínimo 8 caracteres",
             isError = true,
-            onToggleVisibilityCLick = { isPasswordVisible.value = !isPasswordVisible.value }
+            onToggleVisibilityClick = { isPasswordVisible.value = !isPasswordVisible.value }
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Phone Number", style = MaterialTheme.typography.titleMedium)
         val phoneState = rememberTextFieldState()
-        val dialCodes = listOf("+56", "+54", "+51", "+1")
+        val dialCodes = persistentListOf("+56", "+54", "+51", "+1")
         val selectedDialCode = remember { mutableStateOf(dialCodes.first()) }
         ToteatPhoneNumberField(
             state = phoneState,

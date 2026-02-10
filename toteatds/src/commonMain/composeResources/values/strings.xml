@@ -85,4 +85,12 @@
     <string name="action_type_profile">Mi Perfil</string>
     <string name="action_type_settings">Configuración</string>
     <string name="action_type_switch_user">Cambiar usuario</string>
+    <string name="toteat_iso_description">Isotipo de Toteat</string>
+    <string name="welcome_icon_description">Icono de bienvenida</string>
+    <string name="welcome_greeting">¡Bienvenido %s!</string>
+    <string name="phone_country_code_description">Código de país: %s</string>
+    <string name="phone_dial_code_option">Código de país %s, opción %d de %d</string>
+    <string name="grouped_list_description">Lista de detalles</string>
+    <string name="order_detail_description">Detalle de pedido, %d productos</string>
+    <string name="state_disabled">deshabilitado</string>
 </resources>
