@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.ToteatTheme
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_order_list_ticket
 import org.jetbrains.compose.resources.stringResource
@@ -21,14 +22,17 @@ fun OrderListTicketIcon(
     modifier: Modifier = Modifier,
     size: Dp = 18.dp,
     tint: Color = NeutralGray,
-    contentDescription: String? = null
+    contentDescription: String? = null,
+    testTag: String = ""
 ) {
     val defaultContentDescription = stringResource(Res.string.icon_order_list_ticket)
     
     Icon(
         imageVector = vectorResource(Res.drawable.icon_order_list_ticket),
         contentDescription = contentDescription ?: defaultContentDescription,
-        modifier = modifier.size(size),
+        modifier = modifier
+            .size(size)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         tint = tint
     )
 }

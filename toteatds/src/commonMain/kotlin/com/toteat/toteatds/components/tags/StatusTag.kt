@@ -17,6 +17,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,8 +53,9 @@ fun StatusTag(
             .semantics {
                 role = Role.Image
                 contentDescription = statusDescription
+                stateDescription = displayText
             }
-            .setTestTag(testTag)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .padding(horizontal = 12.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -65,7 +67,8 @@ fun StatusTag(
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_text") else Modifier)
         )
     }
 }

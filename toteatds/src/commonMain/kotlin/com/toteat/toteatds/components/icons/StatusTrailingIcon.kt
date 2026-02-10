@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_status_error
 import designsystemmobile.toteatds.generated.resources.icon_status_success
@@ -20,7 +21,8 @@ fun StatusTrailingIcon(
     isSuccess: Boolean,
     isError: Boolean,
     isWarning: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    testTag: String = ""
 ) {
     val successText = stringResource(Res.string.icon_status_success)
     val errorText = stringResource(Res.string.icon_status_error)
@@ -51,6 +53,7 @@ fun StatusTrailingIcon(
             contentDescription = description,
             tint = tint,
             modifier = modifier
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
         )
     }
 }
