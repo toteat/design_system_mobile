@@ -135,7 +135,7 @@ fun ToteatBottomBar(
                 colors = itemColors,
                 modifier = Modifier.semantics {
                     contentDescription = tablesDescription
-                }
+                }.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_tables") else Modifier)
             )
 
             NavigationBarItem(
@@ -157,7 +157,7 @@ fun ToteatBottomBar(
                 colors = itemColors,
                 modifier = Modifier.semantics {
                     contentDescription = allTablesDescription
-                }
+                }.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_all_tables") else Modifier)
             )
 
             NavigationBarItem(
@@ -179,7 +179,7 @@ fun ToteatBottomBar(
                 colors = itemColors,
                 modifier = Modifier.semantics {
                     contentDescription = viewMoreDescription
-                }
+                }.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_view_more") else Modifier)
             )
         }
     }

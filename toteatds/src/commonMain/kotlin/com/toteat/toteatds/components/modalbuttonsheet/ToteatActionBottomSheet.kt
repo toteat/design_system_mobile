@@ -40,6 +40,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -51,6 +52,8 @@ import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.action_bottom_sheet_description
+import designsystemmobile.toteatds.generated.resources.chip_selected
+import designsystemmobile.toteatds.generated.resources.state_disabled
 import designsystemmobile.toteatds.generated.resources.action_item_description
 import designsystemmobile.toteatds.generated.resources.action_type_profile
 import designsystemmobile.toteatds.generated.resources.action_type_settings
@@ -198,6 +201,8 @@ private fun ActionMenuItem(
 
     val label = stringResource(actionConfig.type.labelRes)
     val actionDescription = stringResource(Res.string.action_item_description, label)
+    val disabledText = stringResource(Res.string.state_disabled)
+    val selectedText = stringResource(Res.string.chip_selected)
 
     val iconTintTarget = when {
         !actionConfig.enabled -> NeutralGray400
@@ -240,6 +245,11 @@ private fun ActionMenuItem(
                 .semantics {
                     contentDescription = actionDescription
                     role = Role.Button
+                    stateDescription = when {
+                        !actionConfig.enabled -> disabledText
+                        actionConfig.isSelected -> selectedText
+                        else -> ""
+                    }
                 }
                 .setTestTag("action_${actionConfig.type.id}")
                 .alpha(if (actionConfig.enabled) 1f else 0.6f)

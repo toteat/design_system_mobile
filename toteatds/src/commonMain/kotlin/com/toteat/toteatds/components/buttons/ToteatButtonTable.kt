@@ -28,6 +28,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -102,6 +103,7 @@ fun ToteatButtonTable(
             .semantics {
                 role = Role.Button
                 contentDescription = accessibilityDescription
+                stateDescription = statusText
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         onClick = onClick,
@@ -123,20 +125,23 @@ fun ToteatButtonTable(
                 color = colors.title,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.fillMaxWidth()
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_table_name") else Modifier)
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.AccountCircle,
                 title = waiterName,
                 iconTint = colors.icon,
                 textTint = colors.text,
-                contentDescription = stringResource(Res.string.waiter_description, waiterName)
+                contentDescription = stringResource(Res.string.waiter_description, waiterName),
+                testTag = if (testTag.isNotEmpty()) "${testTag}_waiter" else ""
             )
             ToteatButtonItemRow(
                 icon = Icons.Default.Schedule,
                 title = occupationTime,
                 iconTint = colors.icon,
                 textTint = colors.text,
-                contentDescription = stringResource(Res.string.occupation_time_description, occupationTime)
+                contentDescription = stringResource(Res.string.occupation_time_description, occupationTime),
+                testTag = if (testTag.isNotEmpty()) "${testTag}_time" else ""
             )
         }
     }
@@ -148,18 +153,21 @@ private fun ToteatButtonItemRow(
     title: String,
     iconTint: Color,
     textTint: Color,
-    contentDescription: String? = null
+    contentDescription: String? = null,
+    testTag: String = ""
 ) {
     val iconModifier = remember { Modifier.size(16.dp) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = Modifier.semantics(mergeDescendants = true) {
-            contentDescription?.let {
-                this.contentDescription = it
+        modifier = Modifier
+            .semantics(mergeDescendants = true) {
+                contentDescription?.let {
+                    this.contentDescription = it
+                }
             }
-        }
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
         Icon(
             imageVector = icon,
