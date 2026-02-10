@@ -1,5 +1,4 @@
 package com.toteat.toteatds.components.textfields
-import com.toteat.toteatds.utils.setTestTag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.10] - 2026-02-10
+### Changed
+- **ToteatRectangleButton**: Added `_title` and `_subtitle` sub-testTags for Appium automation access to child elements
+- **ToteatSquareButton**: Added `_title` and `_subtitle` sub-testTags for Appium automation access to child elements
+- **ToteatButtonTable**: Added `_table_name`, `_waiter`, and `_time` sub-testTags; added `stateDescription` with table status ("ocupada"/"disponible"); added `testTag` parameter to internal `ToteatButtonItemRow`
+- **ToteatDropDown**: Added `_label` and `_input` sub-testTags for label text and input box
+- **ToteatSegmentButton**: Added `_tab_${index}` sub-testTags for each tab element
+- **ToteatToast**: Added `_icon`, `_title`, `_message`, and `_close` sub-testTags; added `stateDescription` with toast type name (Error/Éxito/Advertencia/Información)
+- **ToteatMessageView**: Added `_icon`, `_greeting`, and `_message` sub-testTags for WelcomeMessage child elements
+- **StatusTag**: Added `_text` sub-testTag; added `stateDescription` with display text
+- **GroupedListItem**: Added `_label` and `_value` sub-testTags for label and value boxes
+- **GroupedOrderDetail**: Added `_header`, `_item_${index}`, and `_view_more` sub-testTags; added `testTag` parameter to internal `OrderDetailHeader`, `OrderDetailItem`, and `ViewMoreRow`
+- **ToteatBottomBar**: Added `_tables`, `_all_tables`, and `_view_more` sub-testTags for each NavigationBarItem
+- **ToteatActionBottomSheet**: Added `stateDescription` to `ActionMenuItem` with disabled/selected state text
+
+### Added
+- **strings.xml**: Added `state_disabled` string resource ("deshabilitado") for accessibility state descriptions
+
 ## [0.1.9] - 2026-02-03
 ### Changed
 - **ToteatButtonTable**: Replaced `Card` with `Surface` for maximum rendering performance on low-end POS devices (3GB RAM)

@@ -1,6 +1,5 @@
 package com.toteat.designsystemmobile
 
-import com.toteat.toteatds.components.messageview.WelcomeMessage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -37,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,7 +45,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.components.segmentbuttons.SegmentedTabs
 import com.toteat.toteatds.components.bottombar.ToteatBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
@@ -74,6 +71,8 @@ import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.components.list.GroupedOrderDetail
 import com.toteat.toteatds.components.list.OrderItem
 import com.toteat.toteatds.components.list.OrderItemExtra
+import com.toteat.toteatds.components.messageview.WelcomeMessage
+import com.toteat.toteatds.components.segmentbuttons.SegmentedTabs
 import com.toteat.toteatds.components.tags.StatusTag
 import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField

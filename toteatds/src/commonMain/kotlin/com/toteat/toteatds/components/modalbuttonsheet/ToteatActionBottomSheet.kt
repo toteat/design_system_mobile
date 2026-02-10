@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -44,7 +43,6 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.components.icons.ArrowBackIconButton
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray400
 import com.toteat.toteatds.theme.NeutralGray500
@@ -52,14 +50,14 @@ import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.action_bottom_sheet_description
-import designsystemmobile.toteatds.generated.resources.chip_selected
-import designsystemmobile.toteatds.generated.resources.state_disabled
 import designsystemmobile.toteatds.generated.resources.action_item_description
 import designsystemmobile.toteatds.generated.resources.action_type_profile
 import designsystemmobile.toteatds.generated.resources.action_type_settings
 import designsystemmobile.toteatds.generated.resources.action_type_switch_user
 import designsystemmobile.toteatds.generated.resources.change_icon
+import designsystemmobile.toteatds.generated.resources.chip_selected
 import designsystemmobile.toteatds.generated.resources.group_bottom_view
+import designsystemmobile.toteatds.generated.resources.state_disabled
 import designsystemmobile.toteatds.generated.resources.user_icon_bottom_sheet
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource

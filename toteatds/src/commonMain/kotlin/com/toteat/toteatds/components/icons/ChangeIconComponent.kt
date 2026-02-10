@@ -13,7 +13,6 @@ import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_change
-import designsystemmobile.toteatds.generated.resources.icon_change
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
