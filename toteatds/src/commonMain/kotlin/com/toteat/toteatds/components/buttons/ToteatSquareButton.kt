@@ -22,7 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -53,11 +55,7 @@ fun ToteatSquareButton(
         if (pressed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
     val borderColor by animateColorAsState(targetValue = targetBorderColor, label = "squareBorder")
 
-    // Cache string resource to avoid allocation on every recomposition
-    val description = remember(title, subTitle) {
-        // Note: We use string concatenation here since stringResource can't be in remember
-        "Button: $title, $subTitle"
-    }
+    val description = stringResource(Res.string.square_button_description, title, subTitle)
 
     // Cache static modifiers
     val spacerModifier = remember { Modifier.height(8.dp) }
@@ -67,7 +65,10 @@ fun ToteatSquareButton(
         modifier = modifier
             .heightIn(max = 128.dp)
             .width(150.dp)
-            .semantics { contentDescription = description }
+            .semantics {
+                contentDescription = description
+                role = Role.Button
+            }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         interactionSource = interactionSource,
         colors = CardDefaults
@@ -82,7 +83,8 @@ fun ToteatSquareButton(
             icon()
             Spacer(modifier = spacerModifier)
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.secondary,
@@ -90,7 +92,8 @@ fun ToteatSquareButton(
                 softWrap = true
             )
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_subtitle") else Modifier),
                 text = subTitle,
                 style = MaterialTheme.typography.bodyLargeRegular,
                 color = MaterialTheme.colorScheme.secondary,

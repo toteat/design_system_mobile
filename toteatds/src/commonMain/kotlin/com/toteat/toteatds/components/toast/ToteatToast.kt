@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.BlueLight
 import com.toteat.toteatds.theme.BlueNormal
@@ -130,18 +131,20 @@ fun ToteatToastMessage(
             )
             .border(1.dp, type.borderBackground, RoundedCornerShape(8.dp))
             .padding(16.dp)
-            .setTestTag(testTag)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .semantics {
                 role = Role.Button
                 contentDescription = toastDescription
                 liveRegion = LiveRegionMode.Polite
+                stateDescription = toastTypeName
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = vectorResource(type.iconRes),
             contentDescription = toastTypeName,
-            modifier = Modifier.size(21.dp),
+            modifier = Modifier.size(21.dp)
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_icon") else Modifier),
             tint = type.iconTint
         )
 
@@ -151,12 +154,14 @@ fun ToteatToastMessage(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier)
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMediumRegular,
-                color = MaterialTheme.colorScheme.extended.neutral500
+                color = MaterialTheme.colorScheme.extended.neutral500,
+                modifier = Modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_message") else Modifier)
             )
         }
 
@@ -167,6 +172,7 @@ fun ToteatToastMessage(
                 .semantics {
                     contentDescription = closeButtonDescription
                 }
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_close") else Modifier)
         ) {
             Icon(
                 imageVector = Icons.Default.Close,

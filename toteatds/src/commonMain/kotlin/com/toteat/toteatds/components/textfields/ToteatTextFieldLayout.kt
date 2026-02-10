@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.extended
@@ -74,13 +75,22 @@ fun ToteatTextFieldLayout(
             if (isError && helperText != null) {
                 error(helperText)
             }
+            if (isSuccess && helperText != null) {
+                stateDescription = helperText
+            }
+            if (isWarning && helperText != null) {
+                stateDescription = helperText
+            }
         }
+        .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_input") else Modifier)
     Column(
         modifier = modifier
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
         title?.let {
             Text(
+                modifier = Modifier
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier),
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (enabled) {
@@ -95,7 +105,8 @@ fun ToteatTextFieldLayout(
         helperText?.let {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_helper") else Modifier),
                 text = helperText,
                 color = when {
                     !enabled -> MaterialTheme.colorScheme.extended.neutral400.copy(alpha = 0.38f)

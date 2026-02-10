@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_eye_close
 import designsystemmobile.toteatds.generated.resources.icon_eye_open
@@ -19,17 +20,18 @@ fun VisibilityToggleIcon(
     isVisible: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    tint: Color = MaterialTheme.colorScheme.onSurface
+    tint: Color = MaterialTheme.colorScheme.onSurface,
+    testTag: String = ""
 ) {
     val icon = if (isVisible) {
         vectorResource(Res.drawable.icon_eye_open)
     } else {
         vectorResource(Res.drawable.icon_eye_close)
     }
-    
+
     val hidePasswordText = stringResource(Res.string.icon_hide_password)
     val showPasswordText = stringResource(Res.string.icon_show_password)
-    
+
     val contentDescription = if (isVisible) {
         hidePasswordText
     } else {
@@ -39,6 +41,7 @@ fun VisibilityToggleIcon(
     IconButton(
         onClick = onClick,
         modifier = modifier
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
         Icon(
             imageVector = icon,
