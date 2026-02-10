@@ -83,12 +83,13 @@ fun ToteatDropDown(
     // Cache colors based on enabled state
     val labelColor = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.extended.neutral400
 
-    Column(modifier = modifier.setTestTag(testTag)) {
+    Column(modifier = modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMediumRegular,
             fontSize = 12.sp,
-            modifier = Modifier.padding(start = 12.dp),
+            modifier = Modifier.padding(start = 12.dp)
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_label") else Modifier),
             color = labelColor
         )
 
@@ -101,6 +102,7 @@ fun ToteatDropDown(
                     contentDescription = dropdownDescription
                     stateDescription = if (expanded) expandedText else collapsedText
                 }
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_input") else Modifier)
         ) {
             OutlinedTextField(
                 value = selectedOption,
@@ -167,11 +169,7 @@ private fun DropdownOption(
     textFieldStyle: TextStyle,
     onOptionClick: () -> Unit
 ) {
-    // Cache the accessibility description - remember prevents allocation on recomposition
-    val optionDescription = remember(option, index, totalOptions) {
-        // This stringResource call happens only once per option
-        "Option $option, ${index + 1} of $totalOptions"
-    }
+    val optionDescription = stringResource(Res.string.dropdown_option_description, option, index + 1, totalOptions)
 
     // Cache colors based on selection state
     val backgroundColor = if (isSelected) {
