@@ -18,14 +18,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.grouped_list_description
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -34,6 +39,7 @@ fun GroupedListItem(
     labelBackgroundColor: Color = MaterialTheme.colorScheme.extended.neutral100,
     valueBackgroundColor: Color = Color.White,
     testTag: String = "",
+    contentDescription: String? = null,
     label: @Composable () -> Unit,
     value: @Composable () -> Unit
 ) {
@@ -41,14 +47,15 @@ fun GroupedListItem(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .setTestTag(testTag)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
         Box(
             modifier = Modifier
                 .weight(0.4f)
                 .fillMaxHeight()
                 .background(labelBackgroundColor)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_label") else Modifier),
             contentAlignment = Alignment.TopStart
         ) {
             label()
@@ -59,7 +66,8 @@ fun GroupedListItem(
                 .weight(0.6f)
                 .fillMaxHeight()
                 .background(valueBackgroundColor)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_value") else Modifier),
             contentAlignment = Alignment.CenterStart
         ) {
             value()
@@ -74,9 +82,12 @@ fun GroupedList(
     borderColor: Color = MaterialTheme.colorScheme.outline,
     borderWidth: Dp = 1.dp,
     testTag: String = "",
+    contentDescription: String? = null,
     items: ImmutableList<@Composable () -> Unit>
 ) {
     val shape = ListItemPosition.Single.getShape(cornerRadius)
+    val defaultDescription = stringResource(Res.string.grouped_list_description)
+    val description = contentDescription ?: defaultDescription
 
     Column(
         modifier = modifier
@@ -86,7 +97,8 @@ fun GroupedList(
                 color = borderColor,
                 shape = shape
             )
-            .setTestTag(testTag)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+            .semantics { this.contentDescription = description }
     ) {
         items.forEachIndexed { index, item ->
             item()

@@ -27,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +43,7 @@ import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.order_detail_collapse_extras
+import designsystemmobile.toteatds.generated.resources.order_detail_description
 import designsystemmobile.toteatds.generated.resources.order_detail_consumption
 import designsystemmobile.toteatds.generated.resources.order_detail_entry_time
 import designsystemmobile.toteatds.generated.resources.order_detail_expand_extras
@@ -88,20 +91,25 @@ fun GroupedOrderDetail(
     var showAll by remember { mutableStateOf(false) }
     val hasMore = items.size > maxCollapsedItems
     val visible = if (showAll || !hasMore) items else items.take(maxCollapsedItems)
+    val description = stringResource(Res.string.order_detail_description, items.size)
 
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(NeutralGray, RoundedCornerShape(14.dp))
             .border(1.dp, NeutralGray200, RoundedCornerShape(14.dp))
-            .setTestTag(testTag)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+            .semantics { contentDescription = description }
     ) {
-        OrderDetailHeader()
+        OrderDetailHeader(
+            testTag = if (testTag.isNotEmpty()) "${testTag}_header" else ""
+        )
 
-        visible.forEach { item ->
+        visible.forEachIndexed { index, item ->
             OrderDetailItem(
                 item = item,
-                rowModifier = itemModifier(item)
+                rowModifier = itemModifier(item),
+                testTag = if (testTag.isNotEmpty()) "${testTag}_item_${index}" else ""
             )
         }
 
@@ -109,14 +117,15 @@ fun GroupedOrderDetail(
             ViewMoreRow(
                 expanded = showAll,
                 onClick = { showAll = !showAll },
-                modifier = viewMoreModifier
+                modifier = viewMoreModifier,
+                testTag = if (testTag.isNotEmpty()) "${testTag}_view_more" else ""
             )
         }
     }
 }
 
 @Composable
-private fun OrderDetailHeader() {
+private fun OrderDetailHeader(testTag: String = "") {
     val extended = MaterialTheme.colorScheme.extended
     val consumptionText = stringResource(Res.string.order_detail_consumption)
     val productsText = stringResource(Res.string.order_detail_products)
@@ -124,13 +133,14 @@ private fun OrderDetailHeader() {
     val totalPriceText = stringResource(Res.string.order_detail_total_price)
     val timeText = stringResource(Res.string.order_detail_time)
     val entryTimeText = stringResource(Res.string.order_detail_entry_time)
-    
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
             .background(NeutralGray100, RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp))
-            .padding(start = HorizontalPadding),
+            .padding(start = HorizontalPadding)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -155,7 +165,7 @@ private fun OrderDetailHeader() {
 }
 
 @Composable
-private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier) {
+private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier, testTag: String = "") {
     val extended = MaterialTheme.colorScheme.extended
     var isExpanded by remember { mutableStateOf(false) }
     val expandText = stringResource(Res.string.order_detail_expand_extras)
@@ -167,6 +177,7 @@ private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier) {
             .fillMaxWidth()
             .background(NeutralGray)
             .clickable(enabled = item.extras.isNotEmpty()) { if (item.extras.isNotEmpty()) isExpanded = !isExpanded }
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
         Row(
             modifier = Modifier
@@ -247,19 +258,20 @@ private fun ExtraItemRow(extra: OrderItemExtra) {
 }
 
 @Composable
-private fun ViewMoreRow(expanded: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun ViewMoreRow(expanded: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier, testTag: String = "") {
     val extended = MaterialTheme.colorScheme.extended
     val showMoreText = stringResource(Res.string.order_detail_show_more)
     val showLessText = stringResource(Res.string.order_detail_show_less)
     val text = if (expanded) showLessText else showMoreText
-    
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .then(modifier)
             .background(NeutralGray100, RoundedCornerShape(bottomStart = 14.dp, bottomEnd = 14.dp))
             .clickable { onClick() }
-            .padding(horizontal = 15.dp, vertical = 4.dp),
+            .padding(horizontal = 15.dp, vertical = 4.dp)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text, style = MaterialTheme.typography.bodyMediumRegular, fontSize = 12.sp, color = extended.neutral400)
