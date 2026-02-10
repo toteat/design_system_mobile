@@ -80,7 +80,7 @@ fun SegmentedTabs(
                 border = BorderStroke(1.dp, borderColor),
                 shape = RoundedCornerShape(cornerRadius)
             )
-            .setTestTag(testTag)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .semantics {
                 contentDescription = tabsDescription
             }
@@ -103,7 +103,8 @@ fun SegmentedTabs(
                         contentDescription = tabDescription
                         stateDescription = if (isSelected) selectedText else notSelectedText
                         selected = isSelected
-                    },
+                    }
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_tab_${index}") else Modifier),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

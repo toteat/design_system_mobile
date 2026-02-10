@@ -21,7 +21,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,7 +57,10 @@ fun ToteatRectangleButton(
         modifier = modifier
             .heightIn(max = 128.dp)
             .fillMaxWidth()
-            .semantics { contentDescription = description }
+            .semantics {
+                contentDescription = description
+                role = Role.Button
+            }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         interactionSource = interactionSource,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
@@ -69,7 +74,8 @@ fun ToteatRectangleButton(
             icon()
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.secondary,
@@ -77,7 +83,8 @@ fun ToteatRectangleButton(
                 softWrap = true
             )
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_subtitle") else Modifier),
                 text = subTitle,
                 style = MaterialTheme.typography.bodyLargeRegular,
                 color = MaterialTheme.colorScheme.secondary,

@@ -44,7 +44,7 @@ fun ToteatPasswordTextField(
     isWarning: Boolean = false,
     isError: Boolean = false,
     enabled: Boolean = true,
-    onToggleVisibilityCLick: () -> Unit = {},
+    onToggleVisibilityClick: () -> Unit = {},
     onFocusChange: (Boolean) -> Unit = {},
     testTag: String = ""
 ) {
@@ -91,7 +91,7 @@ fun ToteatPasswordTextField(
 
                     VisibilityToggleIcon(
                         isVisible = isPasswordVisible,
-                        onClick = onToggleVisibilityCLick,
+                        onClick = onToggleVisibilityClick,
                         tint = MaterialTheme.colorScheme.extended.neutral400
                     )
                     if (isSuccess || isError || isWarning) {
@@ -129,7 +129,7 @@ private fun ToteatPasswordTextFieldPreview() {
                 placeHolder = "Ingresa tu contraseña",
                 title = "Contraseña",
                 helperText = "Mínimo 8 caracteres",
-                onToggleVisibilityCLick = { isVisible = !isVisible }
+                onToggleVisibilityClick = { isVisible = !isVisible }
             )
 
             // Con error
@@ -141,7 +141,7 @@ private fun ToteatPasswordTextFieldPreview() {
                 title = "Contraseña",
                 helperText = "Contraseña muy corta",
                 isError = true,
-                onToggleVisibilityCLick = {}
+                onToggleVisibilityClick = {}
             )
 
             // Con éxito
@@ -153,7 +153,7 @@ private fun ToteatPasswordTextFieldPreview() {
                 title = "Contraseña",
                 helperText = "Contraseña válida",
                 isSuccess = true,
-                onToggleVisibilityCLick = {}
+                onToggleVisibilityClick = {}
             )
 
             // Deshabilitado
@@ -165,7 +165,7 @@ private fun ToteatPasswordTextFieldPreview() {
                 title = "Contraseña (deshabilitada)",
                 helperText = "Campo bloqueado",
                 enabled = false,
-                onToggleVisibilityCLick = {}
+                onToggleVisibilityClick = {}
             )
         }
     }

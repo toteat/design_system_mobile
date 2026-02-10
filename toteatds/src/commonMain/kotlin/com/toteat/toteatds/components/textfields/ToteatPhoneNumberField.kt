@@ -43,13 +43,19 @@ import com.toteat.toteatds.components.icons.StatusTrailingIcon
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.headingMediumRegular
+import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.phone_country_code_description
+import designsystemmobile.toteatds.generated.resources.phone_dial_code_option
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ToteatPhoneNumberField(
     state: TextFieldState,
     selectedDialCode: String,
-    dialCodeOptions: List<String>,
+    dialCodeOptions: ImmutableList<String>,
     onDialCodeChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeHolder: String? = null,
@@ -64,6 +70,7 @@ fun ToteatPhoneNumberField(
     testTag: String = ""
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val dialCodeDescription = stringResource(Res.string.phone_country_code_description, selectedDialCode)
 
     ToteatTextFieldLayout(
         modifier = modifier,
@@ -101,7 +108,7 @@ fun ToteatPhoneNumberField(
                                     .padding(horizontal = 8.dp, vertical = 6.dp)
                                     .semantics {
                                         role = Role.DropdownList
-                                        contentDescription = "Código de país: $selectedDialCode"
+                                        contentDescription = dialCodeDescription
                                     }
                             ) {
                                 Text(
@@ -115,8 +122,18 @@ fun ToteatPhoneNumberField(
                                     onDismissRequest = { expanded = false },
                                     modifier = Modifier.background(MaterialTheme.colorScheme.background)
                                 ) {
-                                    dialCodeOptions.forEach { code ->
+                                    val totalOptions = dialCodeOptions.size
+                                    dialCodeOptions.forEachIndexed { index, code ->
+                                        val optionDescription = stringResource(
+                                            Res.string.phone_dial_code_option,
+                                            code,
+                                            index + 1,
+                                            totalOptions
+                                        )
                                         DropdownMenuItem(
+                                            modifier = Modifier.semantics {
+                                                contentDescription = optionDescription
+                                            },
                                             text = {
                                                 Text(
                                                     text = code,
@@ -187,7 +204,7 @@ private fun ToteatPhoneNumberFieldPreview() {
                 title = "Teléfono",
                 helperText = "Ingresa tu número sin el código de país",
                 selectedDialCode = selectedDialCode,
-                dialCodeOptions = listOf("+56", "+1", "+34", "+54", "+52"),
+                dialCodeOptions = persistentListOf("+56", "+1", "+34", "+54", "+52"),
                 onDialCodeChange = { selectedDialCode = it }
             )
 
@@ -200,7 +217,7 @@ private fun ToteatPhoneNumberFieldPreview() {
                 helperText = "Número muy corto",
                 isError = true,
                 selectedDialCode = "+56",
-                dialCodeOptions = listOf("+56", "+1", "+34"),
+                dialCodeOptions = persistentListOf("+56", "+1", "+34"),
                 onDialCodeChange = {}
             )
 
@@ -213,7 +230,7 @@ private fun ToteatPhoneNumberFieldPreview() {
                 helperText = "Número válido",
                 isSuccess = true,
                 selectedDialCode = "+56",
-                dialCodeOptions = listOf("+56", "+1", "+34"),
+                dialCodeOptions = persistentListOf("+56", "+1", "+34"),
                 onDialCodeChange = {}
             )
 
@@ -226,7 +243,7 @@ private fun ToteatPhoneNumberFieldPreview() {
                 helperText = "Campo bloqueado",
                 enabled = false,
                 selectedDialCode = "+56",
-                dialCodeOptions = listOf("+56", "+1", "+34"),
+                dialCodeOptions = persistentListOf("+56", "+1", "+34"),
                 onDialCodeChange = {}
             )
         }
