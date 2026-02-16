@@ -22,7 +22,8 @@ import com.toteat.toteatds.theme.bodyLargeRegular
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
-import designsystemmobile.toteatds.generated.resources.welcome_greeting
+import designsystemmobile.toteatds.generated.resources.welcome_greeting_prefix
+import designsystemmobile.toteatds.generated.resources.welcome_greeting_suffix
 import designsystemmobile.toteatds.generated.resources.welcome_icon_description
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,7 +44,9 @@ fun WelcomeMessage(
     modifier: Modifier = Modifier,
     testTag: String = ""
 ) {
-    val greetingText = stringResource(Res.string.welcome_greeting, userName)
+    val prefix = stringResource(Res.string.welcome_greeting_prefix)
+    val suffix = stringResource(Res.string.welcome_greeting_suffix)
+    val greetingText = "$prefix $userName$suffix"
     val iconDescription = stringResource(Res.string.welcome_icon_description)
 
     Column(

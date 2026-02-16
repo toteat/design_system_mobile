@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.12] - 2026-02-16
+### Fixed
+- **WelcomeMessage**: Removed `stringResource` format args to avoid `IndexOutOfBoundsException` caused by Compose Resources version mismatch between DS and consumer apps
+  - Split `welcome_greeting` into `welcome_greeting_prefix` and `welcome_greeting_suffix` string resources without placeholders
+  - Greeting text is now built in code, eliminating dependency on `replaceWithArgs` behavior
+
 ## [0.1.11] - 2026-02-16
 ### Fixed
 - **strings.xml**: Fixed all string resource format placeholders from `%s`/`%d` to positional format `%1$s`/`%1$d` required by Compose Multiplatform resources
