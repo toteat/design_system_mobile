@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.11] - 2026-02-16
+### Fixed
+- **strings.xml**: Fixed all string resource format placeholders from `%s`/`%d` to positional format `%1$s`/`%1$d` required by Compose Multiplatform resources
+  - Affected strings: `waiter_description`, `occupation_time_description`, `switch_description`, `rectangle_button_description`, `square_button_description`, `back_navigation_semantic_label`, `restaurant_description`, `dropdown_description`, `dropdown_option_description`, `toast_content_description`, `toast_error_description`, `toast_success_description`, `toast_warning_description`, `toast_info_description`, `segmented_tab_item`, `status_tag_description`, `action_item_description`, `welcome_greeting`, `phone_country_code_description`, `phone_dial_code_option`, `order_detail_description`
+  - Fixes `WelcomeMessage` and other components showing raw `%s` instead of substituted values
+
 ## [0.1.10] - 2026-02-10
 ### Changed
 - **ToteatRectangleButton**: Added `_title` and `_subtitle` sub-testTags for Appium automation access to child elements
