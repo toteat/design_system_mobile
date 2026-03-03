@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **FloatingTotalBar**: Added new floating bottom bar component for order totals
+  - API: `FloatingTotalBar(totalAmount, label, onClick, modifier, testTag)`
+  - Rounded corners (32.dp), solid primary background, and floating shadow (8.dp)
+  - Supports fixed bottom usage through `Scaffold(bottomBar = ...)`
+  - Shows formatted total from caller, optional label, and trailing arrow action
+  - Includes accessibility semantics (`Role.Button`, `contentDescription`) and test sub-tags (`_label`, `_amount`, `_icon`)
+  - Added previews for both states (with label and without label)
+- **Showcase App**: Added "Floating Total Bar" section demonstrating dynamic total updates from external state
+
 ## [0.1.14] - 2026-02-16
 ### Fixed
 - **WelcomeMessage**: Removed `stringResource` format args to avoid `IndexOutOfBoundsException` caused by Compose Resources version mismatch between DS and consumer apps
