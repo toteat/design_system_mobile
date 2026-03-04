@@ -120,16 +120,15 @@ fun FloatingTotalBar(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.then(
-                            if (testTag.isNotEmpty()) {
-
-                                Modifier
-                                    .size(10.dp)
-                                    .setTestTag("${testTag}_icon")
-                            } else {
-                                Modifier
-                            }
-                        )
+                        modifier = Modifier
+                            .size(10.dp)
+                            .then(
+                                if (testTag.isNotEmpty()) {
+                                    Modifier.setTestTag("${testTag}_icon")
+                                } else {
+                                    Modifier
+                                }
+                            )
                     )
                 }
             }
