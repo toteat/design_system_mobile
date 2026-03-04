@@ -71,6 +71,10 @@ import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.components.list.GroupedOrderDetail
 import com.toteat.toteatds.components.list.OrderItem
 import com.toteat.toteatds.components.list.OrderItemExtra
+import com.toteat.toteatds.components.list.ProductCard
+import com.toteat.toteatds.components.list.ProductCardGroup
+import com.toteat.toteatds.components.list.ProductCardItem
+import com.toteat.toteatds.components.list.ProductCardStatus
 import com.toteat.toteatds.components.messageview.WelcomeMessage
 import com.toteat.toteatds.components.segmentbuttons.SegmentedTabs
 import com.toteat.toteatds.components.tags.StatusTag
@@ -119,6 +123,7 @@ fun App() {
                     ComponentShowcaseItem(title = "Switch container"),
                     ComponentShowcaseItem(title = "Chip container"),
                     ComponentShowcaseItem(title = "Order detail"),
+                    ComponentShowcaseItem(title = "Product card"),
                     ComponentShowcaseItem(title = "Tags")
                 )
             )
@@ -234,6 +239,7 @@ fun ComponentShowcaseSection(
                 "Switch container" -> SwitchButtonShowcase()
                 "Chip container" -> ChipButtonShowcase()
                 "Order detail" -> OrderDetailShowcase()
+                "Product card" -> ProductCardShowcase()
                 "Tags" -> StatusTagShowcase()
             }
         }
@@ -752,6 +758,76 @@ fun OrderDetailShowcase() {
         GroupedOrderDetail(
             items = items,
             modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+fun ProductCardShowcase() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Single", style = MaterialTheme.typography.titleMedium)
+        ProductCard(
+            name = "Hamburguesa BBQ",
+            description = "Unitario: $7.000",
+            price = "$14.000",
+            quantity = 2,
+            status = ProductCardStatus.PENDING,
+            showDeleteButton = true,
+            onDeleteClick = {}
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Grouped", style = MaterialTheme.typography.titleMedium)
+        ProductCardGroup(
+            maxCollapsedItems = 3,
+            items = persistentListOf(
+                ProductCardItem(
+                    name = "Mojito tradicional",
+                    description = "Unitario: $5.290",
+                    price = "$5.290",
+                    quantity = 1,
+                    status = ProductCardStatus.PENDING,
+                    onClick = {}
+                ),
+                ProductCardItem(
+                    name = "Mojito tradicional",
+                    description = "Unitario: $5.290",
+                    price = "$5.290",
+                    quantity = 1,
+                    status = ProductCardStatus.PENDING,
+                    onClick = {}
+                ),
+                ProductCardItem(
+                    name = "Mojito tradicional",
+                    description = "Unitario: $5.290",
+                    price = "$5.290",
+                    quantity = 1,
+                    status = ProductCardStatus.PENDING,
+                    onClick = {}
+                ),
+                ProductCardItem(
+                    name = "Mojito tradicional",
+                    description = "Unitario: $5.290",
+                    price = "$5.290",
+                    quantity = 1,
+                    status = ProductCardStatus.PENDING,
+                    onClick = {}
+                ),
+                ProductCardItem(
+                    name = "Mojito tradicional",
+                    description = "Unitario: $5.290",
+                    price = "$5.290",
+                    quantity = 1,
+                    status = ProductCardStatus.PENDING,
+                    onClick = {}
+                )
+            )
         )
     }
 }

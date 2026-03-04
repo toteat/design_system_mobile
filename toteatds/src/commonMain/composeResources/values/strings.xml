@@ -70,6 +70,15 @@
     <string name="order_detail_collapse">Colapsar</string>
     <string name="order_detail_expand_extras">Expandir extras</string>
     <string name="order_detail_collapse_extras">Colapsar extras</string>
+    <string name="product_card_description">%1$s, %2$s, estado %3$s</string>
+    <string name="product_card_group_description">Lista de productos, %1$d elementos</string>
+    <string name="product_card_remove_description">Eliminar %1$s</string>
+    <string name="product_card_quantity_description">Cantidad %1$d</string>
+    <string name="product_card_status_default">neutro</string>
+    <string name="product_card_status_confirmed">confirmado</string>
+    <string name="product_card_status_pending">pendiente</string>
+    <string name="product_card_view_all_items">Ver más</string>
+    <string name="product_card_view_less_items">Ver menos</string>
     <string name="segmented_tabs_description">Pestañas segmentadas</string>
     <string name="segmented_tab_item">%s, pestaña %d de %d</string>
     <string name="segmented_tab_selected">seleccionada</string>
