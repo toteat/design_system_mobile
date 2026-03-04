@@ -110,4 +110,6 @@
     <string name="counter_decrement">Disminuir cantidad</string>
     <string name="counter_delete">Eliminar producto</string>
     <string name="subcategory_button_description">Subcategoría: %1$s</string>
+    <string name="search_bar_description">Buscador</string>
+    <string name="search_bar_icon">Buscar</string>
 </resources>

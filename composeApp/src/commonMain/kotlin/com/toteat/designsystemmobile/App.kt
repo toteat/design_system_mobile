@@ -86,6 +86,7 @@ import com.toteat.toteatds.components.tags.StatusTag
 import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
+import com.toteat.toteatds.components.textfields.ToteatSearchBar
 import com.toteat.toteatds.components.textfields.ToteatTextField
 import com.toteat.toteatds.components.toast.ToteatToastMessage
 import com.toteat.toteatds.components.toast.ToteatToastMessageType
@@ -528,6 +529,17 @@ fun InputShowcase() {
             isError = true,
             onToggleVisibilityClick = { isPasswordVisible.value = !isPasswordVisible.value }
         )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("SearchBar", style = MaterialTheme.typography.titleMedium)
+        var searchValue by remember { mutableStateOf("") }
+        ToteatSearchBar(
+            value = searchValue,
+            onValueChange = { searchValue = it },
+            placeholder = "Buscar productos..."
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Phone Number", style = MaterialTheme.typography.titleMedium)

@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 ### Added
+- **ToteatSearchBar**: New search bar component for filtering products
+  - API: `ToteatSearchBar(value, onValueChange, placeholder, enabled, modifier, testTag)`
+  - Background `NeutralGray100`, border visible only on focus (`NeutralGray300`), search icon on the right
+  - Full-width, 50dp height, 8dp corner radius — consistent with existing text fields
+  - Enabled and disabled states with proper color tokens
+### Fixed
+- **ToteatDropDown**: Options list now scrolls when there are more items than fit on screen (max height 200dp)
+### Added
 - **FloatingTotalBar**: Added new floating bottom bar component for order totals
   - API: `FloatingTotalBar(totalAmount, label, onClick, modifier, testTag)`
   - Rounded corners (32.dp), solid primary background, and floating shadow (8.dp)
