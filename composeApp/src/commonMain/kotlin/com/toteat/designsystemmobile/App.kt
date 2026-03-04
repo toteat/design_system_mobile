@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.bottombar.FloatingTotalBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
 import com.toteat.toteatds.components.cards.ToteatCategoryCard
@@ -113,6 +114,7 @@ fun App() {
             mutableStateOf(
                 persistentListOf(
                     ComponentShowcaseItem(title = "Buttons"),
+                    ComponentShowcaseItem(title = "Floating Total Bar"),
                     ComponentShowcaseItem(title = "TopBars"),
                     ComponentShowcaseItem(title = "Dropdowns"),
                     ComponentShowcaseItem(title = "Inputs"),
@@ -231,6 +233,7 @@ fun ComponentShowcaseSection(
             HorizontalDivider()
             when (item.title) {
                 "Buttons" -> ButtonShowcase()
+                "Floating Total Bar" -> FloatingTotalBarShowcase()
                 "TopBars" -> TopBarShowcase()
                 "Inputs" -> InputShowcase()
                 "Dropdowns" -> DropdownShowcase()
@@ -388,6 +391,77 @@ fun ButtonShowcase() {
                 tableStatus = ButtonTableStatus.AVAILABLE,
                 onClick = {}
             )
+        }
+    }
+}
+
+@Composable
+fun FloatingTotalBarShowcase() {
+    var productCount by remember { mutableIntStateOf(2) }
+    val unitPrice = 14645
+    val total = productCount * unitPrice
+    val formattedTotal = remember(total) { formatAmountWithThousands(total) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Bottom bar flotante", style = MaterialTheme.typography.titleMedium)
+        Text("Productos en pedido: $productCount", style = MaterialTheme.typography.bodyMedium)
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToteatSecondaryButton(
+                onClick = { productCount += 1 },
+                text = "Agregar"
+            )
+            ToteatSecondaryButton(
+                onClick = { if (productCount > 0) productCount -= 1 },
+                text = "Quitar",
+                enabled = productCount > 0
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                containerColor = Color.White,
+                bottomBar = {
+                    FloatingTotalBar(
+                        totalAmount = formattedTotal,
+                        label = if (productCount > 0) "Ver pedido mesa" else null,
+                        onClick = {}
+                    )
+                }
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        "Ejemplo en Scaffold(bottomBar).",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        "Total actualizado: $formattedTotal",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 }
@@ -930,4 +1004,14 @@ fun StatusTagShowcase() {
         Text("Cancelled", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Cancelled)
     }
+}
+
+private fun formatAmountWithThousands(amount: Int): String {
+    val safeAmount = if (amount < 0) 0 else amount
+    val grouped = safeAmount.toString()
+        .reversed()
+        .chunked(3)
+        .joinToString(".")
+        .reversed()
+    return "\$ $grouped"
 }

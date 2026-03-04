@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 ### Added
+- **FloatingTotalBar**: Added new floating bottom bar component for order totals
+  - API: `FloatingTotalBar(totalAmount, label, onClick, modifier, testTag)`
+  - Rounded corners (32.dp), solid primary background, and floating shadow (8.dp)
+  - Supports fixed bottom usage through `Scaffold(bottomBar = ...)`
+  - Shows formatted total from caller, optional label, and trailing arrow action
+  - Includes accessibility semantics (`Role.Button`, `contentDescription`) and test sub-tags (`_label`, `_amount`, `_icon`)
+  - Added previews for both states (with label and without label)
+- **Showcase App**: Added "Floating Total Bar" section demonstrating dynamic total updates from external state
 - **ToteatCategoryCard**: New card component for menu category grid (L1)
   - Vertical layout with centered category name (`bodyLarge`)
   - Pressed state feedback via `MutableInteractionSource`
