@@ -12,13 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray100
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray500
@@ -49,7 +49,7 @@ fun ToteatProductRow(
     val semanticDescription = contentDescription
         ?: stringResource(Res.string.product_row_description, name, price)
 
-    val containerColor = if (enabled) Color.White else NeutralGray100
+    val containerColor = if (enabled) NeutralGray else NeutralGray100
     val titleColor = if (enabled) NeutralGray500 else NeutralGray300
     val descriptionColor = if (enabled) NeutralGray500 else NeutralGray300
     val priceColor = if (enabled) PrimaryNormal else NeutralGray300

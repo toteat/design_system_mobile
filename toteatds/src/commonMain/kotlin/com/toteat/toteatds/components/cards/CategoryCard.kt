@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -24,6 +23,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray100
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray500
@@ -55,7 +55,7 @@ fun ToteatCategoryCard(
     val containerColor = when {
         !enabled -> NeutralGray100
         isPressed -> NeutralGray100
-        else -> Color.White
+        else -> NeutralGray
     }
     val textColor = if (enabled) NeutralGray500 else NeutralGray300
 
