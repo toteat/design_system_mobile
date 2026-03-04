@@ -3,28 +3,30 @@
 ## [Unreleased]
 ### Added
 - **ToteatCategoryCard**: New card component for menu category grid (L1)
-  - Vertical layout: centered icon slot (26dp) + category name (Manrope 14sp bold)
-  - Composable `icon` slot — consumers provide any icon (Material, Image, SVG, etc.)
-  - Default and disabled states with proper color tokens via `LocalContentColor`
+  - Vertical layout with centered category name (`bodyLarge`)
+  - Pressed state feedback via `MutableInteractionSource`
+  - Default and disabled states with proper color tokens
   - Subtle shadow, 16dp corner radius, 160x72dp base size
-  - Accessibility: contentDescription, testTag with sub-testTags (`_icon`, `_name`)
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_name`)
 - **ToteatCounterCompact**: New compact counter/stepper component
   - Three states: qty=0 (only + button), qty=1 (delete + 1 + plus), qty>1 (minus + N + plus)
-  - Circular buttons with bg #E3DBCC, icon NeutralGray500 (#464646)
+  - Circular buttons using `CounterButtonColor` and `CounterContainerColor` theme tokens
   - Delete icon (trash) at qty=1, minus icon at qty>1
   - Default and disabled states with proper color tokens
-  - Accessibility: contentDescription, testTag with sub-testTags (`_increment`, `_decrement`, `_quantity`)
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_increment`, `_decrement`, `_quantity`)
 - **ToteatProductRow**: New product row component for menu item listing
-  - Horizontal layout: text column (title 12sp bold, description 10sp, price 12sp bold red) + ToteatCounterCompact
+  - Horizontal layout: text column (title `bodyMedium`, description `tagRegular`, price `bodyMedium` PrimaryNormal) + ToteatCounterCompact
   - Integrated counter with `quantity`, `onIncrement`, `onDecrement` params
   - Default and disabled states with proper color tokens
   - Subtle shadow, 12dp corner radius, full-width
-  - Accessibility: contentDescription, testTag with sub-testTags (`_title`, `_description`, `_price`, `_counter`)
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_title`, `_description`, `_price`, `_counter`)
 - **ToteatSubcategoryButton**: New subcategory navigation button
-  - Horizontal layout: icon (26dp) + label (14sp bold) + trailing chevron (20dp)
+  - Horizontal layout: label (`bodyLarge`) + composable trailing icon slot (20dp)
+  - Pressed state feedback via `MutableInteractionSource`
   - Default and disabled states with proper color tokens via `LocalContentColor`
   - Subtle shadow, 16dp corner radius, full-width
-  - Accessibility: contentDescription, testTag with sub-testTags (`_icon`, `_name`, `_chevron`)
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_name`, `_chevron`)
+- **Color tokens**: Added `CounterContainerColor`, `CounterContainerDisabledColor`, `CounterButtonColor`, `CounterButtonDisabledColor` to theme
 
 ## [0.1.14] - 2026-02-16
 ### Fixed
