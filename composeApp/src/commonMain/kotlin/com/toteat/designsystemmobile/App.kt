@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.WavingHand
@@ -45,8 +46,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.bottombar.FloatingTotalBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
+import com.toteat.toteatds.components.cards.ToteatCategoryCard
+import com.toteat.toteatds.components.cards.ToteatProductRow
+import com.toteat.toteatds.components.cards.ToteatSubcategoryButton
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
 import com.toteat.toteatds.components.brand.iso.ToteatIsoCreamOrange
 import com.toteat.toteatds.components.brand.iso.ToteatIsoOriginal
@@ -113,6 +118,7 @@ fun App() {
             mutableStateOf(
                 persistentListOf(
                     ComponentShowcaseItem(title = "Buttons"),
+                    ComponentShowcaseItem(title = "Floating Total Bar"),
                     ComponentShowcaseItem(title = "TopBars"),
                     ComponentShowcaseItem(title = "Dropdowns"),
                     ComponentShowcaseItem(title = "Inputs"),
@@ -122,6 +128,9 @@ fun App() {
                     ComponentShowcaseItem(title = "Toast"),
                     ComponentShowcaseItem(title = "Switch container"),
                     ComponentShowcaseItem(title = "Chip container"),
+                    ComponentShowcaseItem(title = "Category Cards"),
+                    ComponentShowcaseItem(title = "Product Rows"),
+                    ComponentShowcaseItem(title = "Subcategory Buttons"),
                     ComponentShowcaseItem(title = "Order detail"),
                     ComponentShowcaseItem(title = "Product card"),
                     ComponentShowcaseItem(title = "Tags")
@@ -229,6 +238,7 @@ fun ComponentShowcaseSection(
             HorizontalDivider()
             when (item.title) {
                 "Buttons" -> ButtonShowcase()
+                "Floating Total Bar" -> FloatingTotalBarShowcase()
                 "TopBars" -> TopBarShowcase()
                 "Inputs" -> InputShowcase()
                 "Dropdowns" -> DropdownShowcase()
@@ -238,6 +248,9 @@ fun ComponentShowcaseSection(
                 "Toast" -> ToastShowcase()
                 "Switch container" -> SwitchButtonShowcase()
                 "Chip container" -> ChipButtonShowcase()
+                "Category Cards" -> CategoryCardShowcase()
+                "Product Rows" -> ProductRowShowcase()
+                "Subcategory Buttons" -> SubcategoryButtonShowcase()
                 "Order detail" -> OrderDetailShowcase()
                 "Product card" -> ProductCardShowcase()
                 "Tags" -> StatusTagShowcase()
@@ -384,6 +397,77 @@ fun ButtonShowcase() {
                 tableStatus = ButtonTableStatus.AVAILABLE,
                 onClick = {}
             )
+        }
+    }
+}
+
+@Composable
+fun FloatingTotalBarShowcase() {
+    var productCount by remember { mutableIntStateOf(2) }
+    val unitPrice = 14645
+    val total = productCount * unitPrice
+    val formattedTotal = remember(total) { formatAmountWithThousands(total) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Bottom bar flotante", style = MaterialTheme.typography.titleMedium)
+        Text("Productos en pedido: $productCount", style = MaterialTheme.typography.bodyMedium)
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToteatSecondaryButton(
+                onClick = { productCount += 1 },
+                text = "Agregar"
+            )
+            ToteatSecondaryButton(
+                onClick = { if (productCount > 0) productCount -= 1 },
+                text = "Quitar",
+                enabled = productCount > 0
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                containerColor = Color.White,
+                bottomBar = {
+                    FloatingTotalBar(
+                        totalAmount = formattedTotal,
+                        label = if (productCount > 0) "Ver pedido mesa" else null,
+                        onClick = {}
+                    )
+                }
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        "Ejemplo en Scaffold(bottomBar).",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        "Total actualizado: $formattedTotal",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 }
@@ -828,6 +912,142 @@ fun ProductCardShowcase() {
                     onClick = {}
                 )
             )
+fun CategoryCardShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Default", style = MaterialTheme.typography.titleMedium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ToteatCategoryCard(
+                name = "Entradas",
+                onClick = {},
+                modifier = Modifier.weight(1f)
+            )
+            ToteatCategoryCard(
+                name = "Bebidas",
+                onClick = {},
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ToteatCategoryCard(
+                name = "Platos de fondo",
+                onClick = {},
+                modifier = Modifier.weight(1f)
+            )
+            ToteatCategoryCard(
+                name = "Café y postres",
+                onClick = {},
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Disabled", style = MaterialTheme.typography.titleMedium)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ToteatCategoryCard(
+                name = "Entradas",
+                onClick = {},
+                enabled = false,
+                modifier = Modifier.weight(1f)
+            )
+            ToteatCategoryCard(
+                name = "Bebidas",
+                onClick = {},
+                enabled = false,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+fun ProductRowShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        var quantity1 by remember { mutableIntStateOf(0) }
+        var quantity2 by remember { mutableIntStateOf(1) }
+        var quantity3 by remember { mutableIntStateOf(3) }
+
+        Text("quantity = 0 (solo +)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Copa de vino",
+            price = "$ 3.690",
+            description = "Vino tinto reserva",
+            quantity = quantity1,
+            onIncrement = { quantity1++ },
+            onDecrement = { if (quantity1 > 0) quantity1-- }
+        )
+
+        Text("quantity = 1 (basura + 1 + plus)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Mojito tradicional",
+            price = "$ 5.290",
+            description = "Descripción del componente (opcional)",
+            quantity = quantity2,
+            onIncrement = { quantity2++ },
+            onDecrement = { if (quantity2 > 0) quantity2-- }
+        )
+
+        Text("quantity > 1 (minus + N + plus)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Capuccino espresso doble con leche de almendras",
+            price = "$ 4.500",
+            quantity = quantity3,
+            onIncrement = { quantity3++ },
+            onDecrement = { if (quantity3 > 0) quantity3-- }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Disabled", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Capuccino",
+            price = "$ 3.690",
+            description = "Descripción del componente (opcional)",
+            quantity = 2,
+            onIncrement = {},
+            onDecrement = {},
+            enabled = false
+        )
+    }
+}
+
+@Composable
+fun SubcategoryButtonShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Default", style = MaterialTheme.typography.titleMedium)
+        ToteatSubcategoryButton(
+            name = "Cafés y bebidas calientes",
+            onClick = {},
+            trailingIcon = {
+                Icon(Icons.Default.ChevronRight, contentDescription = null, modifier = Modifier.size(20.dp))
+            }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Disabled", style = MaterialTheme.typography.titleMedium)
+        ToteatSubcategoryButton(
+            name = "Cafés y bebidas calientes",
+            onClick = {},
+            enabled = false,
+            trailingIcon = {
+                Icon(Icons.Default.ChevronRight, contentDescription = null, modifier = Modifier.size(20.dp))
+            }
         )
     }
 }
@@ -855,4 +1075,14 @@ fun StatusTagShowcase() {
         Text("Cancelled", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Cancelled)
     }
+}
+
+private fun formatAmountWithThousands(amount: Int): String {
+    val safeAmount = if (amount < 0) 0 else amount
+    val grouped = safeAmount.toString()
+        .reversed()
+        .chunked(3)
+        .joinToString(".")
+        .reversed()
+    return "\$ $grouped"
 }

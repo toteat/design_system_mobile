@@ -103,4 +103,11 @@
     <string name="grouped_list_description">Lista de detalles</string>
     <string name="order_detail_description">Detalle de pedido, %d productos</string>
     <string name="state_disabled">deshabilitado</string>
+    <string name="category_card_description">Categoría: %1$s</string>
+    <string name="product_row_description">Producto: %1$s, %2$s</string>
+    <string name="counter_description">Cantidad: %1$d</string>
+    <string name="counter_increment">Aumentar cantidad</string>
+    <string name="counter_decrement">Disminuir cantidad</string>
+    <string name="counter_delete">Eliminar producto</string>
+    <string name="subcategory_button_description">Subcategoría: %1$s</string>
 </resources>
