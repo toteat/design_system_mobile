@@ -82,6 +82,9 @@ import com.toteat.toteatds.components.list.ProductCardItem
 import com.toteat.toteatds.components.list.ProductCardStatus
 import com.toteat.toteatds.components.messageview.WelcomeMessage
 import com.toteat.toteatds.components.segmentbuttons.SegmentedTabs
+import com.toteat.toteatds.components.segmentbuttons.TabSelectorBadge
+import com.toteat.toteatds.components.segmentbuttons.TabSelectorBadgeItem
+import com.toteat.toteatds.components.segmentbuttons.TabSelectorBadgeVariant
 import com.toteat.toteatds.components.tags.StatusTag
 import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
@@ -124,6 +127,7 @@ fun App() {
                     ComponentShowcaseItem(title = "Dropdowns"),
                     ComponentShowcaseItem(title = "Inputs"),
                     ComponentShowcaseItem(title = "Segmented Tabs"),
+                    ComponentShowcaseItem(title = "Tab Selector Badge"),
                     ComponentShowcaseItem(title = "MessageView"),
                     ComponentShowcaseItem(title = "Brand"),
                     ComponentShowcaseItem(title = "Toast"),
@@ -244,6 +248,7 @@ fun ComponentShowcaseSection(
                 "Inputs" -> InputShowcase()
                 "Dropdowns" -> DropdownShowcase()
                 "Segmented Tabs" -> SegmentedTabsShowcase()
+                "Tab Selector Badge" -> TabSelectorBadgeShowcase()
                 "MessageView" -> MyShowroomScreen()
                 "Brand" -> BrandShowcase()
                 "Toast" -> ToastShowcase()
@@ -259,6 +264,8 @@ fun ComponentShowcaseSection(
         }
     }
 }
+
+
 
 @Composable
 fun SectionHeader(title: String, isExpanded: Boolean, onClick: () -> Unit) {
@@ -787,6 +794,69 @@ fun SegmentedTabsShowcase() {
 }
 
 @Composable
+fun TabSelectorBadgeShowcase() {
+    val itemsWithBadge = persistentListOf(
+        TabSelectorBadgeItem("Carta"),
+        TabSelectorBadgeItem("Pedido", badgeCount = 8)
+    )
+    val baseItems = persistentListOf(
+        TabSelectorBadgeItem("Carta"),
+        TabSelectorBadgeItem("Pedido")
+    )
+    var selectedTabIndex by remember { mutableIntStateOf(1) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Base + badge", style = MaterialTheme.typography.titleMedium)
+        TabSelectorBadge(
+            items = itemsWithBadge,
+            selectedIndex = selectedTabIndex,
+            onTabSelect = { selectedTabIndex = it }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Variantes", style = MaterialTheme.typography.titleMedium)
+        TabSelectorBadge(
+            items = baseItems,
+            selectedIndex = 0,
+            onTabSelect = {},
+            variant = TabSelectorBadgeVariant.DARK
+        )
+        TabSelectorBadge(
+            items = baseItems,
+            selectedIndex = 0,
+            onTabSelect = {},
+            variant = TabSelectorBadgeVariant.CREAM
+        )
+        TabSelectorBadge(
+            items = baseItems,
+            selectedIndex = 0,
+            onTabSelect = {},
+            variant = TabSelectorBadgeVariant.GRAY
+        )
+        TabSelectorBadge(
+            items = baseItems,
+            selectedIndex = 0,
+            onTabSelect = {},
+            variant = TabSelectorBadgeVariant.PRIMARY
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun TabSelectorBadgeShowcasePreview() {
+    ToteatTheme {
+        TabSelectorBadgeShowcase()
+    }
+}
+
+@Composable
 fun OrderDetailShowcase() {
     Column(
         modifier = Modifier
@@ -923,7 +993,11 @@ fun ProductCardShowcase() {
                     status = ProductCardStatus.PENDING,
                     onClick = {}
                 )
-            )
+            ))
+    }
+}
+
+@Composable
 fun CategoryCardShowcase() {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -1089,7 +1163,7 @@ fun StatusTagShowcase() {
     }
 }
 
-private fun formatAmountWithThousands(amount: Int): String {
+fun formatAmountWithThousands(amount: Int): String {
     val safeAmount = if (amount < 0) 0 else amount
     val grouped = safeAmount.toString()
         .reversed()

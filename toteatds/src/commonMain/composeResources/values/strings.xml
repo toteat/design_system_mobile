@@ -83,6 +83,11 @@
     <string name="segmented_tab_item">%s, pestaña %d de %d</string>
     <string name="segmented_tab_selected">seleccionada</string>
     <string name="segmented_tab_not_selected">no seleccionada</string>
+    <string name="tab_selector_badge_description">Selector de pestañas con badge</string>
+    <plurals name="tab_selector_badge_count">
+        <item quantity="one">%d pendiente</item>
+        <item quantity="other">%d pendientes</item>
+    </plurals>
     <string name="status_tag_pending">Pendiente</string>
     <string name="status_tag_confirmed">Confirmado</string>
     <string name="status_tag_ended">Finalizado</string>

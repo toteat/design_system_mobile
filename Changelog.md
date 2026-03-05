@@ -7,6 +7,11 @@
   - Background `NeutralGray100`, border visible only on focus (`NeutralGray300`), search icon on the right
   - Full-width, 50dp height, 8dp corner radius — consistent with existing text fields
   - Enabled and disabled states with proper color tokens
+- **TabSelectorBadge**: New segmented selector with optional badge count per tab
+  - API: `TabSelectorBadge(items, selectedIndex, onTabSelect, modifier, variant, enabled, testTag)`
+  - Supports four visual variants (`DARK`, `CREAM`, `GRAY`, `PRIMARY`) following DS tokens
+  - Includes accessibility semantics (`Role.Tab`, selected/not selected state, badge count description)
+  - Added showcase section in `App.kt` and new string resources for accessibility
 ### Fixed
 - **ToteatDropDown**: Options list now scrolls when there are more items than fit on screen (max height 200dp)
 ### Added
