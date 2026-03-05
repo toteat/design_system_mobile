@@ -45,6 +45,7 @@ import designsystemmobile.toteatds.generated.resources.tab_selector_badge_count
 import designsystemmobile.toteatds.generated.resources.tab_selector_badge_description
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -127,7 +128,7 @@ fun TabSelectorBadge(
             )
             val badgeDescription = item.badgeCount
                 ?.takeIf { it > 0 }
-                ?.let { stringResource(Res.string.tab_selector_badge_count, it) }
+                ?.let { pluralStringResource(Res.plurals.tab_selector_badge_count, it, it) }
                 .orEmpty()
             val fullDescription = if (badgeDescription.isEmpty()) {
                 tabDescription
