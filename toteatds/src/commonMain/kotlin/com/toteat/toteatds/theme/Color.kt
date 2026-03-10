@@ -9,6 +9,8 @@ val SecondaryNormal = Color(0xFF1B1B1B)
 val SecondaryLight = Color(0xFFB3B3B3)
 val TertiaryNormal = Color(0xFFE6D9CA)
 val TertiaryLight = Color(0xFFF7F3EE)
+val TertiarySurface = Color(0xFFF8F3ED)
+val TertiaryMuted = Color(0xFFB29D81)
 
 // Neutral Colors
 val NeutralGray500 = Color(0xFF464646)
