@@ -14,7 +14,6 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.material.icons)
                 implementation(libs.kotlinx.collections.immutable)
-
             }
         }
 

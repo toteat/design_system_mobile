@@ -9,6 +9,8 @@ val SecondaryNormal = Color(0xFF1B1B1B)
 val SecondaryLight = Color(0xFFB3B3B3)
 val TertiaryNormal = Color(0xFFE6D9CA)
 val TertiaryLight = Color(0xFFF7F3EE)
+val TertiarySurface = Color(0xFFF8F3ED)
+val TertiaryMuted = Color(0xFFB29D81)
 
 // Neutral Colors
 val NeutralGray500 = Color(0xFF464646)
@@ -17,6 +19,12 @@ val NeutralGray300 = Color(0xFFCFCFCF)
 val NeutralGray200 = Color(0xFFDDDDDD)
 val NeutralGray100 = Color(0xFFF2F2F2)
 val NeutralGray = Color(0xFFFFFFFF)
+
+// Counter Colors
+val CounterContainerColor = Color(0xFFF7F4F0)
+val CounterContainerDisabledColor = Color(0xFFF8F8F8)
+val CounterButtonColor = Color(0xFFE3DBCC)
+val CounterButtonDisabledColor = Color(0xFFF8F8F8)
 
 // Feedback / tags
 val GreenNormal = Color(0xFF46D281)

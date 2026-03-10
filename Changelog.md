@@ -7,6 +7,54 @@
 - **icon_delete_default.xml**: New vector drawable resource for delete action button
 - **icon_right_chevron.xml**: New vector drawable resource for navigation chevron indicator
 - **strings.xml**: Added product card related string resources (`product_card_item`, `product_card_group`, `product_card_item_default`, `product_card_group_default`, `product_card_add`, `product_card_delete`, `product_card_empty_list`)
+## [Unreleased]
+### Added
+- **ToteatSearchBar**: New search bar component for filtering products
+  - API: `ToteatSearchBar(value, onValueChange, placeholder, enabled, modifier, testTag)`
+  - Background `NeutralGray100`, border visible only on focus (`NeutralGray300`), search icon on the right
+  - Full-width, 50dp height, 8dp corner radius — consistent with existing text fields
+  - Enabled and disabled states with proper color tokens
+- **TabSelectorBadge**: New segmented selector with optional badge count per tab
+  - API: `TabSelectorBadge(items, selectedIndex, onTabSelect, modifier, variant, enabled, testTag)`
+  - Supports four visual variants (`DARK`, `CREAM`, `GRAY`, `PRIMARY`) following DS tokens
+  - Includes accessibility semantics (`Role.Tab`, selected/not selected state, badge count description)
+  - Added showcase section in `App.kt` and new string resources for accessibility
+### Fixed
+- **ToteatDropDown**: Options list now scrolls when there are more items than fit on screen (max height 200dp)
+### Added
+- **FloatingTotalBar**: Added new floating bottom bar component for order totals
+  - API: `FloatingTotalBar(totalAmount, label, onClick, modifier, testTag)`
+  - Rounded corners (32.dp), solid primary background, and floating shadow (8.dp)
+  - Supports fixed bottom usage through `Scaffold(bottomBar = ...)`
+  - Shows formatted total from caller, optional label, and trailing arrow action
+  - Includes accessibility semantics (`Role.Button`, `contentDescription`) and test sub-tags (`_label`, `_amount`, `_icon`)
+  - Added previews for both states (with label and without label)
+- **Showcase App**: Added "Floating Total Bar" section demonstrating dynamic total updates from external state
+- **ToteatCategoryCard**: New card component for menu category grid (L1)
+  - Vertical layout with centered category name (`bodyLarge`)
+  - Pressed state feedback via `MutableInteractionSource`
+  - Default and disabled states with proper color tokens
+  - Subtle shadow, 16dp corner radius, 160x72dp base size
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_name`)
+- **ToteatCounterCompact**: New compact counter/stepper component
+  - Three states: qty=0 (only + button), qty=1 (delete + 1 + plus), qty>1 (minus + N + plus)
+  - Circular buttons using `CounterButtonColor` and `CounterContainerColor` theme tokens
+  - Delete icon (trash) at qty=1, minus icon at qty>1
+  - Default and disabled states with proper color tokens
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_increment`, `_decrement`, `_quantity`)
+- **ToteatProductRow**: New product row component for menu item listing
+  - Horizontal layout: text column (title `bodyMedium`, description `tagRegular`, price `bodyMedium` PrimaryNormal) + ToteatCounterCompact
+  - Integrated counter with `quantity`, `onIncrement`, `onDecrement` params
+  - Default and disabled states with proper color tokens
+  - Subtle shadow, 12dp corner radius, full-width
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_title`, `_description`, `_price`, `_counter`)
+- **ToteatSubcategoryButton**: New subcategory navigation button
+  - Horizontal layout: label (`bodyLarge`) + composable trailing icon slot (20dp)
+  - Pressed state feedback via `MutableInteractionSource`
+  - Default and disabled states with proper color tokens via `LocalContentColor`
+  - Subtle shadow, 16dp corner radius, full-width
+  - Accessibility: contentDescription, Role.Button, testTag with sub-testTags (`_name`, `_chevron`)
+- **Color tokens**: Added `CounterContainerColor`, `CounterContainerDisabledColor`, `CounterButtonColor`, `CounterButtonDisabledColor` to theme
 
 ## [0.1.14] - 2026-02-16
 ### Fixed
