@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.bottombar.AmountBottomBar
 import com.toteat.toteatds.components.bottombar.FloatingTotalBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
@@ -123,6 +124,7 @@ fun App() {
                 persistentListOf(
                     ComponentShowcaseItem(title = "Buttons"),
                     ComponentShowcaseItem(title = "Floating Total Bar"),
+                    ComponentShowcaseItem(title = "Amount Bottom Bar"),
                     ComponentShowcaseItem(title = "TopBars"),
                     ComponentShowcaseItem(title = "Dropdowns"),
                     ComponentShowcaseItem(title = "Inputs"),
@@ -244,6 +246,7 @@ fun ComponentShowcaseSection(
             when (item.title) {
                 "Buttons" -> ButtonShowcase()
                 "Floating Total Bar" -> FloatingTotalBarShowcase()
+                "Amount Bottom Bar" -> AmountBottomBarShowcase()
                 "TopBars" -> TopBarShowcase()
                 "Inputs" -> InputShowcase()
                 "Dropdowns" -> DropdownShowcase()
@@ -476,6 +479,61 @@ fun FloatingTotalBarShowcase() {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun AmountBottomBarShowcase() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Amount Bottom Bar", style = MaterialTheme.typography.titleMedium)
+
+        Text("Estado colapsado", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 32.780",
+                paidAmount = "$ 0",
+                amountToPay = "$32.780",
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
+        }
+
+        Text("Estado expandido", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 32.780",
+                paidAmount = "$ 0",
+                amountToPay = "$32.780",
+                initialPaidAmountExpanded = true,
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
         }
     }
 }
