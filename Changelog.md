@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - 2026-03-04
+### Added
+- **ProductCard**: New card component for displaying product information with icon, title, subtitle, price, and action buttons
+- **ProductCardGroup**: Container component for displaying a group of ProductCards in a Column layout with add and delete functionality
+- **icon_delete_default.xml**: New vector drawable resource for delete action button
+- **icon_right_chevron.xml**: New vector drawable resource for navigation chevron indicator
+- **strings.xml**: Added product card related string resources (`product_card_item`, `product_card_group`, `product_card_item_default`, `product_card_group_default`, `product_card_add`, `product_card_delete`, `product_card_empty_list`)
 ## [Unreleased]
 ### Added
 - **ToteatSearchBar**: New search bar component for filtering products
