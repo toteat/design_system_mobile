@@ -252,4 +252,5 @@ private fun TabSelectorBadgePreview() {
             )
         }
     }
+
 }
