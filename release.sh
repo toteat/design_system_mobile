@@ -54,22 +54,38 @@ TAG_NAME="v$NEW_VERSION"
 
 echo -e "${GREEN}→ Nueva versión: $TAG_NAME${NC}\n"
 
-# Verificar si hay cambios sin commitear
+# Actualizar libVersion en gradle.properties
+echo -e "${BLUE}Actualizando libVersion en gradle.properties...${NC}"
+sed -i '' "s/libVersion=.*/libVersion=$NEW_VERSION/" gradle.properties
+echo -e "${GREEN}✓ gradle.properties actualizado (libVersion=$NEW_VERSION)${NC}\n"
+
+# Verificar si hay cambios sin commitear (incluyendo gradle.properties)
 if [[ -n $(git status -s) ]]; then
-    echo -e "${YELLOW}Hay cambios sin commitear:${NC}"
+    echo -e "${YELLOW}Hay cambios sin commitear (incluyendo versión):${NC}"
     git status -s
     echo ""
     read -p "¿Desea commitear estos cambios? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        read -p "Mensaje del commit: " COMMIT_MSG
-        git add .
+        git add gradle.properties
+        # Si hay otros cambios, también los agregamos
+        if [[ -n $(git status -s -- ':!gradle.properties') ]]; then
+            read -p "Mensaje del commit (todos los cambios): " COMMIT_MSG
+            git add .
+        else
+            COMMIT_MSG="chore: bump version to $NEW_VERSION"
+        fi
         git commit -m "$COMMIT_MSG"
         echo -e "${GREEN}✓ Cambios commiteados${NC}\n"
     else
         echo -e "${RED}✗ Cancelando release${NC}"
         exit 1
     fi
+else
+    # Solo el cambio de versión en gradle.properties, commitear automáticamente
+    git add gradle.properties
+    git commit -m "chore: bump version to $NEW_VERSION"
+    echo -e "${GREEN}✓ Versión actualizada y commiteada${NC}\n"
 fi
 
 # Verificar si el tag ya existe
