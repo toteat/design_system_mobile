@@ -9,7 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,8 +38,7 @@ fun ArrowBackIconButton(
         enabled = enabled,
         modifier = modifier
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
-            .minimumInteractiveComponentSize()
-            .size(48.dp)
+            .size(44.dp)
             .clip(CircleShape)
             .background(
                 color = if (enabled) {
@@ -63,7 +61,7 @@ fun ArrowBackIconButton(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = null,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(22.dp)
         )
     }
 }

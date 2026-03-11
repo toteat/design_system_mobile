@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,7 +31,7 @@ import com.toteat.toteatds.utils.setTestTag
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val FloatingTotalBarShape = androidx.compose.foundation.shape.RoundedCornerShape(32.dp)
-private val FloatingTotalBarMinHeight = 64.dp
+private val FloatingTotalBarMinHeight = 56.dp
 
 @Composable
 fun FloatingTotalBar(
@@ -48,89 +45,83 @@ fun FloatingTotalBar(
         if (label.isNullOrBlank()) totalAmount else "$label, $totalAmount"
     }
 
-    Box(
+    Surface(
+        onClick = onClick,
+        shape = FloatingTotalBarShape,
+        color = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        shadowElevation = 8.dp,
+        tonalElevation = 0.dp,
         modifier = modifier
             .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .heightIn(min = FloatingTotalBarMinHeight)
+            .padding(horizontal = 16.dp)
+            .semantics {
+                role = Role.Button
+                contentDescription = accessibilityDescription
+            }
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
-        Surface(
-            onClick = onClick,
-            shape = FloatingTotalBarShape,
-            color = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            shadowElevation = 8.dp,
-            tonalElevation = 0.dp,
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = FloatingTotalBarMinHeight)
-                .semantics {
-                    role = Role.Button
-                    contentDescription = accessibilityDescription
-                }
-                .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = FloatingTotalBarMinHeight)
-                    .padding(horizontal = 24.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (!label.isNullOrBlank()) {
-                    Text(
-                        text = label,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .weight(1f)
-                            .then(
-                                if (testTag.isNotEmpty()) {
-                                    Modifier.setTestTag("${testTag}_label")
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    )
-                } else {
-                    Box(modifier = Modifier.weight(1f))
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = totalAmount,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.then(
+            if (!label.isNullOrBlank()) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .weight(1f)
+                        .then(
                             if (testTag.isNotEmpty()) {
-                                Modifier.setTestTag("${testTag}_amount")
+                                Modifier.setTestTag("${testTag}_label")
                             } else {
                                 Modifier
                             }
                         )
+                )
+            } else {
+                Box(modifier = Modifier.weight(1f))
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = totalAmount,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.then(
+                        if (testTag.isNotEmpty()) {
+                            Modifier.setTestTag("${testTag}_amount")
+                        } else {
+                            Modifier
+                        }
                     )
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier
-                            .size(10.dp)
-                            .then(
-                                if (testTag.isNotEmpty()) {
-                                    Modifier.setTestTag("${testTag}_icon")
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    )
-                }
+                )
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .size(10.dp)
+                        .then(
+                            if (testTag.isNotEmpty()) {
+                                Modifier.setTestTag("${testTag}_icon")
+                            } else {
+                                Modifier
+                            }
+                        )
+                )
             }
         }
     }
@@ -140,20 +131,28 @@ fun FloatingTotalBar(
 @Composable
 private fun FloatingTotalBarPreviewWithLabel() {
     ToteatTheme {
-        Scaffold(
-            bottomBar = {
-                FloatingTotalBar(
-                    totalAmount = "$ 29.290",
-                    label = "Ver pedido mesa",
-                    onClick = {}
-                )
-            }
-        ) { paddingValues ->
+        Scaffold { paddingValues ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-            )
+            ) {
+
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                )
+
+
+                FloatingTotalBar(
+                    totalAmount = "$ 29.290",
+                    label = "Ver pedido mesa",
+                    onClick = {},
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     }
 }
@@ -162,20 +161,27 @@ private fun FloatingTotalBarPreviewWithLabel() {
 @Composable
 private fun FloatingTotalBarPreviewWithoutLabel() {
     ToteatTheme {
-        Scaffold(
-            bottomBar = {
-                FloatingTotalBar(
-                    totalAmount = "$ 29.290",
-                    label = null,
-                    onClick = {}
-                )
-            }
-        ) { paddingValues ->
+        Scaffold { paddingValues ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-            )
+            ) {
+
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                FloatingTotalBar(
+                    totalAmount = "$ 29.290",
+                    label = null,
+                    onClick = {},
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp)
+                        .navigationBarsPadding()
+                )
+            }
         }
     }
 }

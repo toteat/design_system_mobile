@@ -41,7 +41,7 @@ fun ToteatTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(56.dp)
             .background(color = MaterialTheme.colorScheme.secondary)
             .padding(horizontal = 12.dp)
             .semantics {
