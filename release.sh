@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Script para generar una release con tag
-# Uso: ./release.sh <version> [mensaje]
-# Ejemplo: ./release.sh 1.1.0 "Mejoras en SwitchButtonContainer"
+# Uso: ./release.sh <mensaje>
+# Ejemplo: ./release.sh "Mejoras en SwitchButtonContainer"
 
 set -e
 
@@ -15,24 +15,44 @@ NC='\033[0m' # No Color
 
 # Función para mostrar uso
 show_usage() {
-    echo -e "${BLUE}Uso:${NC} ./release.sh <version> [mensaje]"
-    echo -e "${BLUE}Ejemplo:${NC} ./release.sh 1.1.0 \"Mejoras en SwitchButtonContainer\""
+    echo -e "${BLUE}Uso:${NC} ./release.sh <mensaje>"
+    echo -e "${BLUE}Ejemplo:${NC} ./release.sh \"Mejoras en SwitchButtonContainer\""
     exit 1
 }
 
 # Verificar argumentos
 if [ -z "$1" ]; then
-    echo -e "${RED}Error: Debe especificar una versión${NC}"
+    echo -e "${RED}Error: Debe especificar un mensaje para el release${NC}"
     show_usage
 fi
 
-VERSION=$1
-MESSAGE=${2:-"Release v$VERSION"}
-TAG_NAME="v$VERSION"
+MESSAGE=$1
 
-echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}  Generando Release $TAG_NAME${NC}"
-echo -e "${BLUE}========================================${NC}\n"
+# Obtener el último tag y calcular nueva versión
+echo -e "${BLUE}Detectando última versión...${NC}"
+LAST_TAG=$(git tag -l "v*" | sort -V | tail -n 1)
+
+if [ -z "$LAST_TAG" ]; then
+    echo -e "${YELLOW}No se encontraron tags previos. Iniciando en v0.0.1${NC}"
+    NEW_VERSION="0.0.1"
+else
+    echo -e "${BLUE}Último tag encontrado: ${GREEN}$LAST_TAG${NC}"
+    # Extraer números de versión vX.Y.Z
+    if [[ $LAST_TAG =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+        MAJOR=${BASH_REMATCH[1]}
+        MINOR=${BASH_REMATCH[2]}
+        PATCH=${BASH_REMATCH[3]}
+        PATCH=$((PATCH + 1))
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+    else
+        echo -e "${RED}Error: Formato de tag no reconocido. Se esperaba vX.Y.Z${NC}"
+        exit 1
+    fi
+fi
+
+TAG_NAME="v$NEW_VERSION"
+
+echo -e "${GREEN}→ Nueva versión: $TAG_NAME${NC}\n"
 
 # Verificar si hay cambios sin commitear
 if [[ -n $(git status -s) ]]; then
