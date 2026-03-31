@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.19] - 2026-03-31
+### Changed
+- **ToteatSearchBar**: Added `onSearch` callback parameter to intercept the IME search action (keyboard search button). The `BasicTextField` already displayed the search IME action but had no way to notify callers when pressed.
+
 ## [0.1.18] - 2026-03-31
 ### Added
 - **TableIcon**: New icon component wrapping `Res.drawable.icon_table`

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -51,6 +52,7 @@ fun ToteatSearchBar(
     modifier: Modifier = Modifier,
     placeholder: String = "",
     enabled: Boolean = true,
+    onSearch: () -> Unit = {},
     testTag: String = ""
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -73,6 +75,7 @@ fun ToteatSearchBar(
         ),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { onSearch() }),
         interactionSource = interactionSource,
         modifier = modifier
             .fillMaxWidth()
