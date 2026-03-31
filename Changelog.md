@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **AmountBottomBar**: Added `fullPaid` and `onPaymentDetailClick` parameters to support a "Detalle del pago" button (green with check icon) when the full consumption has been paid, replacing the "Pagar" button
+
 ## [0.1.19] - 2026-03-31
 ### Changed
 - **ToteatSearchBar**: Added `onSearch` callback parameter to intercept the IME search action (keyboard search button). The `BasicTextField` already displayed the search IME action but had no way to notify callers when pressed.

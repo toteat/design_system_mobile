@@ -31,6 +31,7 @@
     <string name="amount_to_pay">Por pagar:</string>
     <string name="confirm">Confirmar</string>
     <string name="pay">Pagar</string>
+    <string name="payment_detail">Detalle del pago</string>
     <string name="print_prebill">Imprimir precuenta</string>
     <string name="amount_bottom_bar_description">Barra inferior de montos y acciones</string>
     <string name="dropdown_select_placeholder">Seleccionar</string>

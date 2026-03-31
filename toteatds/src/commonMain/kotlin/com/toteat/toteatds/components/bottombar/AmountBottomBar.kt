@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.GreenNormal
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray400
@@ -58,6 +59,7 @@ import designsystemmobile.toteatds.generated.resources.confirm
 import designsystemmobile.toteatds.generated.resources.credit_card_icon
 import designsystemmobile.toteatds.generated.resources.pan_fire_icon
 import designsystemmobile.toteatds.generated.resources.pay
+import designsystemmobile.toteatds.generated.resources.payment_detail
 import designsystemmobile.toteatds.generated.resources.print_prebill
 import designsystemmobile.toteatds.generated.resources.print_vector
 import designsystemmobile.toteatds.generated.resources.subtotal
@@ -85,6 +87,8 @@ fun AmountBottomBar(
     enabled: Boolean = true,
     confirmEnabled: Boolean = enabled,
     payEnabled: Boolean = enabled,
+    fullPaid: Boolean = false,
+    onPaymentDetailClick: (() -> Unit)? = null,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) {
@@ -95,6 +99,7 @@ fun AmountBottomBar(
     val printPrebillText = stringResource(Res.string.print_prebill)
     val confirmText = stringResource(Res.string.confirm)
     val payText = stringResource(Res.string.pay)
+    val paymentDetailText = stringResource(Res.string.payment_detail)
     var showPaidAmount by remember(paidAmount, initialPaidAmountExpanded) {
         mutableStateOf(initialPaidAmountExpanded)
     }
@@ -311,30 +316,57 @@ fun AmountBottomBar(
                             }
                         )
                 )
-                AmountActionButton(
-                    onClick = onPayClick,
-                    enabled = payEnabled,
-                    text = payText,
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = NeutralGray,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = vectorResource(Res.drawable.credit_card_icon),
-                            contentDescription = null,
-                            tint = NeutralGray,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .then(
-                            if (testTag.isNotEmpty()) {
-                                Modifier.setTestTag("${testTag}_pay")
-                            } else {
-                                Modifier
-                            }
-                        )
-                )
+                if (fullPaid) {
+                    AmountActionButton(
+                        onClick = { onPaymentDetailClick?.invoke() },
+                        enabled = enabled,
+                        text = paymentDetailText,
+                        containerColor = GreenNormal,
+                        contentColor = NeutralGray,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                tint = NeutralGray,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(
+                                if (testTag.isNotEmpty()) {
+                                    Modifier.setTestTag("${testTag}_payment_detail")
+                                } else {
+                                    Modifier
+                                }
+                            )
+                    )
+                } else {
+                    AmountActionButton(
+                        onClick = onPayClick,
+                        enabled = payEnabled,
+                        text = payText,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = NeutralGray,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = vectorResource(Res.drawable.credit_card_icon),
+                                contentDescription = null,
+                                tint = NeutralGray,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(
+                                if (testTag.isNotEmpty()) {
+                                    Modifier.setTestTag("${testTag}_pay")
+                                } else {
+                                    Modifier
+                                }
+                            )
+                    )
+                }
             }
         }
     }
@@ -388,7 +420,7 @@ private fun AmountActionButton(
 @Deprecated(
     message = "Use AmountBottomBar instead",
     replaceWith = ReplaceWith(
-        "AmountBottomBar(subtotalAmount, amountToPay, paidAmount, onPrintPreBillClick, onConfirmClick, onPayClick, modifier, enabled, confirmEnabled, payEnabled, initialPaidAmountExpanded, testTag)"
+        "AmountBottomBar(subtotalAmount, amountToPay, paidAmount, onPrintPreBillClick, onConfirmClick, onPayClick, modifier, enabled, confirmEnabled, payEnabled, fullPaid, onPaymentDetailClick, initialPaidAmountExpanded, testTag)"
     )
 )
 @Composable
@@ -403,6 +435,8 @@ fun AmountBotombar(
     enabled: Boolean = true,
     confirmEnabled: Boolean = enabled,
     payEnabled: Boolean = enabled,
+    fullPaid: Boolean = false,
+    onPaymentDetailClick: (() -> Unit)? = null,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) = AmountBottomBar(
@@ -416,6 +450,8 @@ fun AmountBotombar(
     enabled = enabled,
     confirmEnabled = confirmEnabled,
     payEnabled = payEnabled,
+    fullPaid = fullPaid,
+    onPaymentDetailClick = onPaymentDetailClick,
     initialPaidAmountExpanded = initialPaidAmountExpanded,
     testTag = testTag
 )
@@ -466,6 +502,34 @@ private fun AmountBottomBarPreviewWithPaidAmount() {
                     subtotalAmount = "$ 32.780",
                     paidAmount = "$ 0",
                     amountToPay = "$32.780",
+                    onPrintPreBillClick = {},
+                    onConfirmClick = {},
+                    onPayClick = {}
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun AmountBottomBarPreviewFullPaid() {
+    ToteatTheme {
+        Scaffold(
+            bottomBar = {
+                AmountBottomBar(
+                    subtotalAmount = "$ 32.780",
+                    paidAmount = "$ 32.780",
+                    amountToPay = "$ 0",
+                    fullPaid = true,
+                    onPaymentDetailClick = {},
+                    initialPaidAmountExpanded = true,
                     onPrintPreBillClick = {},
                     onConfirmClick = {},
                     onPayClick = {}
