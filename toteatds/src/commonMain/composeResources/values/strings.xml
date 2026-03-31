@@ -52,6 +52,11 @@
     <string name="icon_customer_service">Servicio al cliente</string>
     <string name="icon_arrow_back">Navegar hacia atrás</string>
     <string name="icon_print">Imprimir</string>
+    <string name="icon_table">Mesa</string>
+    <string name="icon_warning">Advertencia</string>
+    <string name="icon_success">Éxito</string>
+    <string name="icon_error">Error</string>
+    <string name="icon_info">Información</string>
     <string name="icon_user">usuario</string>
     <string name="icon_config">configuración</string>
     <string name="icon_split_payment">Dividir pago</string>

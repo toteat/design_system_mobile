@@ -83,6 +83,8 @@ fun AmountBottomBar(
     onPayClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    confirmEnabled: Boolean = enabled,
+    payEnabled: Boolean = enabled,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) {
@@ -287,7 +289,7 @@ fun AmountBottomBar(
             ) {
                 AmountActionButton(
                     onClick = onConfirmClick,
-                    enabled = enabled,
+                    enabled = confirmEnabled,
                     text = confirmText,
                     containerColor = SecondaryNormal,
                     contentColor = NeutralGray,
@@ -311,7 +313,7 @@ fun AmountBottomBar(
                 )
                 AmountActionButton(
                     onClick = onPayClick,
-                    enabled = enabled,
+                    enabled = payEnabled,
                     text = payText,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = NeutralGray,
@@ -386,7 +388,7 @@ private fun AmountActionButton(
 @Deprecated(
     message = "Use AmountBottomBar instead",
     replaceWith = ReplaceWith(
-        "AmountBottomBar(subtotalAmount, amountToPay, paidAmount, onPrintPreBillClick, onConfirmClick, onPayClick, modifier, enabled, initialPaidAmountExpanded, testTag)"
+        "AmountBottomBar(subtotalAmount, amountToPay, paidAmount, onPrintPreBillClick, onConfirmClick, onPayClick, modifier, enabled, confirmEnabled, payEnabled, initialPaidAmountExpanded, testTag)"
     )
 )
 @Composable
@@ -399,6 +401,8 @@ fun AmountBotombar(
     onPayClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    confirmEnabled: Boolean = enabled,
+    payEnabled: Boolean = enabled,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) = AmountBottomBar(
@@ -410,6 +414,8 @@ fun AmountBotombar(
     onPayClick = onPayClick,
     modifier = modifier,
     enabled = enabled,
+    confirmEnabled = confirmEnabled,
+    payEnabled = payEnabled,
     initialPaidAmountExpanded = initialPaidAmountExpanded,
     testTag = testTag
 )
