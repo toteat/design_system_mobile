@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.20] - 2026-03-31
 ### Changed
 - **AmountBottomBar**: Added `fullPaid` and `onPaymentDetailClick` parameters to support a "Detalle del pago" button (green with check icon) when the full consumption has been paid, replacing the "Pagar" button
 
