@@ -1,0 +1,25 @@
+Changelog.md
+  bce1a8307bd654e1 3-6
+gradle.properties
+  bce1a8307bd654e1 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "0dd74325f0e08acadc6a0a744e45ee3321ad63e1",
+  "prompts": {
+    "bce1a8307bd654e1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a70ad33f-3775-4279-bcce-74ef60129473",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nicobeltrami <nbeltrami@toteat.com>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 1,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}
