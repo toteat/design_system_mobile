@@ -51,8 +51,32 @@ else
 fi
 
 TAG_NAME="v$NEW_VERSION"
+TODAY=$(date +%Y-%m-%d)
 
 echo -e "${GREEN}→ Nueva versión: $TAG_NAME${NC}\n"
+
+# Actualizar Changelog.md - reemplazar [Unreleased] por la nueva versión
+if [ -f "Changelog.md" ]; then
+    echo -e "${BLUE}Actualizando Changelog.md...${NC}"
+    # Reemplazar todas las líneas "## [Unreleased]..." por "## [$NEW_VERSION] - $TODAY"
+    # Solo reemplaza la primera ocurrencia, las demás se eliminan
+    FIRST=true
+    TEMP_FILE=$(mktemp)
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^##\ \[Unreleased\] ]]; then
+            if $FIRST; then
+                echo "## [$NEW_VERSION] - $TODAY" >> "$TEMP_FILE"
+                FIRST=false
+            fi
+        else
+            echo "$line" >> "$TEMP_FILE"
+        fi
+    done < Changelog.md
+    mv "$TEMP_FILE" Changelog.md
+    echo -e "${GREEN}✓ Changelog.md actualizado ([Unreleased] → [$NEW_VERSION] - $TODAY)${NC}\n"
+else
+    echo -e "${YELLOW}⚠ No se encontró Changelog.md, saltando actualización${NC}\n"
+fi
 
 # Actualizar libVersion en gradle.properties
 echo -e "${BLUE}Actualizando libVersion en gradle.properties...${NC}"
@@ -67,7 +91,7 @@ if [[ -n $(git status -s) ]]; then
     read -p "¿Desea commitear estos cambios? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        git add gradle.properties
+        git add gradle.properties Changelog.md
         # Si hay otros cambios, también los agregamos
         if [[ -n $(git status -s -- ':!gradle.properties') ]]; then
             read -p "Mensaje del commit (todos los cambios): " COMMIT_MSG
@@ -82,8 +106,8 @@ if [[ -n $(git status -s) ]]; then
         exit 1
     fi
 else
-    # Solo el cambio de versión en gradle.properties, commitear automáticamente
-    git add gradle.properties
+    # Solo el cambio de versión en gradle.properties y changelog, commitear automáticamente
+    git add gradle.properties Changelog.md
     git commit -m "chore: bump version to $NEW_VERSION"
     echo -e "${GREEN}✓ Versión actualizada y commiteada${NC}\n"
 fi

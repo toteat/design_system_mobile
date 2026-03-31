@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased] - 2026-03-31
+### Added
+- **TableIcon**: New icon component wrapping `Res.drawable.icon_table`
+- **WarningIcon**: New icon component wrapping `Res.drawable.icon_warning`
+- **SuccessIcon**: New icon component wrapping `Res.drawable.icon_success`
+- **ErrorIcon**: New icon component wrapping `Res.drawable.icon_error`
+- **InfoIcon**: New icon component wrapping `Res.drawable.icon_info`
+
 ## [Unreleased] - 2026-03-04
 ### Added
 - **ProductCard**: New card component for displaying product information with icon, title, subtitle, price, and action buttons
