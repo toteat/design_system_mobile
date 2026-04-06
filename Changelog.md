@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.21] - 2026-04-06
 ### Changed
 - **TableIcon, WarningIcon, SuccessIcon, ErrorIcon, InfoIcon**: Added `tint` parameter (`Color = LocalContentColor.current`) to allow customizing icon color
 
