@@ -89,6 +89,7 @@ fun AmountBottomBar(
     fullPaid: Boolean = false,
     onPaymentDetailClick: (() -> Unit)? = null,
     paymentDetailContainerColor: Color = SecondaryNormal,
+    showButtons: Boolean = true,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) {
@@ -284,88 +285,90 @@ fun AmountBottomBar(
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(AmountBottomBarBottomHeight)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AmountActionButton(
-                    onClick = onConfirmClick,
-                    enabled = confirmEnabled,
-                    text = confirmText,
-                    containerColor = SecondaryNormal,
-                    contentColor = NeutralGray,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = vectorResource(Res.drawable.pan_fire_icon),
-                            contentDescription = null,
-                            tint = NeutralGray,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    },
+            if (showButtons) {
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .then(
-                            if (testTag.isNotEmpty()) {
-                                Modifier.setTestTag("${testTag}_confirm")
-                            } else {
-                                Modifier
-                            }
+                        .fillMaxWidth()
+                        .height(AmountBottomBarBottomHeight)
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AmountActionButton(
+                        onClick = onConfirmClick,
+                        enabled = confirmEnabled,
+                        text = confirmText,
+                        containerColor = SecondaryNormal,
+                        contentColor = NeutralGray,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = vectorResource(Res.drawable.pan_fire_icon),
+                                contentDescription = null,
+                                tint = NeutralGray,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(
+                                if (testTag.isNotEmpty()) {
+                                    Modifier.setTestTag("${testTag}_confirm")
+                                } else {
+                                    Modifier
+                                }
+                            )
+                    )
+                    if (fullPaid) {
+                        AmountActionButton(
+                            onClick = { onPaymentDetailClick?.invoke() },
+                            enabled = enabled,
+                            text = paymentDetailText,
+                            containerColor = paymentDetailContainerColor,
+                            contentColor = NeutralGray,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    tint = NeutralGray,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .then(
+                                    if (testTag.isNotEmpty()) {
+                                        Modifier.setTestTag("${testTag}_payment_detail")
+                                    } else {
+                                        Modifier
+                                    }
+                                )
                         )
-                )
-                if (fullPaid) {
-                    AmountActionButton(
-                        onClick = { onPaymentDetailClick?.invoke() },
-                        enabled = enabled,
-                        text = paymentDetailText,
-                        containerColor = paymentDetailContainerColor,
-                        contentColor = NeutralGray,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = null,
-                                tint = NeutralGray,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .then(
-                                if (testTag.isNotEmpty()) {
-                                    Modifier.setTestTag("${testTag}_payment_detail")
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    )
-                } else {
-                    AmountActionButton(
-                        onClick = onPayClick,
-                        enabled = payEnabled,
-                        text = payText,
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = NeutralGray,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = vectorResource(Res.drawable.credit_card_icon),
-                                contentDescription = null,
-                                tint = NeutralGray,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .then(
-                                if (testTag.isNotEmpty()) {
-                                    Modifier.setTestTag("${testTag}_pay")
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    )
+                    } else {
+                        AmountActionButton(
+                            onClick = onPayClick,
+                            enabled = payEnabled,
+                            text = payText,
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = NeutralGray,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = vectorResource(Res.drawable.credit_card_icon),
+                                    contentDescription = null,
+                                    tint = NeutralGray,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .then(
+                                    if (testTag.isNotEmpty()) {
+                                        Modifier.setTestTag("${testTag}_pay")
+                                    } else {
+                                        Modifier
+                                    }
+                                )
+                        )
+                    }
                 }
             }
         }
@@ -420,7 +423,7 @@ private fun AmountActionButton(
 @Deprecated(
     message = "Use AmountBottomBar instead",
     replaceWith = ReplaceWith(
-        "AmountBottomBar(subtotalAmount, amountToPay, paidAmount, onPrintPreBillClick, onConfirmClick, onPayClick, modifier, enabled, confirmEnabled, payEnabled, fullPaid, onPaymentDetailClick, initialPaidAmountExpanded, testTag)"
+        "AmountBottomBar(subtotalAmount, amountToPay, paidAmount, onPrintPreBillClick, onConfirmClick, onPayClick, modifier, enabled, confirmEnabled, payEnabled, fullPaid, onPaymentDetailClick, paymentDetailContainerColor, showButtons, initialPaidAmountExpanded, testTag)"
     )
 )
 @Composable

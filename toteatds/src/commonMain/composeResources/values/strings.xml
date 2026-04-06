@@ -26,9 +26,9 @@
     <string name="bottom_bar_my_tables">Mis mesas</string>
     <string name="bottom_bar_all_tables">Todas las mesas</string>
     <string name="bottom_bar_view_more">Ver más</string>
-    <string name="subtotal">Subtotal:</string>
+    <string name="subtotal">Total:</string>
     <string name="amount_paid">Monto pagado:</string>
-    <string name="amount_to_pay">Por pagar:</string>
+    <string name="amount_to_pay">Pendiente Pagar:</string>
     <string name="confirm">Confirmar</string>
     <string name="pay">Pagar</string>
     <string name="payment_detail">Detalle del pago</string>
