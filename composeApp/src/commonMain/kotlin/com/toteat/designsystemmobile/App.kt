@@ -390,6 +390,20 @@ fun ButtonShowcase() {
                 onClick = {}
             )
         }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "monto especifico",
+                comingSoon = true,
+                iconSize = 36.dp,
+                icon = { DifferentAmountPaymentsIcon(size = 36.dp) },
+                onClick = {}
+            )
+        }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Tables", style = MaterialTheme.typography.titleMedium)
