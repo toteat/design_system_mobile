@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.GreenNormal
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.NeutralGray400
@@ -89,6 +88,7 @@ fun AmountBottomBar(
     payEnabled: Boolean = enabled,
     fullPaid: Boolean = false,
     onPaymentDetailClick: (() -> Unit)? = null,
+    paymentDetailContainerColor: Color = SecondaryNormal,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) {
@@ -321,7 +321,7 @@ fun AmountBottomBar(
                         onClick = { onPaymentDetailClick?.invoke() },
                         enabled = enabled,
                         text = paymentDetailText,
-                        containerColor = GreenNormal,
+                        containerColor = paymentDetailContainerColor,
                         contentColor = NeutralGray,
                         leadingIcon = {
                             Icon(
@@ -437,6 +437,7 @@ fun AmountBotombar(
     payEnabled: Boolean = enabled,
     fullPaid: Boolean = false,
     onPaymentDetailClick: (() -> Unit)? = null,
+    paymentDetailContainerColor: Color = SecondaryNormal,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) = AmountBottomBar(
@@ -452,6 +453,7 @@ fun AmountBotombar(
     payEnabled = payEnabled,
     fullPaid = fullPaid,
     onPaymentDetailClick = onPaymentDetailClick,
+    paymentDetailContainerColor = paymentDetailContainerColor,
     initialPaidAmountExpanded = initialPaidAmountExpanded,
     testTag = testTag
 )
