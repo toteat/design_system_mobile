@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.25] - 2026-04-09
 ### Added
 - **ToteatNumericKeypad**: New numeric keypad component with a 4×3 grid layout (digits 0-9, backspace, and custom action button). Supports `onNumberClick`, `onDeleteClick`, and `onActionClick` callbacks, optional custom action icon, enabled/disabled states, and full accessibility semantics.
 - **ToteatAmountDisplay**: New read-only display component for formatted amounts, designed to pair with ToteatNumericKeypad. Supports placeholder, enabled/disabled states, and accessibility semantics.
