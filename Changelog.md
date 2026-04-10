@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatNumericKeypad**: New numeric keypad component with a 4×3 grid layout (digits 0-9, backspace, and custom action button). Supports `onNumberClick`, `onDeleteClick`, and `onActionClick` callbacks, optional custom action icon, enabled/disabled states, and full accessibility semantics.
+- **ToteatAmountDisplay**: New read-only display component for formatted amounts, designed to pair with ToteatNumericKeypad. Supports placeholder, enabled/disabled states, and accessibility semantics.
+- **ToteatPillLabel**: New non-interactive pill-shaped label with optional trailing icon, for section titles and contextual labels.
+- **icon_backspace.xml**: New vector drawable resource for the keypad delete button
+
 ## [0.1.21] - 2026-04-06
 ### Changed
 - **TableIcon, WarningIcon, SuccessIcon, ErrorIcon, InfoIcon**: Added `tint` parameter (`Color = LocalContentColor.current`) to allow customizing icon color

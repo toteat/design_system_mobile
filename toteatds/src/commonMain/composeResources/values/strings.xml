@@ -131,4 +131,9 @@
     <string name="search_bar_description">Buscador</string>
     <string name="search_bar_icon">Buscar</string>
     <string name="coming_soon">Próximamente</string>
+    <string name="amount_display_description">Monto: %1$s</string>
+    <string name="numeric_keypad_description">Teclado numérico</string>
+    <string name="numeric_keypad_number_description">Número %1$d</string>
+    <string name="numeric_keypad_delete_description">Borrar</string>
+    <string name="numeric_keypad_action_description">Acción adicional</string>
 </resources>

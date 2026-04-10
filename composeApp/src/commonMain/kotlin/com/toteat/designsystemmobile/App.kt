@@ -97,6 +97,9 @@ import com.toteat.toteatds.components.toast.ToteatToastMessageType
 import com.toteat.toteatds.components.topbar.BackNavigationTopBar
 import com.toteat.toteatds.components.topbar.CenterContentTopBar
 import com.toteat.toteatds.components.topbar.LoginTopBar
+import com.toteat.toteatds.components.display.ToteatAmountDisplay
+import com.toteat.toteatds.components.display.ToteatPillLabel
+import com.toteat.toteatds.components.keypad.ToteatNumericKeypad
 import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
 import com.toteat.toteatds.components.topbar.RestaurantNameTopBarItem
 import com.toteat.toteatds.theme.ToteatTheme
@@ -140,7 +143,8 @@ fun App() {
                     ComponentShowcaseItem(title = "Subcategory Buttons"),
                     ComponentShowcaseItem(title = "Order detail"),
                     ComponentShowcaseItem(title = "Product card"),
-                    ComponentShowcaseItem(title = "Tags")
+                    ComponentShowcaseItem(title = "Tags"),
+                    ComponentShowcaseItem(title = "Numeric Keypad")
                 )
             )
         }
@@ -263,6 +267,7 @@ fun ComponentShowcaseSection(
                 "Order detail" -> OrderDetailShowcase()
                 "Product card" -> ProductCardShowcase()
                 "Tags" -> StatusTagShowcase()
+                "Numeric Keypad" -> NumericKeypadShowcase()
             }
         }
     }
@@ -1232,6 +1237,53 @@ fun StatusTagShowcase() {
 
         Text("Cancelled", style = MaterialTheme.typography.bodyMedium)
         StatusTag(variant = StatusTagVariant.Cancelled)
+    }
+}
+
+@Composable
+fun NumericKeypadShowcase() {
+    var inputValue by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Pill Label", style = MaterialTheme.typography.titleMedium)
+
+        ToteatPillLabel(
+            text = "Pago por monto específico",
+            trailingIcon = {
+                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+            }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Amount Display + Keypad", style = MaterialTheme.typography.titleMedium)
+
+        ToteatAmountDisplay(
+            value = if (inputValue.isEmpty()) "" else "\$$inputValue",
+            placeholder = "\$0"
+        )
+
+        ToteatNumericKeypad(
+            onNumberClick = { number -> inputValue += number.toString() },
+            onDeleteClick = { if (inputValue.isNotEmpty()) inputValue = inputValue.dropLast(1) },
+            onActionClick = { inputValue = "" }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Disabled", style = MaterialTheme.typography.titleMedium)
+        ToteatAmountDisplay(value = "\$5.200", enabled = false)
+        ToteatNumericKeypad(
+            onNumberClick = {},
+            onDeleteClick = {},
+            onActionClick = {},
+            enabled = false
+        )
     }
 }
 
