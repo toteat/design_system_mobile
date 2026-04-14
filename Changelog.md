@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ToteatProductRow**: Added `showControls` parameter (default `true`). When set to `false`, hides the +/- counter buttons and shows a numeric badge only — intended for products with variants/extras that require opening a detail screen instead of direct increment/decrement.
+
 ## [0.1.25] - 2026-04-09
 ### Added
 - **ToteatNumericKeypad**: New numeric keypad component with a 4×3 grid layout (digits 0-9, backspace, and custom action button). Supports `onNumberClick`, `onDeleteClick`, and `onActionClick` callbacks, optional custom action icon, enabled/disabled states, and full accessibility semantics.

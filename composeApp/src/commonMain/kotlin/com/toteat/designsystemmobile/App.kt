@@ -1175,6 +1175,40 @@ fun ProductRowShowcase() {
         )
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Badge only (showControls = false, qty = 0)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Hamburguesa BBQ",
+            price = "$ 9.000",
+            description = "Producto con variantes",
+            quantity = 0,
+            onIncrement = {},
+            onDecrement = {},
+            showControls = false
+        )
+
+        Text("Badge only (showControls = false, qty = 1)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Hamburguesa BBQ",
+            price = "$ 9.000",
+            description = "Producto con variantes",
+            quantity = 1,
+            onIncrement = {},
+            onDecrement = {},
+            showControls = false
+        )
+
+        Text("Badge only (showControls = false, qty = 3)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Brownie con helado",
+            price = "$ 6.500",
+            description = "Producto con variantes",
+            quantity = 3,
+            onIncrement = {},
+            onDecrement = {},
+            showControls = false
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
         Text("Disabled", style = MaterialTheme.typography.titleMedium)
         ToteatProductRow(
             name = "Capuccino",

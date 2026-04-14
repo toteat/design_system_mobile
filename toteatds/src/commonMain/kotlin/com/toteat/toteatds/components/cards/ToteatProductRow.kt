@@ -1,10 +1,14 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,8 +20,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.CounterContainerColor
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray100
 import com.toteat.toteatds.theme.NeutralGray300
@@ -42,6 +49,7 @@ fun ToteatProductRow(
     onDecrement: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    showControls: Boolean = true,
     description: String? = null,
     contentDescription: String? = null,
     testTag: String = ""
@@ -106,14 +114,45 @@ fun ToteatProductRow(
                 )
             }
 
-            // Right: counter
-            ToteatCounterCompact(
-                quantity = quantity,
-                onIncrement = onIncrement,
-                onDecrement = onDecrement,
-                enabled = enabled,
-                testTag = if (testTag.isNotEmpty()) "${testTag}_counter" else ""
-            )
+            // Right: counter or badge
+            if (showControls) {
+                ToteatCounterCompact(
+                    quantity = quantity,
+                    onIncrement = onIncrement,
+                    onDecrement = onDecrement,
+                    enabled = enabled,
+                    testTag = if (testTag.isNotEmpty()) "${testTag}_counter" else ""
+                )
+            } else if (quantity > 0) {
+                ProductRowBadge(
+                    quantity = quantity,
+                    testTag = if (testTag.isNotEmpty()) "${testTag}_badge" else ""
+                )
+            }
         }
+    }
+}
+
+private val BadgeSize = 36.dp
+
+@Composable
+private fun ProductRowBadge(
+    quantity: Int,
+    testTag: String = ""
+) {
+    Box(
+        modifier = Modifier
+            .size(BadgeSize)
+            .clip(CircleShape)
+            .background(CounterContainerColor)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = quantity.toString(),
+            style = MaterialTheme.typography.bodyLarge,
+            color = NeutralGray500,
+            textAlign = TextAlign.Center
+        )
     }
 }
