@@ -79,7 +79,7 @@ fun ToteatSquareButton(
         onClick = onClick,
         enabled = true,
         modifier = modifier
-            .heightIn(min = if (comingSoon) 128.dp else 0.dp, max = 128.dp)
+            .heightIn(min = 128.dp, max = 128.dp)
             .width(150.dp)
             .semantics {
                 contentDescription = if (comingSoon) "$description, $comingSoonText" else description

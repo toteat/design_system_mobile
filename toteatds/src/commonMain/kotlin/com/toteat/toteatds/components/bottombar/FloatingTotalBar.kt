@@ -26,6 +26,8 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.NeutralGray
+import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.utils.setTestTag
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -39,17 +41,22 @@ fun FloatingTotalBar(
     label: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     testTag: String = ""
 ) {
     val accessibilityDescription = remember(label, totalAmount) {
         if (label.isNullOrBlank()) totalAmount else "$label, $totalAmount"
     }
 
+    val containerColor = if (enabled) MaterialTheme.colorScheme.primary else NeutralGray300
+    val contentColor = if (enabled) MaterialTheme.colorScheme.onPrimary else NeutralGray
+
     Surface(
         onClick = onClick,
+        enabled = enabled,
         shape = FloatingTotalBarShape,
-        color = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        color = containerColor,
+        contentColor = contentColor,
         shadowElevation = 8.dp,
         tonalElevation = 0.dp,
         modifier = modifier
@@ -73,7 +80,7 @@ fun FloatingTotalBar(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = contentColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
@@ -97,7 +104,7 @@ fun FloatingTotalBar(
                 Text(
                     text = totalAmount,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = contentColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.then(
@@ -111,7 +118,7 @@ fun FloatingTotalBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = contentColor,
                     modifier = Modifier
                         .size(10.dp)
                         .then(
@@ -147,6 +154,36 @@ private fun FloatingTotalBarPreviewWithLabel() {
                     totalAmount = "$ 29.290",
                     label = "Ver pedido mesa",
                     onClick = {},
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp)
+                        .navigationBarsPadding()
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun FloatingTotalBarPreviewDisabled() {
+    ToteatTheme {
+        Scaffold { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                FloatingTotalBar(
+                    totalAmount = "$ 29.290",
+                    label = "Ver pedido mesa",
+                    onClick = {},
+                    enabled = false,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp)

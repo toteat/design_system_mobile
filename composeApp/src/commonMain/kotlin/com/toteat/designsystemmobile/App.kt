@@ -477,7 +477,8 @@ fun FloatingTotalBarShowcase() {
                     FloatingTotalBar(
                         totalAmount = formattedTotal,
                         label = if (productCount > 0) "Ver pedido mesa" else null,
-                        onClick = {}
+                        onClick = {},
+                        enabled = productCount > 0
                     )
                 }
             ) { innerPadding ->
