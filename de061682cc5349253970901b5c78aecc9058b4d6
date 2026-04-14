@@ -1,0 +1,27 @@
+toteatds/src/commonMain/kotlin/com/toteat/toteatds/components/cards/ToteatProductRow.kt
+  1f79a90989ce0ac3 3,5,10-11,23-24,27,52,117-131,135-156
+composeApp/src/commonMain/kotlin/com/toteat/designsystemmobile/App.kt
+  1f79a90989ce0ac3 1178-1210
+Changelog.md
+  1f79a90989ce0ac3 3-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "de061682cc5349253970901b5c78aecc9058b4d6",
+  "prompts": {
+    "1f79a90989ce0ac3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2488a818-7ec8-4e66-a654-7f2751585cd0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nicobeltrami",
+      "messages": [],
+      "total_additions": 92,
+      "total_deletions": 15,
+      "accepted_lines": 85,
+      "overriden_lines": 0
+    }
+  }
+}
