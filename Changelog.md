@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.27] - 2026-04-14
 ### Changed
 - **ToteatProductRow**: Added `showControls` parameter (default `true`). When set to `false`, hides the +/- counter buttons and shows a numeric badge only — intended for products with variants/extras that require opening a detail screen instead of direct increment/decrement.
 
