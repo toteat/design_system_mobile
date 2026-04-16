@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- **Release**: Re-publish v0.1.28 changes under new version due to failed prior release
+
 ## [0.1.28] - 2026-04-16
 ### Changed
 - **ToteatActionBottomSheet**: `actions` parameter now uses `ImmutableList<ToteatActionConfig>` instead of `List`. Added `@Immutable` to `ToteatActionConfig`. Added `key()` wrappers for efficient recomposition tracking. Cached `vectorResource` icons in parent scope to avoid re-parsing on animation frames.
