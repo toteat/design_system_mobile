@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ToteatActionBottomSheet**: `actions` parameter now uses `ImmutableList<ToteatActionConfig>` instead of `List`. Added `@Immutable` to `ToteatActionConfig`. Added `key()` wrappers for efficient recomposition tracking. Cached `vectorResource` icons in parent scope to avoid re-parsing on animation frames.
+- **GroupedOrderDetail**: Added `@Immutable` to `OrderItem` and `OrderItemExtra`. Added `key()` wrappers in item and extras loops. Pre-compute `MaterialTheme.colorScheme.extended` once in parent and pass to child items instead of per-item CompositionLocal lookup.
+- **ToteatDropDown**: Added `key()` wrappers in dropdown options for efficient diff tracking.
+
+### Added
+- **compose_stability.conf**: Stability configuration file marking public types (`ToteatActionType`, `ToteatActionConfig`, `OrderItem`, `OrderItemExtra`, `ButtonTableStatus`) as stable for consumer apps.
+- **CmpLibraryConventionPlugin**: Wired `compose_stability.conf` into Compose compiler. Added opt-in Compose compiler reports via `-PenableComposeCompilerReports=true`.
+
 ## [0.1.27] - 2026-04-14
 ### Changed
 - **ToteatProductRow**: Added `showControls` parameter (default `true`). When set to `false`, hides the +/- counter buttons and shows a numeric badge only — intended for products with variants/extras that require opening a detail screen instead of direct increment/decrement.

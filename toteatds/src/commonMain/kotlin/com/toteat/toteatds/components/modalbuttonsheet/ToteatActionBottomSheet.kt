@@ -28,12 +28,15 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -59,6 +62,8 @@ import designsystemmobile.toteatds.generated.resources.chip_selected
 import designsystemmobile.toteatds.generated.resources.group_bottom_view
 import designsystemmobile.toteatds.generated.resources.state_disabled
 import designsystemmobile.toteatds.generated.resources.user_icon_bottom_sheet
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -101,6 +106,7 @@ sealed class ToteatActionType(
  * @param isSelected Si la acción está seleccionada (muestra el icono en color primario)
  * @param onClick Callback cuando se hace clic en la acción
  */
+@Immutable
 data class ToteatActionConfig(
     val type: ToteatActionType,
     val enabled: Boolean = true,
@@ -116,7 +122,7 @@ private val IconSize = 30.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToteatActionBottomSheet(
-    actions: List<ToteatActionConfig>,
+    actions: ImmutableList<ToteatActionConfig>,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
@@ -163,9 +169,13 @@ private fun DragHandle() {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ActionMenuContent(
-    actions: List<ToteatActionConfig>,
+    actions: ImmutableList<ToteatActionConfig>,
     onDismissRequest: () -> Unit,
 ) {
+    val iconCache = remember(actions) {
+        actions.associate { it.type.id to it.type.iconRes }
+    }
+
     FlowRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -176,13 +186,17 @@ private fun ActionMenuContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         actions.forEach { actionConfig ->
-            ActionMenuItem(
-                actionConfig = actionConfig,
-                onItemClick = {
-                    actionConfig.onClick()
-                    onDismissRequest()
-                }
-            )
+            key(actionConfig.type.id) {
+                val cachedIcon = vectorResource(iconCache[actionConfig.type.id]!!)
+                ActionMenuItem(
+                    actionConfig = actionConfig,
+                    icon = cachedIcon,
+                    onItemClick = {
+                        actionConfig.onClick()
+                        onDismissRequest()
+                    }
+                )
+            }
         }
     }
 
@@ -192,6 +206,7 @@ private fun ActionMenuContent(
 @Composable
 private fun ActionMenuItem(
     actionConfig: ToteatActionConfig,
+    icon: ImageVector,
     onItemClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -259,7 +274,7 @@ private fun ActionMenuItem(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = vectorResource(actionConfig.type.iconRes),
+                    imageVector = icon,
                     contentDescription = null,
                     tint = iconTint,
                     modifier = Modifier.size(IconSize)
@@ -295,8 +310,8 @@ private fun ToteatActionBottomSheetPreview_Light() {
 }
 
 @Composable
-private fun previewActions(): List<ToteatActionConfig> {
-    return listOf(
+private fun previewActions(): ImmutableList<ToteatActionConfig> {
+    return persistentListOf(
         ToteatActionConfig(
             type = ToteatActionType.Profile,
             isSelected = true,

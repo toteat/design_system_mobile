@@ -21,7 +21,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,6 +34,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.toteat.toteatds.theme.ExtendedColors
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray100
 import com.toteat.toteatds.theme.NeutralGray200
@@ -64,12 +67,14 @@ private val PriceColumnWidth = 75.dp
 private val HourColumnWidth = 75.dp
 private val RowHeight = 60.dp
 
+@Immutable
 data class OrderItemExtra(
     val name: String,
     val description: String,
     val price: String
 )
 
+@Immutable
 data class OrderItem(
     val name: String,
     val quantity: Int = 1,
@@ -92,6 +97,7 @@ fun GroupedOrderDetail(
     val hasMore = items.size > maxCollapsedItems
     val visible = if (showAll || !hasMore) items else items.take(maxCollapsedItems)
     val description = stringResource(Res.string.order_detail_description, items.size)
+    val extended = MaterialTheme.colorScheme.extended
 
     Column(
         modifier = modifier
@@ -106,11 +112,14 @@ fun GroupedOrderDetail(
         )
 
         visible.forEachIndexed { index, item ->
-            OrderDetailItem(
-                item = item,
-                rowModifier = itemModifier(item),
-                testTag = if (testTag.isNotEmpty()) "${testTag}_item_${index}" else ""
-            )
+            key(item.name, index) {
+                OrderDetailItem(
+                    item = item,
+                    extended = extended,
+                    rowModifier = itemModifier(item),
+                    testTag = if (testTag.isNotEmpty()) "${testTag}_item_${index}" else ""
+                )
+            }
         }
 
         if (hasMore) {
@@ -165,8 +174,12 @@ private fun OrderDetailHeader(testTag: String = "") {
 }
 
 @Composable
-private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier, testTag: String = "") {
-    val extended = MaterialTheme.colorScheme.extended
+private fun OrderDetailItem(
+    item: OrderItem,
+    extended: ExtendedColors,
+    rowModifier: Modifier = Modifier,
+    testTag: String = ""
+) {
     var isExpanded by remember { mutableStateOf(false) }
     val expandText = stringResource(Res.string.order_detail_expand_extras)
     val collapseText = stringResource(Res.string.order_detail_collapse_extras)
@@ -227,14 +240,17 @@ private fun OrderDetailItem(item: OrderItem, rowModifier: Modifier = Modifier, t
         }
 
         if (isExpanded && item.extras.isNotEmpty()) {
-            item.extras.forEach { ExtraItemRow(extra = it) }
+            item.extras.forEachIndexed { index, extra ->
+                key(extra.name, index) {
+                    ExtraItemRow(extra = extra, extended = extended)
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun ExtraItemRow(extra: OrderItemExtra) {
-    val extended = MaterialTheme.colorScheme.extended
+private fun ExtraItemRow(extra: OrderItemExtra, extended: ExtendedColors) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(start = HorizontalPadding),
         verticalAlignment = Alignment.CenterVertically

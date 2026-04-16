@@ -11,6 +11,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 import com.android.build.gradle.LibraryExtension
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class CmpLibraryConventionPlugin: Plugin<Project> {
@@ -63,6 +64,27 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
                 singleVariant("release") {
                     withSourcesJar()
                 }
+            }
+        }
+
+        // Compose stability config for consumer apps
+        val stabilityFile = rootProject.layout.projectDirectory.file("compose_stability.conf")
+        if (stabilityFile.asFile.exists()) {
+            extensions.configure<ComposeCompilerGradlePluginExtension> {
+                stabilityConfigurationFiles.add(stabilityFile)
+            }
+        }
+
+        // Opt-in: Compose compiler reports
+        val reportsEnabled = providers.gradleProperty("enableComposeCompilerReports")
+            .map { it.toBoolean() }
+            .orElse(false)
+            .get()
+        if (reportsEnabled) {
+            extensions.configure<ComposeCompilerGradlePluginExtension> {
+                val outputDir = rootProject.layout.buildDirectory.dir("compose_compiler")
+                reportsDestination.set(outputDir)
+                metricsDestination.set(outputDir)
             }
         }
 
