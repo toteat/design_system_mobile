@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.28] - 2026-04-16
 ### Changed
 - **ToteatActionBottomSheet**: `actions` parameter now uses `ImmutableList<ToteatActionConfig>` instead of `List`. Added `@Immutable` to `ToteatActionConfig`. Added `key()` wrappers for efficient recomposition tracking. Cached `vectorResource` icons in parent scope to avoid re-parsing on animation frames.
 - **GroupedOrderDetail**: Added `@Immutable` to `OrderItem` and `OrderItemExtra`. Added `key()` wrappers in item and extras loops. Pre-compute `MaterialTheme.colorScheme.extended` once in parent and pass to child items instead of per-item CompositionLocal lookup.
