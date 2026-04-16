@@ -1,0 +1,47 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "ddf61b276c7ba98ba094e49483e60a6e6e02eb54",
+  "prompts": {
+    "1f79a90989ce0ac3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2488a818-7ec8-4e66-a654-7f2751585cd0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nicobeltrami",
+      "messages": [],
+      "total_additions": 92,
+      "total_deletions": 15,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "71643fb4eb13dc14": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f166933-02cc-4816-8aee-db2a6490d579",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nicobeltrami",
+      "messages": [],
+      "total_additions": 108,
+      "total_deletions": 37,
+      "accepted_lines": 9,
+      "overriden_lines": 0
+    },
+    "bce1a8307bd654e1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a70ad33f-3775-4279-bcce-74ef60129473",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nicobeltrami <nbeltrami@toteat.com>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 1,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    }
+  }
+}
