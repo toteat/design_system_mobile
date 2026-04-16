@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.29] - 2026-04-16
 ### Fixed
 - **Release**: Re-publish v0.1.28 changes under new version due to failed prior release
 
