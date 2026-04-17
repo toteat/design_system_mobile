@@ -57,7 +57,7 @@ fun FloatingTotalBar(
         shape = FloatingTotalBarShape,
         color = containerColor,
         contentColor = contentColor,
-        shadowElevation = 8.dp,
+        shadowElevation = 0.dp,
         tonalElevation = 0.dp,
         modifier = modifier
             .fillMaxWidth()

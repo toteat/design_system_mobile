@@ -79,7 +79,6 @@ fun ToteatSubcategoryButton(
         enabled = enabled,
         shape = ButtonShape,
         color = containerColor,
-        shadowElevation = 2.dp,
         interactionSource = interactionSource
     ) {
         Row(

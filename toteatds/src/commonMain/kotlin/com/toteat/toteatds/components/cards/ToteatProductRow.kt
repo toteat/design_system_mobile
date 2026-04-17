@@ -71,8 +71,7 @@ fun ToteatProductRow(
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         shape = RowShape,
-        color = containerColor,
-        shadowElevation = 2.dp
+        color = containerColor
     ) {
         Row(
             modifier = Modifier.padding(RowPadding),

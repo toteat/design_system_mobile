@@ -72,7 +72,6 @@ fun ToteatCategoryCard(
         enabled = enabled,
         shape = CardShape,
         color = containerColor,
-        shadowElevation = 2.dp,
         interactionSource = interactionSource
     ) {
         Column(
