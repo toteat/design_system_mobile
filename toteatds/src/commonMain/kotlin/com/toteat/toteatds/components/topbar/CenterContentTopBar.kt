@@ -1,22 +1,14 @@
 package com.toteat.toteatds.components.topbar
 
-import androidx.compose.foundation.MarqueeSpacing
-import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.restaurant_description
@@ -52,30 +44,15 @@ fun RestaurantNameTopBarItem(
 ) {
     val description = stringResource(Res.string.restaurant_description, restaurantName)
 
-    Row(
-        modifier = modifier
-            .width(IntrinsicSize.Max)
-            .semantics(mergeDescendants = true) {
-                contentDescription = description
-            },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = restaurantName,
-            modifier = Modifier
-                .weight(1f, fill = false)
-                .basicMarquee(
-                    iterations = Int.MAX_VALUE,
-                    spacing = MarqueeSpacing(8.dp)
-                ),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSecondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
-        )
-    }
+    Text(
+        text = restaurantName,
+        modifier = modifier.semantics { contentDescription = description },
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSecondary,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable
@@ -85,15 +62,10 @@ fun ProcessNameTopBarItem(
 ) {
     Text(
         text = processName,
-        modifier = modifier
-            .basicMarquee(
-                iterations = Int.MAX_VALUE,
-                spacing = MarqueeSpacing(8.dp)
-            )
-            .semantics {
-                heading()
-                contentDescription = processName
-            },
+        modifier = modifier.semantics {
+            heading()
+            contentDescription = processName
+        },
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSecondary,
         maxLines = 1,
