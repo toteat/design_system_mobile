@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.31] - 2026-04-17
 ### Performance
 - **ToteatProductRow, CategoryCard, ToteatSubcategoryButton**: Removed `shadowElevation = 2.dp`. On low-end terminals (e.g. Getnet A960 with Skia-OpenGL), HWUI spends significant per-frame time computing shadow geometry for every visible card. Removing the shadow drops this cost to zero while the rounded corners + container color still provide visual separation.
 - **FloatingTotalBar**: Removed `shadowElevation = 8.dp` (large persistent shadow on the menu bottom bar).
