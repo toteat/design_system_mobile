@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+### Performance
+- **ToteatProductRow, CategoryCard, ToteatSubcategoryButton**: Removed `shadowElevation = 2.dp`. On low-end terminals (e.g. Getnet A960 with Skia-OpenGL), HWUI spends significant per-frame time computing shadow geometry for every visible card. Removing the shadow drops this cost to zero while the rounded corners + container color still provide visual separation.
+- **FloatingTotalBar**: Removed `shadowElevation = 8.dp` (large persistent shadow on the menu bottom bar).
+- **RestaurantNameTopBarItem, ProcessNameTopBarItem**: Dropped `basicMarquee(iterations = Int.MAX_VALUE)` and the surrounding `Row(width = IntrinsicSize.Max)` wrapper. The marquee `ModifierNode` was being rebuilt on every host state emission, forcing the item to recompose on unrelated updates (Layout Inspector counts climbed steadily even when `restaurantName` did not change). `IntrinsicSize.Max` added an O(n) intrinsic measurement pass for no layout benefit. Long names now truncate with an ellipsis via `maxLines = 1, overflow = Ellipsis`.
+
 ## [0.1.30] - 2026-04-17
 ### Changed
 - **ToteatAmountDisplay**: Text is now always visually centered within the container regardless of content length. Visual refresh to match design spec: corner radius reduced from 14dp to 8dp, white background with a 1dp `NeutralGray100` border and a subtle top inner shadow (`rgba(0,0,0,0.07)`) for depth.
