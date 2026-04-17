@@ -1287,12 +1287,16 @@ fun NumericKeypadShowcase() {
     ) {
         Text("Pill Label", style = MaterialTheme.typography.titleMedium)
 
+        ToteatPillLabel(text = "Dividir cuenta")
+
         ToteatPillLabel(
             text = "Pago por monto específico",
             trailingIcon = {
                 Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
             }
         )
+
+        ToteatPillLabel(text = "Sin ícono", trailingIcon = null)
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 

@@ -13,6 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -32,8 +36,9 @@ import designsystemmobile.toteatds.generated.resources.amount_display_descriptio
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-private val DisplayShape = RoundedCornerShape(14.dp)
+private val DisplayShape = RoundedCornerShape(8.dp)
 private val DisplayHeight = 56.dp
+private val InnerShadowHeight = 4.dp
 
 /**
  * Read-only display for formatted amounts, designed to pair with [ToteatNumericKeypad].
@@ -59,8 +64,23 @@ fun ToteatAmountDisplay(
             .fillMaxWidth()
             .height(DisplayHeight)
             .clip(DisplayShape)
-            .background(if (enabled) NeutralGray100 else NeutralGray)
-            .border(1.dp, NeutralGray200, DisplayShape)
+            .background(if (enabled) NeutralGray else NeutralGray100)
+            .drawWithContent {
+                drawContent()
+                val shadowHeightPx = InnerShadowHeight.toPx()
+                drawRect(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black.copy(alpha = 0.07f),
+                            Color.Transparent
+                        ),
+                        startY = 0f,
+                        endY = shadowHeightPx
+                    ),
+                    size = Size(size.width, shadowHeightPx)
+                )
+            }
+            .border(1.dp, NeutralGray100, DisplayShape)
             .padding(horizontal = 16.dp)
             .semantics { contentDescription = displayDescription }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
@@ -68,6 +88,7 @@ fun ToteatAmountDisplay(
     ) {
         Text(
             text = value.ifEmpty { placeholder },
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp

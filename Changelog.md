@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.30] - 2026-04-17
+### Changed
+- **ToteatAmountDisplay**: Text is now always visually centered within the container regardless of content length. Visual refresh to match design spec: corner radius reduced from 14dp to 8dp, white background with a 1dp `NeutralGray100` border and a subtle top inner shadow (`rgba(0,0,0,0.07)`) for depth.
+- **ToteatPillLabel**: Text is now always visually centered within the pill regardless of icon presence. The pill also fills the available width. `trailingIcon` now defaults to `icon_split_bill` instead of `null`. Pass `null` explicitly to hide the icon or provide a custom composable for a different icon.
+
 ## [0.1.29] - 2026-04-16
 ### Fixed
 - **Release**: Re-publish v0.1.28 changes under new version due to failed prior release
