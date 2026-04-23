@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.33] - 2026-04-23
 ### Added
 - **AmountBottomBar**: New parameter `showPrintPreBill: Boolean = true`. When `false`, the print pre-bill button is omitted from the bar. Consumers on form factors without an integrated printer (e.g. mobile phones running the POS) can now hide the button entirely instead of rendering a button that has no device to route to.
 
