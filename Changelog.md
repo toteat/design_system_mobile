@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **AmountBottomBar**: New parameter `showPrintPreBill: Boolean = true`. When `false`, the print pre-bill button is omitted from the bar. Consumers on form factors without an integrated printer (e.g. mobile phones running the POS) can now hide the button entirely instead of rendering a button that has no device to route to.
+
+### Changed
+- **ToteatCategoryCard**: Added a 1dp `NeutralGray300` border. The shadow removal in 0.1.31 left cards without clear separation on light backgrounds; the border restores the visual boundary without re-introducing the HWUI shadow-geometry cost.
+- **ToteatSubcategoryButton**: Same as above — added a 1dp `NeutralGray300` border for visual separation after the shadow removal.
+
 ## [0.1.31] - 2026-04-17
 ### Performance
 - **ToteatProductRow, CategoryCard, ToteatSubcategoryButton**: Removed `shadowElevation = 2.dp`. On low-end terminals (e.g. Getnet A960 with Skia-OpenGL), HWUI spends significant per-frame time computing shadow geometry for every visible card. Removing the shadow drops this cost to zero while the rounded corners + container color still provide visual separation.

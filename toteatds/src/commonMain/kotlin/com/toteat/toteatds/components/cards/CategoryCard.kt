@@ -1,5 +1,6 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -72,6 +73,7 @@ fun ToteatCategoryCard(
         enabled = enabled,
         shape = CardShape,
         color = containerColor,
+        border = BorderStroke(1.dp, NeutralGray300),
         interactionSource = interactionSource
     ) {
         Column(

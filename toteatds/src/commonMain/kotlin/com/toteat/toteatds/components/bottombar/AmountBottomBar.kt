@@ -90,6 +90,7 @@ fun AmountBottomBar(
     onPaymentDetailClick: (() -> Unit)? = null,
     paymentDetailContainerColor: Color = SecondaryNormal,
     showButtons: Boolean = true,
+    showPrintPreBill: Boolean = true,
     initialPaidAmountExpanded: Boolean = false,
     testTag: String = ""
 ) {
@@ -158,39 +159,41 @@ fun AmountBottomBar(
                         .padding(horizontal = 16.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(
-                        onClick = onPrintPreBillClick,
-                        enabled = enabled,
-                        shape = AmountBottomBarPrintShape,
-                        color = NeutralGray,
-                        border = BorderStroke(1.dp, NeutralGray400),
-                        tonalElevation = 0.dp,
-                        shadowElevation = 0.dp,
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(28.dp)
-                            .semantics {
-                                role = Role.Button
-                                contentDescription = printPrebillText
-                            }
-                            .then(
-                                if (testTag.isNotEmpty()) {
-                                    Modifier.setTestTag("${testTag}_print_prebill")
-                                } else {
-                                    Modifier
+                    if (showPrintPreBill) {
+                        Surface(
+                            onClick = onPrintPreBillClick,
+                            enabled = enabled,
+                            shape = AmountBottomBarPrintShape,
+                            color = NeutralGray,
+                            border = BorderStroke(1.dp, NeutralGray400),
+                            tonalElevation = 0.dp,
+                            shadowElevation = 0.dp,
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(28.dp)
+                                .semantics {
+                                    role = Role.Button
+                                    contentDescription = printPrebillText
                                 }
-                            )
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                                .then(
+                                    if (testTag.isNotEmpty()) {
+                                        Modifier.setTestTag("${testTag}_print_prebill")
+                                    } else {
+                                        Modifier
+                                    }
+                                )
                         ) {
-                            Icon(
-                                imageVector = vectorResource(Res.drawable.print_vector),
-                                contentDescription = null,
-                                tint = NeutralGray500,
-                                modifier = Modifier.size(14.dp)
-                            )
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = vectorResource(Res.drawable.print_vector),
+                                    contentDescription = null,
+                                    tint = NeutralGray500,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                            }
                         }
                     }
 
