@@ -23,6 +23,11 @@ data class ExtendedColors(
     val neutral100: Color,
     val neutral400: Color,
     val neutral500: Color,
+    val disabledContent: Color,
+    val counterContainer: Color,
+    val counterContainerDisabled: Color,
+    val counterButton: Color,
+    val counterButtonDisabled: Color,
 )
 
 val LightExtendedColors = ExtendedColors(
@@ -31,6 +36,11 @@ val LightExtendedColors = ExtendedColors(
     neutral100 = NeutralGray100,
     neutral400 = NeutralGray400,
     neutral500 = NeutralGray500,
+    disabledContent = NeutralGray300,
+    counterContainer = CounterContainerColor,
+    counterContainerDisabled = CounterContainerDisabledColor,
+    counterButton = CounterButtonColor,
+    counterButtonDisabled = CounterButtonDisabledColor,
 )
 
 val LightColorScheme = lightColorScheme(
@@ -46,9 +56,13 @@ val LightColorScheme = lightColorScheme(
     onTertiary = NeutralGray500,
     tertiaryContainer = TertiaryLight,
     background = NeutralGray,
+    onBackground = NeutralGray500,
     surface = TertiaryLight,
-    onSurface = NeutralGray,
+    onSurface = NeutralGray500,
+    surfaceVariant = NeutralGray100,
+    onSurfaceVariant = NeutralGray500,
     error = RedNormal,
     onError = NeutralGray,
     outline = NeutralGray300,
+    outlineVariant = NeutralGray200,
 )

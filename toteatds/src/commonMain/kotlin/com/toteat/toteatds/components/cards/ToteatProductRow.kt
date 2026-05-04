@@ -24,12 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.CounterContainerColor
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray100
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
-import com.toteat.toteatds.theme.PrimaryNormal
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.tagRegular
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
@@ -57,10 +52,12 @@ fun ToteatProductRow(
     val semanticDescription = contentDescription
         ?: stringResource(Res.string.product_row_description, name, price)
 
-    val containerColor = if (enabled) NeutralGray else NeutralGray100
-    val titleColor = if (enabled) NeutralGray500 else NeutralGray300
-    val descriptionColor = if (enabled) NeutralGray500 else NeutralGray300
-    val priceColor = if (enabled) PrimaryNormal else NeutralGray300
+    val disabledContent = MaterialTheme.colorScheme.extended.disabledContent
+    val containerColor = if (enabled) MaterialTheme.colorScheme.background
+        else MaterialTheme.colorScheme.surfaceVariant
+    val titleColor = if (enabled) MaterialTheme.colorScheme.onBackground else disabledContent
+    val descriptionColor = if (enabled) MaterialTheme.colorScheme.onBackground else disabledContent
+    val priceColor = if (enabled) MaterialTheme.colorScheme.primary else disabledContent
 
     Surface(
         modifier = modifier
@@ -143,14 +140,14 @@ private fun ProductRowBadge(
         modifier = Modifier
             .size(BadgeSize)
             .clip(CircleShape)
-            .background(CounterContainerColor)
+            .background(MaterialTheme.colorScheme.extended.counterContainer)
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = quantity.toString(),
             style = MaterialTheme.typography.bodyLarge,
-            color = NeutralGray500,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
     }

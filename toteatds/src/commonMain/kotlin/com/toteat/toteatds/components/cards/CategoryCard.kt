@@ -24,10 +24,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray100
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.category_card_description
@@ -54,11 +51,12 @@ fun ToteatCategoryCard(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val containerColor = when {
-        !enabled -> NeutralGray100
-        isPressed -> NeutralGray100
-        else -> NeutralGray
+        !enabled -> MaterialTheme.colorScheme.surfaceVariant
+        isPressed -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.background
     }
-    val textColor = if (enabled) NeutralGray500 else NeutralGray300
+    val textColor = if (enabled) MaterialTheme.colorScheme.onBackground
+        else MaterialTheme.colorScheme.extended.disabledContent
 
     Surface(
         onClick = onClick,
@@ -73,7 +71,7 @@ fun ToteatCategoryCard(
         enabled = enabled,
         shape = CardShape,
         color = containerColor,
-        border = BorderStroke(1.dp, NeutralGray300),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         interactionSource = interactionSource
     ) {
         Column(

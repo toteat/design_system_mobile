@@ -26,11 +26,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray100
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
-import com.toteat.toteatds.theme.PrimaryLight
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.subcategory_button_description
@@ -56,16 +52,17 @@ fun ToteatSubcategoryButton(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
+    val disabledContent = MaterialTheme.colorScheme.extended.disabledContent
     val containerColor = when {
-        !enabled -> NeutralGray100
-        isPressed -> NeutralGray100
-        else -> NeutralGray
+        !enabled -> MaterialTheme.colorScheme.surfaceVariant
+        isPressed -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.background
     }
-    val iconTint = if (enabled) MaterialTheme.colorScheme.primary else NeutralGray300
+    val iconTint = if (enabled) MaterialTheme.colorScheme.primary else disabledContent
     val textColor = when {
-        !enabled -> NeutralGray300
-        isPressed -> PrimaryLight
-        else -> NeutralGray500
+        !enabled -> disabledContent
+        isPressed -> MaterialTheme.colorScheme.primaryContainer
+        else -> MaterialTheme.colorScheme.onBackground
     }
 
     Surface(
@@ -80,7 +77,7 @@ fun ToteatSubcategoryButton(
         enabled = enabled,
         shape = ButtonShape,
         color = containerColor,
-        border = BorderStroke(1.dp, NeutralGray300),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         interactionSource = interactionSource
     ) {
         Row(
