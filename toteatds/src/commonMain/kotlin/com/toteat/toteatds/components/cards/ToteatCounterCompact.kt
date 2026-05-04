@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -37,7 +36,6 @@ import designsystemmobile.toteatds.generated.resources.counter_description
 import designsystemmobile.toteatds.generated.resources.counter_increment
 import org.jetbrains.compose.resources.stringResource
 
-private val ContainerShape = RoundedCornerShape(999.dp)
 private val ContainerPadding = 4.dp
 private val ButtonSize = 28.dp
 private val IconSize = 18.dp
@@ -72,7 +70,7 @@ fun ToteatCounterCompact(
                 this.contentDescription = counterDescription
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        shape = ContainerShape,
+        shape = CircleShape,
         color = containerBg
     ) {
         Row(

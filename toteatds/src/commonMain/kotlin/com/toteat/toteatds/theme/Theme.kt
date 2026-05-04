@@ -1,12 +1,25 @@
 package com.toteat.toteatds.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+val ToteatShapes = Shapes(
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(12.dp),
+    large = RoundedCornerShape(16.dp),
+    extraLarge = RoundedCornerShape(28.dp),
+)
+
+val ToteatPillShape = RoundedCornerShape(50)
 
 val LocalExtendedColors = staticCompositionLocalOf { LightExtendedColors }
 

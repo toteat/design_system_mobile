@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,7 +31,6 @@ import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.subcategory_button_description
 import org.jetbrains.compose.resources.stringResource
 
-private val ButtonShape = RoundedCornerShape(16.dp)
 private val ButtonPadding = 12.dp
 private val ChevronSize = 20.dp
 
@@ -75,7 +73,7 @@ fun ToteatSubcategoryButton(
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         enabled = enabled,
-        shape = ButtonShape,
+        shape = MaterialTheme.shapes.large,
         color = containerColor,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         interactionSource = interactionSource

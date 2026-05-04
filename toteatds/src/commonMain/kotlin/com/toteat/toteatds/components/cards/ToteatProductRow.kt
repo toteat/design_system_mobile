@@ -1,15 +1,16 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,8 +32,8 @@ import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.product_row_description
 import org.jetbrains.compose.resources.stringResource
 
-private val RowShape = RoundedCornerShape(12.dp)
 private val RowPadding = 12.dp
+private val RowMinHeight = 66.dp
 private val TextGap = 2.dp
 
 @Composable
@@ -62,13 +63,15 @@ fun ToteatProductRow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            .heightIn(min = RowMinHeight)
             .semantics {
                 this.contentDescription = semanticDescription
                 this.role = Role.Button
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        shape = RowShape,
-        color = containerColor
+        shape = MaterialTheme.shapes.medium,
+        color = containerColor,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
         Row(
             modifier = Modifier.padding(RowPadding),
