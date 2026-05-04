@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.34] - 2026-05-04
 ### Fixed
 - **Theme**: `onSurface` was set to white (`NeutralGray`) over a cream `surface` (`TertiaryLight`), producing unreadable text. Changed to `NeutralGray500`.
 
