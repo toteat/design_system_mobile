@@ -98,6 +98,7 @@ import com.toteat.toteatds.components.topbar.BackNavigationTopBar
 import com.toteat.toteatds.components.topbar.CenterContentTopBar
 import com.toteat.toteatds.components.topbar.LoginTopBar
 import com.toteat.toteatds.components.display.ToteatAmountDisplay
+import com.toteat.toteatds.components.display.ToteatPendingAmountLabel
 import com.toteat.toteatds.components.display.ToteatPillLabel
 import com.toteat.toteatds.components.keypad.ToteatNumericKeypad
 import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
@@ -1311,6 +1312,17 @@ fun NumericKeypadShowcase() {
             onNumberClick = { number -> inputValue += number.toString() },
             onDeleteClick = { if (inputValue.isNotEmpty()) inputValue = inputValue.dropLast(1) },
             onActionClick = { inputValue = "" }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Pending Amount Label", style = MaterialTheme.typography.titleMedium)
+
+        ToteatPendingAmountLabel(amount = "\$ 32.780")
+
+        ToteatPendingAmountLabel(
+            label = "Saldo restante :",
+            amount = "\$ 12.780"
         )
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)

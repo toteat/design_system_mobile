@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatPendingAmountLabel**: New non-interactive banner showing a pending amount (e.g. "Monto pendiente a pagar : $ 32.780"). Uses `TertiarySurface` background with top-rounded corners so it can be stacked above an action button or `AmountBottomBar`. Configurable label and amount, with full accessibility semantics.
+
 ## [0.1.30] - 2026-04-17
 ### Changed
 - **ToteatAmountDisplay**: Text is now always visually centered within the container regardless of content length. Visual refresh to match design spec: corner radius reduced from 14dp to 8dp, white background with a 1dp `NeutralGray100` border and a subtle top inner shadow (`rgba(0,0,0,0.07)`) for depth.
