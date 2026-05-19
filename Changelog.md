@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 ### Added
-- **ToteatPendingAmountLabel**: New non-interactive banner showing a pending amount (e.g. "Monto pendiente a pagar : $ 32.780"). Uses `TertiarySurface` background with top-rounded corners so it can be stacked above an action button or `AmountBottomBar`. Configurable label and amount, with full accessibility semantics.
+- **ToteatPendingAmountLabel**: New non-interactive banner showing a pending amount (e.g. "Monto pendiente a pagar : $ 32.780") on a `TertiarySurface` background, intended to sit above an action button or `AmountBottomBar`. Configurable label and amount, with full accessibility semantics.
 
 ## [0.1.34] - 2026-05-04
 ### Fixed
