@@ -4,6 +4,29 @@
 ### Added
 - **ToteatPendingAmountLabel**: New non-interactive banner showing a pending amount (e.g. "Monto pendiente a pagar : $ 32.780"). Uses `TertiarySurface` background with top-rounded corners so it can be stacked above an action button or `AmountBottomBar`. Configurable label and amount, with full accessibility semantics.
 
+## [0.1.34] - 2026-05-04
+### Fixed
+- **Theme**: `onSurface` was set to white (`NeutralGray`) over a cream `surface` (`TertiaryLight`), producing unreadable text. Changed to `NeutralGray500`.
+
+### Changed
+- **ColorScheme**: Filled in `onBackground`, `surfaceVariant`, `onSurfaceVariant` and `outlineVariant` so components can rely on MD3 roles instead of importing palette constants directly.
+- **ExtendedColors**: Added `disabledContent`, `counterContainer`, `counterContainerDisabled`, `counterButton`, `counterButtonDisabled`. The counter palette is now part of the theme instead of top-level constants consumed by components.
+- **ToteatCategoryCard**, **ToteatProductRow**, **ToteatCounterCompact**, **ToteatCounterCompactBasic**, **ToteatSubcategoryButton**: Migrated to `MaterialTheme.colorScheme.*` and `extended.*` roles instead of importing `NeutralGray*` / `Counter*Color` / `PrimaryNormal` directly. No visual change intended; palette can now be retuned from the theme.
+
+## [0.1.33] - 2026-04-23
+### Added
+- **AmountBottomBar**: New parameter `showPrintPreBill: Boolean = true`. When `false`, the print pre-bill button is omitted from the bar. Consumers on form factors without an integrated printer (e.g. mobile phones running the POS) can now hide the button entirely instead of rendering a button that has no device to route to.
+
+### Changed
+- **ToteatCategoryCard**: Added a 1dp `NeutralGray300` border. The shadow removal in 0.1.31 left cards without clear separation on light backgrounds; the border restores the visual boundary without re-introducing the HWUI shadow-geometry cost.
+- **ToteatSubcategoryButton**: Same as above — added a 1dp `NeutralGray300` border for visual separation after the shadow removal.
+
+## [0.1.31] - 2026-04-17
+### Performance
+- **ToteatProductRow, CategoryCard, ToteatSubcategoryButton**: Removed `shadowElevation = 2.dp`. On low-end terminals (e.g. Getnet A960 with Skia-OpenGL), HWUI spends significant per-frame time computing shadow geometry for every visible card. Removing the shadow drops this cost to zero while the rounded corners + container color still provide visual separation.
+- **FloatingTotalBar**: Removed `shadowElevation = 8.dp` (large persistent shadow on the menu bottom bar).
+- **RestaurantNameTopBarItem, ProcessNameTopBarItem**: Dropped `basicMarquee(iterations = Int.MAX_VALUE)` and the surrounding `Row(width = IntrinsicSize.Max)` wrapper. The marquee `ModifierNode` was being rebuilt on every host state emission, forcing the item to recompose on unrelated updates (Layout Inspector counts climbed steadily even when `restaurantName` did not change). `IntrinsicSize.Max` added an O(n) intrinsic measurement pass for no layout benefit. Long names now truncate with an ellipsis via `maxLines = 1, overflow = Ellipsis`.
+
 ## [0.1.30] - 2026-04-17
 ### Changed
 - **ToteatAmountDisplay**: Text is now always visually centered within the container regardless of content length. Visual refresh to match design spec: corner radius reduced from 14dp to 8dp, white background with a 1dp `NeutralGray100` border and a subtle top inner shadow (`rgba(0,0,0,0.07)`) for depth.

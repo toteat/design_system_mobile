@@ -1,5 +1,6 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,16 +23,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray100
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.category_card_description
 import org.jetbrains.compose.resources.stringResource
 
-private val CardShape = RoundedCornerShape(16.dp)
 private val CardHeight = 72.dp
 private val CardWidth = 160.dp
 private val VerticalPadding = 12.dp
@@ -53,11 +49,12 @@ fun ToteatCategoryCard(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val containerColor = when {
-        !enabled -> NeutralGray100
-        isPressed -> NeutralGray100
-        else -> NeutralGray
+        !enabled -> MaterialTheme.colorScheme.surfaceVariant
+        isPressed -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.background
     }
-    val textColor = if (enabled) NeutralGray500 else NeutralGray300
+    val textColor = if (enabled) MaterialTheme.colorScheme.onBackground
+        else MaterialTheme.colorScheme.extended.disabledContent
 
     Surface(
         onClick = onClick,
@@ -70,9 +67,9 @@ fun ToteatCategoryCard(
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         enabled = enabled,
-        shape = CardShape,
+        shape = MaterialTheme.shapes.large,
         color = containerColor,
-        shadowElevation = 2.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         interactionSource = interactionSource
     ) {
         Column(

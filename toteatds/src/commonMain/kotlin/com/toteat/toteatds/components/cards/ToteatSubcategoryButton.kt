@@ -1,5 +1,6 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,17 +25,12 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray100
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
-import com.toteat.toteatds.theme.PrimaryLight
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.subcategory_button_description
 import org.jetbrains.compose.resources.stringResource
 
-private val ButtonShape = RoundedCornerShape(16.dp)
 private val ButtonPadding = 12.dp
 private val ChevronSize = 20.dp
 
@@ -55,16 +50,17 @@ fun ToteatSubcategoryButton(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
+    val disabledContent = MaterialTheme.colorScheme.extended.disabledContent
     val containerColor = when {
-        !enabled -> NeutralGray100
-        isPressed -> NeutralGray100
-        else -> NeutralGray
+        !enabled -> MaterialTheme.colorScheme.surfaceVariant
+        isPressed -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.background
     }
-    val iconTint = if (enabled) MaterialTheme.colorScheme.primary else NeutralGray300
+    val iconTint = if (enabled) MaterialTheme.colorScheme.primary else disabledContent
     val textColor = when {
-        !enabled -> NeutralGray300
-        isPressed -> PrimaryLight
-        else -> NeutralGray500
+        !enabled -> disabledContent
+        isPressed -> MaterialTheme.colorScheme.primaryContainer
+        else -> MaterialTheme.colorScheme.onBackground
     }
 
     Surface(
@@ -77,9 +73,9 @@ fun ToteatSubcategoryButton(
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         enabled = enabled,
-        shape = ButtonShape,
+        shape = MaterialTheme.shapes.large,
         color = containerColor,
-        shadowElevation = 2.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         interactionSource = interactionSource
     ) {
         Row(

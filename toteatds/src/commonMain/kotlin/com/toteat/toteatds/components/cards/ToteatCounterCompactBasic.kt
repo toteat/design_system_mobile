@@ -22,13 +22,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.CounterButtonColor
-import com.toteat.toteatds.theme.CounterButtonDisabledColor
-import com.toteat.toteatds.theme.CounterContainerColor
-import com.toteat.toteatds.theme.CounterContainerDisabledColor
-import com.toteat.toteatds.theme.NeutralGray200
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.counter_decrement
@@ -55,10 +49,12 @@ fun ToteatCounterCompactBasic(
     val incrementDescription = stringResource(Res.string.counter_increment)
     val decrementDescription = stringResource(Res.string.counter_decrement)
 
-    val containerBg = if (enabled) CounterContainerColor else CounterContainerDisabledColor
-    val buttonBg = if (enabled) CounterButtonColor else CounterButtonDisabledColor
-    val iconTint = if (enabled) NeutralGray500 else NeutralGray200
-    val textColor = if (enabled) NeutralGray500 else NeutralGray300
+    val extended = MaterialTheme.colorScheme.extended
+    val containerBg = if (enabled) extended.counterContainer else extended.counterContainerDisabled
+    val buttonBg = if (enabled) extended.counterButton else extended.counterButtonDisabled
+    val iconTint = if (enabled) MaterialTheme.colorScheme.onSurface
+        else MaterialTheme.colorScheme.outlineVariant
+    val textColor = if (enabled) MaterialTheme.colorScheme.onSurface else extended.disabledContent
 
     Surface(
         modifier = modifier

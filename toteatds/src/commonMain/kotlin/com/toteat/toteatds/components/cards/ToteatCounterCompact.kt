@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -28,13 +27,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.CounterButtonColor
-import com.toteat.toteatds.theme.CounterButtonDisabledColor
-import com.toteat.toteatds.theme.CounterContainerColor
-import com.toteat.toteatds.theme.CounterContainerDisabledColor
-import com.toteat.toteatds.theme.NeutralGray200
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.counter_decrement
@@ -43,7 +36,6 @@ import designsystemmobile.toteatds.generated.resources.counter_description
 import designsystemmobile.toteatds.generated.resources.counter_increment
 import org.jetbrains.compose.resources.stringResource
 
-private val ContainerShape = RoundedCornerShape(999.dp)
 private val ContainerPadding = 4.dp
 private val ButtonSize = 28.dp
 private val IconSize = 18.dp
@@ -65,10 +57,12 @@ fun ToteatCounterCompact(
         stringResource(Res.string.counter_decrement)
     }
 
-    val containerBg = if (enabled) CounterContainerColor else CounterContainerDisabledColor
-    val buttonBg = if (enabled) CounterButtonColor else CounterButtonDisabledColor
-    val iconTint = if (enabled) NeutralGray500 else NeutralGray200
-    val textColor = if (enabled) NeutralGray500 else NeutralGray300
+    val extended = MaterialTheme.colorScheme.extended
+    val containerBg = if (enabled) extended.counterContainer else extended.counterContainerDisabled
+    val buttonBg = if (enabled) extended.counterButton else extended.counterButtonDisabled
+    val iconTint = if (enabled) MaterialTheme.colorScheme.onSurface
+        else MaterialTheme.colorScheme.outlineVariant
+    val textColor = if (enabled) MaterialTheme.colorScheme.onSurface else extended.disabledContent
 
     Surface(
         modifier = modifier
@@ -76,7 +70,7 @@ fun ToteatCounterCompact(
                 this.contentDescription = counterDescription
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        shape = ContainerShape,
+        shape = CircleShape,
         color = containerBg
     ) {
         Row(

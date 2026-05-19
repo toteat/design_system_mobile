@@ -1,15 +1,16 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,20 +25,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.CounterContainerColor
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray100
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray500
-import com.toteat.toteatds.theme.PrimaryNormal
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.tagRegular
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.product_row_description
 import org.jetbrains.compose.resources.stringResource
 
-private val RowShape = RoundedCornerShape(12.dp)
 private val RowPadding = 12.dp
+private val RowMinHeight = 66.dp
 private val TextGap = 2.dp
 
 @Composable
@@ -57,22 +53,25 @@ fun ToteatProductRow(
     val semanticDescription = contentDescription
         ?: stringResource(Res.string.product_row_description, name, price)
 
-    val containerColor = if (enabled) NeutralGray else NeutralGray100
-    val titleColor = if (enabled) NeutralGray500 else NeutralGray300
-    val descriptionColor = if (enabled) NeutralGray500 else NeutralGray300
-    val priceColor = if (enabled) PrimaryNormal else NeutralGray300
+    val disabledContent = MaterialTheme.colorScheme.extended.disabledContent
+    val containerColor = if (enabled) MaterialTheme.colorScheme.background
+        else MaterialTheme.colorScheme.surfaceVariant
+    val titleColor = if (enabled) MaterialTheme.colorScheme.onBackground else disabledContent
+    val descriptionColor = if (enabled) MaterialTheme.colorScheme.onBackground else disabledContent
+    val priceColor = if (enabled) MaterialTheme.colorScheme.primary else disabledContent
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            .heightIn(min = RowMinHeight)
             .semantics {
                 this.contentDescription = semanticDescription
                 this.role = Role.Button
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        shape = RowShape,
+        shape = MaterialTheme.shapes.medium,
         color = containerColor,
-        shadowElevation = 2.dp
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
         Row(
             modifier = Modifier.padding(RowPadding),
@@ -144,14 +143,14 @@ private fun ProductRowBadge(
         modifier = Modifier
             .size(BadgeSize)
             .clip(CircleShape)
-            .background(CounterContainerColor)
+            .background(MaterialTheme.colorScheme.extended.counterContainer)
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = quantity.toString(),
             style = MaterialTheme.typography.bodyLarge,
-            color = NeutralGray500,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
     }
