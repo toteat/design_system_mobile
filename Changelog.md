@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.36] - 2026-05-27
 ### Added
 - **AmountBottomBar**: New optional parameter `onDiscountClick: (() -> Unit)? = null`. When provided, a discount icon button (`discount_ticket`) is rendered next to the print pre-bill button, with identical styling. The button is omitted when the callback is `null`, so existing consumers are unaffected.
 
