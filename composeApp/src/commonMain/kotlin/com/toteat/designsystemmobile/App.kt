@@ -555,6 +555,28 @@ fun AmountBottomBarShowcase() {
                 onPayClick = {}
             )
         }
+
+        Text("Con botón de descuento", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 32.780",
+                paidAmount = "$ 0",
+                amountToPay = "$32.780",
+                onDiscountClick = {},
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
+        }
     }
 }
 

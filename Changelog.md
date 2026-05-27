@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **AmountBottomBar**: New optional parameter `onDiscountClick: (() -> Unit)? = null`. When provided, a discount icon button (`discount_ticket`) is rendered next to the print pre-bill button, with identical styling. The button is omitted when the callback is `null`, so existing consumers are unaffected.
+
+### Changed
+- **ExtendedColors**: Added `tertiarySurface` and `tertiaryMuted` roles so the summary surface and muted summary text are themeable instead of importing the `TertiarySurface` / `TertiaryMuted` palette constants directly.
+- **AmountBottomBar**: Migrated all colors with a theme role to `MaterialTheme.colorScheme.*` and `extended.*` (`background`, `secondary`, `onSecondary`, `onPrimary`, `onSurfaceVariant`, `extended.neutral400`, `extended.disabledContent`, `extended.tertiarySurface`, `extended.tertiaryMuted`) instead of importing `NeutralGray*` / `SecondaryNormal` / `Tertiary*` directly. No visual change intended; palette can now be retuned from the theme. Also removed dead imports (`CreditCard`, `bodyMediumRegular`).
+
 ## [0.1.34] - 2026-05-04
 ### Fixed
 - **Theme**: `onSurface` was set to white (`NeutralGray`) over a cream `surface` (`TertiaryLight`), producing unreadable text. Changed to `NeutralGray500`.

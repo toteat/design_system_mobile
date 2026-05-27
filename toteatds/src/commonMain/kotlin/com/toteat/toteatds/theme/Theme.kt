@@ -41,6 +41,9 @@ data class ExtendedColors(
     val counterContainerDisabled: Color,
     val counterButton: Color,
     val counterButtonDisabled: Color,
+    //Summary surfaces
+    val tertiarySurface: Color,
+    val tertiaryMuted: Color,
 )
 
 val LightExtendedColors = ExtendedColors(
@@ -54,6 +57,8 @@ val LightExtendedColors = ExtendedColors(
     counterContainerDisabled = CounterContainerDisabledColor,
     counterButton = CounterButtonColor,
     counterButtonDisabled = CounterButtonDisabledColor,
+    tertiarySurface = TertiarySurface,
+    tertiaryMuted = TertiaryMuted,
 )
 
 val LightColorScheme = lightColorScheme(

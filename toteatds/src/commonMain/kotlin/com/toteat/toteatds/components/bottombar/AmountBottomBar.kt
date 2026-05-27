@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
@@ -36,18 +35,14 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.toteat.toteatds.theme.NeutralGray
-import com.toteat.toteatds.theme.NeutralGray300
-import com.toteat.toteatds.theme.NeutralGray400
-import com.toteat.toteatds.theme.NeutralGray500
 import com.toteat.toteatds.theme.SecondaryNormal
-import com.toteat.toteatds.theme.TertiaryMuted
-import com.toteat.toteatds.theme.TertiarySurface
 import com.toteat.toteatds.theme.ToteatTheme
-import com.toteat.toteatds.theme.bodyMediumRegular
+import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.helperRegular
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
@@ -56,6 +51,8 @@ import designsystemmobile.toteatds.generated.resources.amount_paid
 import designsystemmobile.toteatds.generated.resources.amount_to_pay
 import designsystemmobile.toteatds.generated.resources.confirm
 import designsystemmobile.toteatds.generated.resources.credit_card_icon
+import designsystemmobile.toteatds.generated.resources.discount
+import designsystemmobile.toteatds.generated.resources.discount_ticket
 import designsystemmobile.toteatds.generated.resources.pan_fire_icon
 import designsystemmobile.toteatds.generated.resources.pay
 import designsystemmobile.toteatds.generated.resources.payment_detail
@@ -78,11 +75,12 @@ private val AmountBottomBarAmountWidth = 74.dp
 fun AmountBottomBar(
     subtotalAmount: String,
     amountToPay: String,
-    paidAmount: String? = null,
     onPrintPreBillClick: () -> Unit,
     onConfirmClick: () -> Unit,
     onPayClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onDiscountClick: (() -> Unit)? = null,
+    paidAmount: String? = null,
     enabled: Boolean = true,
     confirmEnabled: Boolean = enabled,
     payEnabled: Boolean = enabled,
@@ -99,6 +97,7 @@ fun AmountBottomBar(
     val amountPaidText = stringResource(Res.string.amount_paid)
     val amountToPayText = stringResource(Res.string.amount_to_pay)
     val printPrebillText = stringResource(Res.string.print_prebill)
+    val discountText = stringResource(Res.string.discount)
     val confirmText = stringResource(Res.string.confirm)
     val payText = stringResource(Res.string.pay)
     val paymentDetailText = stringResource(Res.string.payment_detail)
@@ -128,7 +127,7 @@ fun AmountBottomBar(
         modifier = modifier
             .fillMaxWidth()
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        color = NeutralGray,
+        color = MaterialTheme.colorScheme.background,
         tonalElevation = 0.dp
     ) {
         Column(
@@ -140,7 +139,7 @@ fun AmountBottomBar(
         ) {
             Surface(
                 shape = AmountBottomBarTopShape,
-                color = TertiarySurface,
+                color = MaterialTheme.colorScheme.extended.tertiarySurface,
                 tonalElevation = 0.dp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,41 +159,34 @@ fun AmountBottomBar(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (showPrintPreBill) {
-                        Surface(
+                        AmountIconButton(
                             onClick = onPrintPreBillClick,
                             enabled = enabled,
-                            shape = AmountBottomBarPrintShape,
-                            color = NeutralGray,
-                            border = BorderStroke(1.dp, NeutralGray400),
-                            tonalElevation = 0.dp,
-                            shadowElevation = 0.dp,
-                            modifier = Modifier
-                                .width(40.dp)
-                                .height(28.dp)
-                                .semantics {
-                                    role = Role.Button
-                                    contentDescription = printPrebillText
-                                }
-                                .then(
-                                    if (testTag.isNotEmpty()) {
-                                        Modifier.setTestTag("${testTag}_print_prebill")
-                                    } else {
-                                        Modifier
-                                    }
-                                )
-                        ) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = vectorResource(Res.drawable.print_vector),
-                                    contentDescription = null,
-                                    tint = NeutralGray500,
-                                    modifier = Modifier.size(14.dp)
-                                )
+                            icon = vectorResource(Res.drawable.print_vector),
+                            contentDescription = printPrebillText,
+                            modifier = if (testTag.isNotEmpty()) {
+                                Modifier.setTestTag("${testTag}_print_prebill")
+                            } else {
+                                Modifier
                             }
+                        )
+                    }
+
+                    if (onDiscountClick != null) {
+                        if (showPrintPreBill) {
+                            Spacer(modifier = Modifier.width(8.dp))
                         }
+                        AmountIconButton(
+                            onClick = onDiscountClick,
+                            enabled = enabled,
+                            icon = vectorResource(Res.drawable.discount_ticket),
+                            contentDescription = discountText,
+                            modifier = if (testTag.isNotEmpty()) {
+                                Modifier.setTestTag("${testTag}_discount")
+                            } else {
+                                Modifier
+                            }
+                        )
                     }
 
                     Column(
@@ -216,9 +208,9 @@ fun AmountBottomBar(
                                     label = subtotalText,
                                     amount = subtotalAmount,
                                     amountStyle = MaterialTheme.typography.bodySmall,
-                                    amountColor = TertiaryMuted,
+                                    amountColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                     labelStyle = MaterialTheme.typography.helperRegular,
-                                    labelColor = TertiaryMuted,
+                                    labelColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                     testTag = if (testTag.isNotEmpty()) "${testTag}_subtotal" else ""
                                 )
 
@@ -228,9 +220,9 @@ fun AmountBottomBar(
                                         label = amountPaidText,
                                         amount = paidAmount,
                                         amountStyle = MaterialTheme.typography.bodySmall,
-                                        amountColor = TertiaryMuted,
+                                        amountColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                         labelStyle = MaterialTheme.typography.helperRegular,
-                                        labelColor = TertiaryMuted,
+                                        labelColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                         testTag = if (testTag.isNotEmpty()) "${testTag}_paid" else ""
                                     )
                                 }
@@ -278,7 +270,7 @@ fun AmountBottomBar(
                                             Icons.Default.KeyboardArrowUp
                                         },
                                         contentDescription = null,
-                                        tint = TertiaryMuted,
+                                        tint = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                         modifier = Modifier.size(14.dp)
                                     )
                                 }
@@ -301,13 +293,13 @@ fun AmountBottomBar(
                         onClick = onConfirmClick,
                         enabled = confirmEnabled,
                         text = confirmText,
-                        containerColor = SecondaryNormal,
-                        contentColor = NeutralGray,
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary,
                         leadingIcon = {
                             Icon(
                                 imageVector = vectorResource(Res.drawable.pan_fire_icon),
                                 contentDescription = null,
-                                tint = NeutralGray,
+                                tint = MaterialTheme.colorScheme.onSecondary,
                                 modifier = Modifier.size(16.dp)
                             )
                         },
@@ -327,12 +319,12 @@ fun AmountBottomBar(
                             enabled = enabled,
                             text = paymentDetailText,
                             containerColor = paymentDetailContainerColor,
-                            contentColor = NeutralGray,
+                            contentColor = MaterialTheme.colorScheme.onSecondary,
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.Check,
                                     contentDescription = null,
-                                    tint = NeutralGray,
+                                    tint = MaterialTheme.colorScheme.onSecondary,
                                     modifier = Modifier.size(16.dp)
                                 )
                             },
@@ -352,12 +344,12 @@ fun AmountBottomBar(
                             enabled = payEnabled,
                             text = payText,
                             containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = NeutralGray,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
                             leadingIcon = {
                                 Icon(
                                     imageVector = vectorResource(Res.drawable.credit_card_icon),
                                     contentDescription = null,
-                                    tint = NeutralGray,
+                                    tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(16.dp)
                                 )
                             },
@@ -379,6 +371,44 @@ fun AmountBottomBar(
 }
 
 @Composable
+private fun AmountIconButton(
+    onClick: () -> Unit,
+    enabled: Boolean,
+    icon: ImageVector,
+    contentDescription: String,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        enabled = enabled,
+        shape = AmountBottomBarPrintShape,
+        color = MaterialTheme.colorScheme.background,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.extended.neutral400),
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+        modifier = modifier
+            .width(40.dp)
+            .height(28.dp)
+            .semantics {
+                role = Role.Button
+                this.contentDescription = contentDescription
+            }
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(14.dp)
+            )
+        }
+    }
+}
+
+@Composable
 private fun AmountActionButton(
     onClick: () -> Unit,
     enabled: Boolean,
@@ -392,7 +422,7 @@ private fun AmountActionButton(
         onClick = onClick,
         enabled = enabled,
         shape = AmountBottomBarActionShape,
-        color = if (enabled) containerColor else NeutralGray300,
+        color = if (enabled) containerColor else MaterialTheme.colorScheme.extended.disabledContent,
         contentColor = contentColor,
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
@@ -468,9 +498,9 @@ fun AmountBotombar(
 private fun AmountRow(
     label: String,
     amount: String,
-    amountStyle: androidx.compose.ui.text.TextStyle,
-    amountColor: androidx.compose.ui.graphics.Color,
-    labelStyle: androidx.compose.ui.text.TextStyle,
+    amountStyle: TextStyle,
+    amountColor: Color,
+    labelStyle: TextStyle,
     labelColor: Color,
     testTag: String = ""
 ) {
@@ -564,6 +594,32 @@ private fun AmountBottomBarPreviewWithoutPaidAmount() {
                     paidAmount = "$ 0",
                     amountToPay = "$32.780",
                     initialPaidAmountExpanded = true,
+                    onPrintPreBillClick = {},
+                    onConfirmClick = {},
+                    onPayClick = {}
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun AmountBottomBarPreviewWithDiscount() {
+    ToteatTheme {
+        Scaffold(
+            bottomBar = {
+                AmountBottomBar(
+                    subtotalAmount = "$ 32.780",
+                    paidAmount = "$ 0",
+                    amountToPay = "$32.780",
+                    onDiscountClick = {},
                     onPrintPreBillClick = {},
                     onConfirmClick = {},
                     onPayClick = {}
