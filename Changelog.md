@@ -8,6 +8,10 @@
 - **ExtendedColors**: Added `tertiarySurface` and `tertiaryMuted` roles so the summary surface and muted summary text are themeable instead of importing the `TertiarySurface` / `TertiaryMuted` palette constants directly.
 - **AmountBottomBar**: Migrated all colors with a theme role to `MaterialTheme.colorScheme.*` and `extended.*` (`background`, `secondary`, `onSecondary`, `onPrimary`, `onSurfaceVariant`, `extended.neutral400`, `extended.disabledContent`, `extended.tertiarySurface`, `extended.tertiaryMuted`) instead of importing `NeutralGray*` / `SecondaryNormal` / `Tertiary*` directly. No visual change intended; palette can now be retuned from the theme. Also removed dead imports (`CreditCard`, `bodyMediumRegular`).
 
+## [0.1.35] - 2026-05-19
+### Added
+- **ToteatPendingAmountLabel**: New non-interactive banner showing a pending amount (e.g. "Monto pendiente a pagar : $ 32.780") on a `TertiarySurface` background, intended to sit above an action button or `AmountBottomBar`. Configurable label and amount, with full accessibility semantics.
+
 ## [0.1.34] - 2026-05-04
 ### Fixed
 - **Theme**: `onSurface` was set to white (`NeutralGray`) over a cream `surface` (`TertiaryLight`), producing unreadable text. Changed to `NeutralGray500`.

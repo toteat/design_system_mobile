@@ -43,9 +43,7 @@ fun LoginTopBar(
                     }
             )
         },
-        rightComponent = {
-            CustomerServiceIcon(onIconClick = onCustomerServiceButtonClick)
-        },
+        rightComponent = {},
         testTag = testTag
     )
 }
