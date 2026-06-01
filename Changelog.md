@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.38] - 2026-06-01
 ### Added
 - **ToteatToastMessage**: New optional parameter `showCloseButton: Boolean = true`. When `false`, the trailing close (X) icon button is omitted — useful for toasts that auto-dismiss and don't need an explicit close affordance.
 - **AmountBottomBar**: New optional parameter `discountAmount: String? = null`. When provided, a "Descuento" row is rendered in the breakdown between `paidAmount` and `amountToPay`, styled like the other muted lines. The row participates in the existing expand/collapse toggle (same as `paidAmount`), and the toggle arrow now appears whenever there is at least one optional row beyond the always-visible Subtotal + A pagar.
