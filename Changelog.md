@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.37] - 2026-06-01
 ### Added
 - **ToteatTextField**: New optional parameters `imeAction: ImeAction = ImeAction.Default` and `onKeyboardAction: KeyboardActionHandler? = null` plumbed through to the underlying `BasicTextField`. Consumers can now configure the soft-keyboard confirmation action (e.g. `ImeAction.Done`) and react to it without losing the design-system styling. Existing call sites are unaffected — the defaults preserve the previous behaviour.
 
