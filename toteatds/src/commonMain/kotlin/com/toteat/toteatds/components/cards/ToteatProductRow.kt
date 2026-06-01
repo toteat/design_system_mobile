@@ -25,6 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.tags.StatusTag
+import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.tagRegular
 import com.toteat.toteatds.utils.setTestTag
@@ -47,6 +49,8 @@ fun ToteatProductRow(
     enabled: Boolean = true,
     showControls: Boolean = true,
     description: String? = null,
+    statusTag: StatusTagVariant? = null,
+    statusTagText: String? = null,
     contentDescription: String? = null,
     testTag: String = ""
 ) {
@@ -110,6 +114,16 @@ fun ToteatProductRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_price") else Modifier
+                )
+            }
+
+            // Middle: optional status tag (e.g. "En promoción") fed from the backend.
+            if (statusTag != null) {
+                StatusTag(
+                    variant = statusTag,
+                    text = statusTagText,
+                    modifier = Modifier.padding(end = 8.dp),
+                    testTag = if (testTag.isNotEmpty()) "${testTag}_status_tag" else ""
                 )
             }
 

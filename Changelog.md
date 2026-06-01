@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatToastMessage**: New optional parameter `showCloseButton: Boolean = true`. When `false`, the trailing close (X) icon button is omitted — useful for toasts that auto-dismiss and don't need an explicit close affordance.
+- **AmountBottomBar**: New optional parameter `discountAmount: String? = null`. When provided, a "Descuento" row is rendered in the breakdown between `paidAmount` and `amountToPay`, styled like the other muted lines. The row participates in the existing expand/collapse toggle (same as `paidAmount`), and the toggle arrow now appears whenever there is at least one optional row beyond the always-visible Subtotal + A pagar.
+- **StatusTagVariant**: New `Promotion` variant (`BlueLight` background, `BlueNormal` text, default text "En promoción"). Together with the existing `StatusTag.text` override, hosts can either use the default copy or pass a backend-provided label such as "20% OFF".
+- **ToteatProductRow**: New optional parameters `statusTag: StatusTagVariant? = null` and `statusTagText: String? = null`. When `statusTag` is set, a `StatusTag` is rendered between the text column and the trailing counter/badge, optionally with a custom label.
+
+### Changed
+- **ToteatToastMessage**: When `title` is blank, the title `Text` is no longer rendered (it previously consumed a line of vertical space even when empty). Toasts with only a `message` now layout the message centered vertically against the icon. Existing call sites that pass a non-blank title are unaffected.
+- **AmountBottomBar**: The top summary surface now uses `heightIn(min = AmountBottomBarTopHeight)` instead of a fixed `height(...)` so that the extra "Descuento" row introduced above does not clip the bottom "A pagar" row. Visual unchanged for existing 2/3-row breakdowns.
+
 ## [0.1.37] - 2026-06-01
 ### Added
 - **ToteatTextField**: New optional parameters `imeAction: ImeAction = ImeAction.Default` and `onKeyboardAction: KeyboardActionHandler? = null` plumbed through to the underlying `BasicTextField`. Consumers can now configure the soft-keyboard confirmation action (e.g. `ImeAction.Done`) and react to it without losing the design-system styling. Existing call sites are unaffected — the defaults preserve the previous behaviour.

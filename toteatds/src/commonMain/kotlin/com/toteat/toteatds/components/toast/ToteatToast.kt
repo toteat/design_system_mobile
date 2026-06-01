@@ -115,13 +115,15 @@ fun ToteatToastMessage(
     type: ToteatToastMessageType,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
+    showCloseButton: Boolean = true,
     testTag: String = ""
 ) {
     // Localized strings for accessibility
     val toastDescription = stringResource(type.descriptionRes, title, message)
     val closeButtonDescription = stringResource(Res.string.toast_close_message)
     val toastTypeName = stringResource(type.typeNameRes)
-    
+    val hasTitle = title.isNotBlank()
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -151,12 +153,14 @@ fun ToteatToastMessage(
         Spacer(Modifier.width(12.dp))
 
         Column(Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier)
-            )
+            if (hasTitle) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier)
+                )
+            }
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMediumRegular,
@@ -165,20 +169,22 @@ fun ToteatToastMessage(
             )
         }
 
-        IconButton(
-            onClick = onDismiss,
-            modifier = Modifier
-                .size(24.dp)
-                .semantics {
-                    contentDescription = closeButtonDescription
-                }
-                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_close") else Modifier)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary
-            )
+        if (showCloseButton) {
+            IconButton(
+                onClick = onDismiss,
+                modifier = Modifier
+                    .size(24.dp)
+                    .semantics {
+                        contentDescription = closeButtonDescription
+                    }
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_close") else Modifier)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }

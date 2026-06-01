@@ -106,6 +106,7 @@
     <string name="status_tag_confirmed">Confirmado</string>
     <string name="status_tag_ended">Finalizado</string>
     <string name="status_tag_cancelled">Cancelado</string>
+    <string name="status_tag_in_promotion">En promoción</string>
     <string name="status_tag_description">Estado: %s</string>
     <string name="order_list_ticket">order_list_ticket</string>
     <string name="action_bottom_sheet_description">Panel de acciones</string>

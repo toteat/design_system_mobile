@@ -578,6 +578,51 @@ fun AmountBottomBarShowcase() {
                 onPayClick = {}
             )
         }
+
+        Text("Con descuento aplicado (línea de desglose)", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 40.000",
+                paidAmount = "$ 20.000",
+                amountToPay = "$ 31.400",
+                discountAmount = "-$ 5.000",
+                initialPaidAmountExpanded = true,
+                onDiscountClick = {},
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
+        }
+
+        Text("Con descuento aplicado, sin botón de descuento", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 40.000",
+                amountToPay = "$ 35.000",
+                discountAmount = "-$ 5.000",
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
+        }
     }
 }
 
@@ -737,6 +782,34 @@ fun ToastShowcase() {
             title = "Info",
             message = "This is an info message.",
             type = ToteatToastMessageType.Info,
+            onDismiss = {}
+        )
+
+        // New: message-only (blank title) — title row should collapse so the
+        // message sits vertically centered next to the icon.
+        ToteatToastMessage(
+            title = "",
+            message = "Success without title — vertically centered.",
+            type = ToteatToastMessageType.Success,
+            onDismiss = {}
+        )
+
+        // New: auto-dismiss style without the close affordance.
+        ToteatToastMessage(
+            title = "",
+            message = "Auto-dismiss without close button.",
+            type = ToteatToastMessageType.Success,
+            showCloseButton = false,
+            onDismiss = {}
+        )
+
+        // New: title + message but no close button — for hosts that already
+        // manage the dismissal timer themselves.
+        ToteatToastMessage(
+            title = "Listo",
+            message = "Title + message, no close button.",
+            type = ToteatToastMessageType.Info,
+            showCloseButton = false,
             onDismiss = {}
         )
     }
@@ -1241,6 +1314,30 @@ fun ProductRowShowcase() {
             onIncrement = {},
             onDecrement = {},
             enabled = false
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Con tag de promoción (default text)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Hamburguesa Kimchi",
+            price = "$ 7.000",
+            description = "Descripción del componente (opcional)",
+            quantity = 0,
+            onIncrement = {},
+            onDecrement = {},
+            statusTag = StatusTagVariant.Promotion
+        )
+
+        Text("Con tag de promoción (texto custom desde backend)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Hamburguesa BBQ",
+            price = "$ 9.000",
+            description = "Descripción del componente (opcional)",
+            quantity = 1,
+            onIncrement = {},
+            onDecrement = {},
+            statusTag = StatusTagVariant.Promotion,
+            statusTagText = "20% OFF"
         )
     }
 }

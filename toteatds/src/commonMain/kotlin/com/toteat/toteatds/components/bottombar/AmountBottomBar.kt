@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -81,6 +82,7 @@ fun AmountBottomBar(
     modifier: Modifier = Modifier,
     onDiscountClick: (() -> Unit)? = null,
     paidAmount: String? = null,
+    discountAmount: String? = null,
     enabled: Boolean = true,
     confirmEnabled: Boolean = enabled,
     payEnabled: Boolean = enabled,
@@ -143,7 +145,9 @@ fun AmountBottomBar(
                 tonalElevation = 0.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(AmountBottomBarTopHeight)
+                    // Use a minimum height so the container can grow when extra rows
+                    // (e.g. discountAmount) are present without clipping the bottom row.
+                    .heightIn(min = AmountBottomBarTopHeight)
                     .then(
                         if (testTag.isNotEmpty()) {
                             Modifier.setTestTag("${testTag}_summary")
@@ -227,6 +231,19 @@ fun AmountBottomBar(
                                     )
                                 }
 
+                                if (!discountAmount.isNullOrBlank() && showPaidAmount) {
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    AmountRow(
+                                        label = discountText,
+                                        amount = discountAmount,
+                                        amountStyle = MaterialTheme.typography.bodySmall,
+                                        amountColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
+                                        labelStyle = MaterialTheme.typography.helperRegular,
+                                        labelColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
+                                        testTag = if (testTag.isNotEmpty()) "${testTag}_discount" else ""
+                                    )
+                                }
+
                                 AmountRow(
                                     label = amountToPayText,
                                     amount = amountToPay,
@@ -238,7 +255,11 @@ fun AmountBottomBar(
                                 )
                             }
 
-                            if (!paidAmount.isNullOrBlank()) {
+                            // The expand/collapse arrow appears when there is at least one
+                            // optional row (paid amount or discount) beyond the always-visible
+                            // Subtotal + A pagar. Both extra rows share the `showPaidAmount`
+                            // toggle.
+                            if (!paidAmount.isNullOrBlank() || !discountAmount.isNullOrBlank()) {
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Box(
                                     modifier = Modifier
