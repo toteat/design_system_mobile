@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +47,7 @@ fun ToteatTextField(
     imeAction: ImeAction = ImeAction.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
     onFocusChange: (Boolean) -> Unit = {},
+    focusRequester: FocusRequester? = null,
     testTag: String = ""
 ) {
     ToteatTextFieldLayout(
@@ -72,7 +75,7 @@ fun ToteatTextField(
             onKeyboardAction = onKeyboardAction,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             interactionSource = interactionSource,
-            modifier = styleModifier,
+            modifier = focusRequester?.let { styleModifier.focusRequester(it) } ?: styleModifier,
             decorator = { innerBox ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),

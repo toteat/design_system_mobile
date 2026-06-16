@@ -63,6 +63,7 @@
     <string name="icon_config">configuración</string>
     <string name="icon_split_payment">Dividir pago</string>
     <string name="icon_total_payment">Pago total</string>
+    <string name="icon_id">Identificación</string>
     <string name="icon_different_payment">Pagos por montos diferentes</string>
     <string name="icon_change">Cambio</string>
     <string name="icon_order_list_ticket">Lista de pedidos</string>
