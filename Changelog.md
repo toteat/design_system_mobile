@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.39] - 2026-06-16
 ### Added
 - **ToteatTextField**: New optional parameter `focusRequester: FocusRequester? = null` applied directly to the underlying `BasicTextField`. Consumers can now auto-focus the field (e.g. to open the soft keyboard as soon as a bottom sheet appears) with focus reaching the real text field instead of the styling wrapper. Existing call sites are unaffected — the default `null` preserves the previous behaviour.
 - **IdIcon**: New icon component exposing the `id_icon` drawable (an identification / ID-card icon), following the existing icon-component pattern with configurable `size` (default `40.dp`), `tint` (default `NeutralGray`), `contentDescription` and `testTag`. Intended for the promotions "Identificación" flow and other upcoming screens.
