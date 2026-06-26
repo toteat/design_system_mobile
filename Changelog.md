@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.40] - 2026-06-26
+### Added
+- **ToteatProductRow**: New optional parameter `originalPrice: String? = null`. When provided, the original price is rendered struck-through (`TextDecoration.LineThrough`) in a muted color (`onSurfaceVariant`) next to the discounted `price`, so a product on promotion makes the applied discount explicit (e.g. ~~$9.990~~ $4.995). Omitted when `null`, so existing call sites are unaffected. Exposes a `${testTag}_original_price` tag.
+
 ## [0.1.39] - 2026-06-16
 ### Added
 - **ToteatTextField**: New optional parameter `focusRequester: FocusRequester? = null` applied directly to the underlying `BasicTextField`. Consumers can now auto-focus the field (e.g. to open the soft keyboard as soon as a bottom sheet appears) with focus reaching the real text field instead of the styling wrapper. Existing call sites are unaffected — the default `null` preserves the previous behaviour.

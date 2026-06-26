@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.tags.StatusTag
@@ -49,6 +50,7 @@ fun ToteatProductRow(
     enabled: Boolean = true,
     showControls: Boolean = true,
     description: String? = null,
+    originalPrice: String? = null,
     statusTag: StatusTagVariant? = null,
     statusTagText: String? = null,
     contentDescription: String? = null,
@@ -107,14 +109,32 @@ fun ToteatProductRow(
                     )
                 }
 
-                Text(
-                    text = price,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = priceColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_price") else Modifier
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (originalPrice != null) {
+                        Text(
+                            text = originalPrice,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textDecoration = TextDecoration.LineThrough,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = if (testTag.isNotEmpty())
+                                Modifier.setTestTag("${testTag}_original_price") else Modifier
+                        )
+                    }
+                    Text(
+                        text = price,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = priceColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = if (testTag.isNotEmpty())
+                            Modifier.setTestTag("${testTag}_price") else Modifier
+                    )
+                }
             }
 
             // Middle: optional status tag (e.g. "En promoción") fed from the backend.

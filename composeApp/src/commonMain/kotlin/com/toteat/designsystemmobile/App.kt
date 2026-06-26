@@ -1339,6 +1339,34 @@ fun ProductRowShowcase() {
             statusTag = StatusTagVariant.Promotion,
             statusTagText = "20% OFF"
         )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("Con precio original tachado + descuento", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Lasagna boloñesa",
+            price = "$ 4.995",
+            originalPrice = "$ 9.990",
+            description = "Capas de pasta fresca con carne",
+            quantity = 2,
+            onIncrement = {},
+            onDecrement = {},
+            showControls = false,
+            statusTag = StatusTagVariant.Promotion,
+            statusTagText = "50% OFF"
+        )
+
+        Text("Precio tachado + descuento (con controles)", style = MaterialTheme.typography.titleMedium)
+        ToteatProductRow(
+            name = "Spaghetti al pesto",
+            price = "$ 6.500",
+            originalPrice = "$ 13.000",
+            description = "Pasta larga con salsa de albahaca",
+            quantity = quantity1,
+            onIncrement = { quantity1++ },
+            onDecrement = { if (quantity1 > 0) quantity1-- },
+            statusTag = StatusTagVariant.Promotion,
+            statusTagText = "50% OFF"
+        )
     }
 }
 
