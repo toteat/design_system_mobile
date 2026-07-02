@@ -141,4 +141,8 @@
     <string name="numeric_keypad_number_description">Número %1$d</string>
     <string name="numeric_keypad_delete_description">Borrar</string>
     <string name="numeric_keypad_action_description">Acción adicional</string>
+    <string name="diner_add">Agregar</string>
+    <string name="diner_view_more">Ver más</string>
+    <string name="diner_button_description">Comensal: %1$s</string>
+    <string name="diner_container_description">Lista de comensales</string>
 </resources>

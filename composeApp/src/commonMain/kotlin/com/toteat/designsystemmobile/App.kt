@@ -62,6 +62,7 @@ import com.toteat.toteatds.components.brand.logo.ToteatLogoOriginal
 import com.toteat.toteatds.components.buttons.ButtonTableStatus
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
+import com.toteat.toteatds.components.buttons.ToteatDinerButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
@@ -145,7 +146,8 @@ fun App() {
                     ComponentShowcaseItem(title = "Order detail"),
                     ComponentShowcaseItem(title = "Product card"),
                     ComponentShowcaseItem(title = "Tags"),
-                    ComponentShowcaseItem(title = "Numeric Keypad")
+                    ComponentShowcaseItem(title = "Numeric Keypad"),
+                    ComponentShowcaseItem(title = "Diner Buttons")
                 )
             )
         }
@@ -269,6 +271,7 @@ fun ComponentShowcaseSection(
                 "Product card" -> ProductCardShowcase()
                 "Tags" -> StatusTagShowcase()
                 "Numeric Keypad" -> NumericKeypadShowcase()
+                "Diner Buttons" -> DinerButtonShowcase()
             }
         }
     }
@@ -651,6 +654,40 @@ fun ChipButtonShowcase() {
     }
 }
 
+
+@Composable
+fun DinerButtonShowcase() {
+    val diners = persistentListOf(
+        "Trini", "Pauli", "Camila", "Angie", "Vale", "Sofi", "Cata", "Fran", "Isi"
+    )
+    var selectedDiner by remember { mutableStateOf<String?>("Trini") }
+
+    Column(
+        modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Asignación de comensal (scroll horizontal)", style = MaterialTheme.typography.titleSmall)
+        ToteatDinerButtonContainer(
+            diners = diners,
+            selectedDiner = selectedDiner,
+            onDinerSelect = { diner ->
+                selectedDiner = if (selectedDiner == diner) null else diner
+            },
+            onAddClick = {},
+            onViewMoreClick = {}
+        )
+
+        Text("Estado deshabilitado", style = MaterialTheme.typography.titleSmall)
+        ToteatDinerButtonContainer(
+            diners = persistentListOf("Trini", "Pauli"),
+            selectedDiner = "Pauli",
+            onDinerSelect = {},
+            onAddClick = {},
+            onViewMoreClick = {},
+            enabled = false
+        )
+    }
+}
 
 @Composable
 fun InputShowcase() {
