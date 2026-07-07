@@ -146,4 +146,7 @@
     <string name="diner_button_description">Comensal: %1$s</string>
     <string name="diner_container_description">Lista de comensales</string>
     <string name="diner_list_description">Listado de comensales por letra</string>
+    <string name="diner_name_placeholder">Comensal %1$d</string>
+    <string name="diner_name_edit_description">Editar nombre del comensal %1$d</string>
+    <string name="diner_name_list_description">Lista para identificar comensales</string>
 </resources>
