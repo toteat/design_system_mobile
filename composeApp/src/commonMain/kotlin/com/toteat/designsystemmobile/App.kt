@@ -63,6 +63,7 @@ import com.toteat.toteatds.components.buttons.ButtonTableStatus
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatDinerButtonContainer
+import com.toteat.toteatds.components.list.ToteatDinerList
 import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
@@ -147,7 +148,8 @@ fun App() {
                     ComponentShowcaseItem(title = "Product card"),
                     ComponentShowcaseItem(title = "Tags"),
                     ComponentShowcaseItem(title = "Numeric Keypad"),
-                    ComponentShowcaseItem(title = "Diner Buttons")
+                    ComponentShowcaseItem(title = "Diner Buttons"),
+                    ComponentShowcaseItem(title = "Diner List")
                 )
             )
         }
@@ -272,6 +274,7 @@ fun ComponentShowcaseSection(
                 "Tags" -> StatusTagShowcase()
                 "Numeric Keypad" -> NumericKeypadShowcase()
                 "Diner Buttons" -> DinerButtonShowcase()
+                "Diner List" -> DinerListShowcase()
             }
         }
     }
@@ -685,6 +688,30 @@ fun DinerButtonShowcase() {
             onAddClick = {},
             onViewMoreClick = {},
             enabled = false
+        )
+    }
+}
+
+@Composable
+fun DinerListShowcase() {
+    var selectedDiner by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = selectedDiner?.let { "Seleccionado: $it" } ?: "Toca un comensal",
+            style = MaterialTheme.typography.titleSmall
+        )
+        ToteatDinerList(
+            diners = persistentListOf(
+                "Andrés", "Antonia", "Baltazar", "Berna", "Bruno",
+                "Camila", "Carlos", "Daniela", "Dorotea"
+            ),
+            onDinerClick = { selectedDiner = it },
+            // Bounded height: the list is a LazyColumn nested in the showcase scroll
+            modifier = Modifier.height(500.dp)
         )
     }
 }

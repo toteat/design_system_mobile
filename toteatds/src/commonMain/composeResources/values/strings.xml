@@ -145,4 +145,5 @@
     <string name="diner_view_more">Ver más</string>
     <string name="diner_button_description">Comensal: %1$s</string>
     <string name="diner_container_description">Lista de comensales</string>
+    <string name="diner_list_description">Listado de comensales por letra</string>
 </resources>
