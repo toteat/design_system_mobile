@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.41] - 2026-07-13
 ### Added
 - **ToteatDinerButton**: New circular button for diner assignment. Renders a circle with a label underneath and supports three variants via `ToteatDinerButtonType`: `Diner(name)` (shows the first letter of the diner's name), `Add` (plus icon, "Agregar") and `ViewMore` (eye icon, "Ver más"). When `isSelected` is true the border, initial and label switch to `PrimaryNormal`; supports `enabled = false` with `NeutralGray300` styling. Includes accessibility semantics (button role, selected state, "Comensal: %s" description) and optional `testTag`. Reuses the existing `plus_stroke_icon` and `icon_eye_open` drawables.
 - **ToteatDinerButtonContainer**: Horizontally scrollable `LazyRow` of `ToteatDinerButton`s. Takes the diner list (`ImmutableList<String>`), the selected diner and a select callback; the leading "Agregar" and trailing "Ver más" buttons are rendered only when their callbacks (`onAddClick` / `onViewMoreClick`) are provided. When the content exceeds the screen width the row scrolls horizontally. Per-item test tags are derived from the container `testTag` (`_add`, `_<name>`, `_view_more`).
