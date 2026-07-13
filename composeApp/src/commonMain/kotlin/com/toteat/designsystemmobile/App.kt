@@ -63,6 +63,9 @@ import com.toteat.toteatds.components.buttons.ButtonTableStatus
 import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatDinerButtonContainer
+import com.toteat.toteatds.components.list.DinerConsumption
+import com.toteat.toteatds.components.list.DinerConsumptionItem
+import com.toteat.toteatds.components.list.ToteatDinerConsumptionList
 import com.toteat.toteatds.components.list.ToteatDinerList
 import com.toteat.toteatds.components.list.ToteatDinerNameList
 import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
@@ -151,7 +154,8 @@ fun App() {
                     ComponentShowcaseItem(title = "Numeric Keypad"),
                     ComponentShowcaseItem(title = "Diner Buttons"),
                     ComponentShowcaseItem(title = "Diner List"),
-                    ComponentShowcaseItem(title = "Diner Name List")
+                    ComponentShowcaseItem(title = "Diner Name List"),
+                    ComponentShowcaseItem(title = "Diner Consumption List")
                 )
             )
         }
@@ -278,6 +282,7 @@ fun ComponentShowcaseSection(
                 "Diner Buttons" -> DinerButtonShowcase()
                 "Diner List" -> DinerListShowcase()
                 "Diner Name List" -> DinerNameListShowcase()
+                "Diner Consumption List" -> DinerConsumptionListShowcase()
             }
         }
     }
@@ -740,6 +745,59 @@ fun DinerNameListShowcase() {
             onNameChange = { index, name -> names = names.set(index, name) },
             // Bounded height: the list is a LazyColumn nested in the showcase scroll
             modifier = Modifier.height(300.dp)
+        )
+    }
+}
+
+@Composable
+fun DinerConsumptionListShowcase() {
+    var diners by remember {
+        mutableStateOf(
+            persistentListOf(
+                DinerConsumption(
+                    name = "Pauli",
+                    items = persistentListOf(
+                        DinerConsumptionItem(name = "Hamburguesa BBQ", price = "$9.000"),
+                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000")
+                    ),
+                    total = "$16.000",
+                    isChecked = true
+                ),
+                DinerConsumption(
+                    name = "Trini",
+                    items = persistentListOf(
+                        DinerConsumptionItem(name = "Lasagna vegetariana", price = "$8.500"),
+                        DinerConsumptionItem(name = "Copa de vino", price = "$4.000")
+                    ),
+                    total = "$12.500"
+                ),
+                DinerConsumption(
+                    name = "Vale",
+                    items = persistentListOf(),
+                    total = "$0"
+                )
+            )
+        )
+    }
+
+    Column(
+        // White background so the gray dropdown-like collapsed cards stand out
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(vertical = 24.dp, horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "Consumo por comensal (toca el header para expandir)",
+            style = MaterialTheme.typography.titleSmall
+        )
+        ToteatDinerConsumptionList(
+            diners = diners,
+            onCheckedChange = { index, checked ->
+                diners = diners.set(index, diners[index].copy(isChecked = checked))
+            },
+            // Bounded height: the list is a LazyColumn nested in the showcase scroll
+            modifier = Modifier.height(500.dp)
         )
     }
 }

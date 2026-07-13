@@ -149,4 +149,10 @@
     <string name="diner_name_placeholder">Comensal %1$d</string>
     <string name="diner_name_edit_description">Editar nombre del comensal %1$d</string>
     <string name="diner_name_list_description">Lista para identificar comensales</string>
+    <string name="diner_consumption_list_description">Consumo por comensal</string>
+    <string name="diner_consumption_description">Consumo de %1$s</string>
+    <string name="diner_consumption_checkbox_description">Seleccionar a %1$s</string>
+    <string name="diner_consumption_expand">Ver consumo</string>
+    <string name="diner_consumption_collapse">Ocultar consumo</string>
+    <string name="diner_consumption_total">Total</string>
 </resources>
