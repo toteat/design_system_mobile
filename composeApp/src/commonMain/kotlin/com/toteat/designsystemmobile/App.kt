@@ -102,6 +102,7 @@ import com.toteat.toteatds.components.toast.ToteatToastMessage
 import com.toteat.toteatds.components.toast.ToteatToastMessageType
 import com.toteat.toteatds.components.topbar.BackNavigationTopBar
 import com.toteat.toteatds.components.topbar.CenterContentTopBar
+import com.toteat.toteatds.components.topbar.CommentNavigationTopBar
 import com.toteat.toteatds.components.topbar.LoginTopBar
 import com.toteat.toteatds.components.display.ToteatAmountDisplay
 import com.toteat.toteatds.components.display.ToteatPendingAmountLabel
@@ -1013,6 +1014,32 @@ fun TopBarShowcase() {
             title = "Mesa principal con nombre muy largo que debe truncarse",
             onNavigateBackClick = {},
             testTag = "back_navigation_topbar_long_title"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Comment Navigation", style = MaterialTheme.typography.titleMedium)
+        CommentNavigationTopBar(
+            title = "Comunicación cocina",
+            badgeText = "Mesa S7",
+            onNavigateBackClick = {},
+            testTag = "comment_navigation_topbar"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Comment Navigation - Sin badge", style = MaterialTheme.typography.titleMedium)
+        CommentNavigationTopBar(
+            title = "Comunicación cocina",
+            onNavigateBackClick = {},
+            testTag = "comment_navigation_topbar_no_badge"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Comment Navigation - Título largo", style = MaterialTheme.typography.titleMedium)
+        CommentNavigationTopBar(
+            title = "Comunicación con la cocina del segundo piso",
+            badgeText = "Mesa S7",
+            onNavigateBackClick = {},
+            testTag = "comment_navigation_topbar_long_title"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 

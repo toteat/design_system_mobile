@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- **CommentNavigationTopBar**: New top bar for comment / messaging screens (e.g. "Comunicación cocina"). Uses `colorScheme.primary` (orange) as container to differentiate the conversation context from the regular dark navigation bars, reuses `ArrowBackIconButton` (white circular back button) on the left and renders the centered title in `headlineMedium` over `onPrimary` with marquee + ellipsis for long titles. The optional `badgeText` shows a white pill badge (`CommentNavigationTopBarBadge`, exposed for standalone use) with the conversation reference such as "Mesa S7". Accessibility: bar description "Barra de navegación de comentarios: %s", title marked as `heading()`, badge exposed as an image with "Referencia: %s". Derived test tags: `_back`, `_title`, `_badge`.
+
+### Changed
+- **ToteatTopBar**: New optional parameter `containerColor: Color = MaterialTheme.colorScheme.secondary`. Lets variants override the bar background (used by `CommentNavigationTopBar`) without duplicating the layout. Existing call sites are unaffected — the default preserves the previous behaviour.
+- **ArrowBackIconButton**: New optional parameters `size: Dp = 44.dp` and `iconSize: Dp = size / 2` so hosts can size the circle and the arrow independently. `CommentNavigationTopBar` uses a tighter `size = 36.dp` circle keeping the standard `iconSize = 22.dp` arrow. Existing call sites are unaffected — the defaults reproduce the previous 44.dp circle with a 22.dp arrow.
 ### Changed
 - **Toolchain**: Upgraded Kotlin `2.3.0` → `2.3.21` and Compose Multiplatform `1.9.0` → `1.11.1`, groundwork for enabling the iOS target in the consuming app. Compose Material3 is now pinned separately via a new `compose-material3` version (`1.9.0`) instead of following the CMP version, and `composeApp` consumes `libs.jetbrains.compose.material3` rather than the `compose.material3` shorthand — otherwise CMP 1.11.1 pulls a Material3 whose signatures break binary compatibility for consumers.
 - **iOS targets**: Dropped `iosX64()` from the convention plugins (`CmpLibraryConventionPlugin`, `KotlinIosTarget`, `KotlinMultiplatform`), leaving `iosArm64` and `iosSimulatorArm64`. The Intel simulator target is no longer published; Apple Silicon simulators use `iosSimulatorArm64` and devices use `iosArm64`. Consumers still building for Intel simulators would need it restored.

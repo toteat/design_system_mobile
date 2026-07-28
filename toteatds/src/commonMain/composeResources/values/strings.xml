@@ -155,4 +155,6 @@
     <string name="diner_consumption_expand">Ver consumo</string>
     <string name="diner_consumption_collapse">Ocultar consumo</string>
     <string name="diner_consumption_total">Total</string>
+    <string name="comment_navigation_semantic_label">Barra de navegación de comentarios: %1$s</string>
+    <string name="comment_navigation_badge_description">Referencia: %1$s</string>
 </resources>

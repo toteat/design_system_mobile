@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ fun ToteatTopBar(
     modifier: Modifier = Modifier,
     semanticLabel: String = stringResource(Res.string.topbar_semantic_label),
     testTag: String = "",
+    containerColor: Color = MaterialTheme.colorScheme.secondary,
     leftComponent: (@Composable RowScope.() -> Unit)? = null,
     rightComponent: (@Composable RowScope.() -> Unit)? = null,
     centerComponent: @Composable RowScope.() -> Unit
@@ -42,7 +44,7 @@ fun ToteatTopBar(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(color = MaterialTheme.colorScheme.secondary)
+            .background(color = containerColor)
             .padding(horizontal = 12.dp)
             .semantics {
                 contentDescription = semanticLabel
