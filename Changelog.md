@@ -7,6 +7,12 @@
 ### Changed
 - **ToteatTopBar**: New optional parameter `containerColor: Color = MaterialTheme.colorScheme.secondary`. Lets variants override the bar background (used by `CommentNavigationTopBar`) without duplicating the layout. Existing call sites are unaffected — the default preserves the previous behaviour.
 - **ArrowBackIconButton**: New optional parameters `size: Dp = 44.dp` and `iconSize: Dp = size / 2` so hosts can size the circle and the arrow independently. `CommentNavigationTopBar` uses a tighter `size = 36.dp` circle keeping the standard `iconSize = 22.dp` arrow. Existing call sites are unaffected — the defaults reproduce the previous 44.dp circle with a 22.dp arrow.
+### Changed
+- **Toolchain**: Upgraded Kotlin `2.3.0` → `2.3.21` and Compose Multiplatform `1.9.0` → `1.11.1`, groundwork for enabling the iOS target in the consuming app. Compose Material3 is now pinned separately via a new `compose-material3` version (`1.9.0`) instead of following the CMP version, and `composeApp` consumes `libs.jetbrains.compose.material3` rather than the `compose.material3` shorthand — otherwise CMP 1.11.1 pulls a Material3 whose signatures break binary compatibility for consumers.
+- **iOS targets**: Dropped `iosX64()` from the convention plugins (`CmpLibraryConventionPlugin`, `KotlinIosTarget`, `KotlinMultiplatform`), leaving `iosArm64` and `iosSimulatorArm64`. The Intel simulator target is no longer published; Apple Silicon simulators use `iosSimulatorArm64` and devices use `iosArm64`. Consumers still building for Intel simulators would need it restored.
+
+### Added
+- **ProductCardGroupItem**: New public composable rendering a single row of a `ProductCardGroup`, so hosts can emit the rows inside a `LazyColumn` when the list is long enough that composing every item in one frame causes dropped frames. Takes a `ProductCardItem` plus a `ListItemPosition` (reusing the existing `getShape(cornerRadius)` helper) and is visually identical to `ProductCardGroup`: the position drives the rounded corners and the trailing `neutral100` divider, and the group border is drawn with `drawBehind` extended past the visible height on continuing positions so two adjacent rows do not stack two 1.dp strokes at the seam. Collapsing ("ver todos") is the host's responsibility in this mode, since that state cannot live in an individual row. `ProductCardGroup` is unchanged, so existing call sites are unaffected.
 
 ## [0.1.41] - 2026-07-13
 ### Added
