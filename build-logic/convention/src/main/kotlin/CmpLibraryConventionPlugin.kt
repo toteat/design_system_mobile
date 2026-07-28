@@ -46,7 +46,6 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
 
             // Targets iOS
             iosArm64()
-            iosX64()
             iosSimulatorArm64()
 
 
