@@ -25,6 +25,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -61,7 +67,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.vectorResource
 
-private val ProductCardShape = RoundedCornerShape(14.dp)
+private val ProductCardCornerRadius = 14.dp
+private val ProductCardShape = RoundedCornerShape(ProductCardCornerRadius)
 private val QuantityBadgeShape = RoundedCornerShape(8.dp)
 
 enum class ProductCardStatus(val statusRes: StringResource) {
@@ -115,6 +122,86 @@ fun ProductCard(
             testTag = testTag
         )
     }
+}
+
+/**
+ * Una sola fila del grupo, para consumirla desde un `LazyColumn` cuando la lista es
+ * larga y componerla completa resulta costoso. El resultado es visualmente idéntico a
+ * [ProductCardGroup]: [position] define las esquinas redondeadas y el separador, y el
+ * borde se dibuja extendido hacia afuera en las posiciones intermedias para que en las
+ * uniones no se sumen dos trazos.
+ *
+ * El colapso ("ver todos") es responsabilidad del consumidor en este modo.
+ */
+@Composable
+fun ProductCardGroupItem(
+    item: ProductCardItem,
+    position: ListItemPosition,
+    modifier: Modifier = Modifier,
+    testTag: String = ""
+) {
+    val shape = position.getShape(ProductCardCornerRadius)
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clipToBounds()
+            .background(NeutralGray, shape)
+            .groupItemBorder(position)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+    ) {
+        ProductCardRow(
+            name = item.name,
+            description = item.description,
+            price = item.price,
+            quantity = item.quantity,
+            status = item.status,
+            showDeleteButton = item.showDeleteButton,
+            onDeleteClick = item.onDeleteClick,
+            onClick = item.onClick,
+            modifier = Modifier.fillMaxWidth(),
+            testTag = testTag
+        )
+
+        if (position == ListItemPosition.First || position == ListItemPosition.Middle) {
+            HorizontalDivider(
+                color = NeutralGray100,
+                thickness = 1.dp
+            )
+        }
+    }
+}
+
+/**
+ * Dibuja el borde del grupo para una fila suelta. En las posiciones que continúan
+ * (First, Middle, Last) el rectángulo se extiende más allá del alto visible, de modo
+ * que el trazo horizontal de ese lado cae fuera del `clipToBounds` y no se duplica
+ * contra el borde de la fila vecina.
+ */
+private fun Modifier.groupItemBorder(position: ListItemPosition): Modifier = drawBehind {
+    val stroke = 1.dp.toPx()
+    val radius = ProductCardCornerRadius.toPx()
+    val overflowTop = if (position == ListItemPosition.Middle || position == ListItemPosition.Last) {
+        radius
+    } else {
+        0f
+    }
+    val overflowBottom = if (position == ListItemPosition.Middle || position == ListItemPosition.First) {
+        radius
+    } else {
+        0f
+    }
+
+    drawRoundRect(
+        color = NeutralGray200,
+        topLeft = Offset(x = stroke / 2f, y = -overflowTop + stroke / 2f),
+        size = Size(
+            width = size.width - stroke,
+            height = size.height + overflowTop + overflowBottom - stroke
+        ),
+        cornerRadius = CornerRadius(radius),
+        style = Stroke(width = stroke)
+    )
 }
 
 @Composable

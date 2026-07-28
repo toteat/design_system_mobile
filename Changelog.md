@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ProductCardGroupItem**: New public composable rendering a single row of a `ProductCardGroup`, so hosts can emit the rows inside a `LazyColumn` when the list is long enough that composing every item in one frame causes dropped frames. Takes a `ProductCardItem` plus a `ListItemPosition` (reusing the existing `getShape(cornerRadius)` helper) and is visually identical to `ProductCardGroup`: the position drives the rounded corners and the trailing `neutral100` divider, and the group border is drawn with `drawBehind` extended past the visible height on continuing positions so two adjacent rows do not stack two 1.dp strokes at the seam. Collapsing ("ver todos") is the host's responsibility in this mode, since that state cannot live in an individual row. `ProductCardGroup` is unchanged, so existing call sites are unaffected.
+
 ## [0.1.41] - 2026-07-13
 ### Added
 - **ToteatDinerButton**: New circular button for diner assignment. Renders a circle with a label underneath and supports three variants via `ToteatDinerButtonType`: `Diner(name)` (shows the first letter of the diner's name), `Add` (plus icon, "Agregar") and `ViewMore` (eye icon, "Ver más"). When `isSelected` is true the border, initial and label switch to `PrimaryNormal`; supports `enabled = false` with `NeutralGray300` styling. Includes accessibility semantics (button role, selected state, "Comensal: %s" description) and optional `testTag`. Reuses the existing `plus_stroke_icon` and `icon_eye_open` drawables.
