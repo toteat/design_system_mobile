@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **CommentNavigationTopBar**: New top bar for comment / messaging screens (e.g. "Comunicación cocina"). Uses `colorScheme.primary` (orange) as container to differentiate the conversation context from the regular dark navigation bars, reuses `ArrowBackIconButton` (white circular back button) on the left and renders the centered title in `headlineMedium` over `onPrimary` with marquee + ellipsis for long titles. The optional `badgeText` shows a white pill badge (`CommentNavigationTopBarBadge`, exposed for standalone use) with the conversation reference such as "Mesa S7". Accessibility: bar description "Barra de navegación de comentarios: %s", title marked as `heading()`, badge exposed as an image with "Referencia: %s". Derived test tags: `_back`, `_title`, `_badge`.
+
+### Changed
+- **ToteatTopBar**: New optional parameter `containerColor: Color = MaterialTheme.colorScheme.secondary`. Lets variants override the bar background (used by `CommentNavigationTopBar`) without duplicating the layout. Existing call sites are unaffected — the default preserves the previous behaviour.
+- **ArrowBackIconButton**: New optional parameters `size: Dp = 44.dp` and `iconSize: Dp = size / 2` so hosts can size the circle and the arrow independently. `CommentNavigationTopBar` uses a tighter `size = 36.dp` circle keeping the standard `iconSize = 22.dp` arrow. Existing call sites are unaffected — the defaults reproduce the previous 44.dp circle with a 22.dp arrow.
+
 ## [0.1.41] - 2026-07-13
 ### Added
 - **ToteatDinerButton**: New circular button for diner assignment. Renders a circle with a label underneath and supports three variants via `ToteatDinerButtonType`: `Diner(name)` (shows the first letter of the diner's name), `Add` (plus icon, "Agregar") and `ViewMore` (eye icon, "Ver más"). When `isSelected` is true the border, initial and label switch to `PrimaryNormal`; supports `enabled = false` with `NeutralGray300` styling. Includes accessibility semantics (button role, selected state, "Comensal: %s" description) and optional `testTag`. Reuses the existing `plus_stroke_icon` and `icon_eye_open` drawables.

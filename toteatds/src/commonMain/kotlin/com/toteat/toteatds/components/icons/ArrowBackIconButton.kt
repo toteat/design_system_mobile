@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.utils.setTestTag
@@ -24,21 +25,31 @@ import designsystemmobile.toteatds.generated.resources.icon_arrow_back
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+private val DefaultArrowBackSize = 44.dp
+
+/**
+ * Circular back button.
+ *
+ * @param size Diameter of the circular container. The icon scales with it ([iconSize]).
+ * @param iconSize Size of the arrow. Defaults to half the container [size].
+ */
 @Composable
 fun ArrowBackIconButton(
     onNavigateBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    size: Dp = DefaultArrowBackSize,
+    iconSize: Dp = size / 2,
     testTag: String = ""
 ) {
     val arrowBackDescription = stringResource(Res.string.icon_arrow_back)
-    
+
     IconButton(
         onClick = onNavigateBackClick,
         enabled = enabled,
         modifier = modifier
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
-            .size(44.dp)
+            .size(size)
             .clip(CircleShape)
             .background(
                 color = if (enabled) {
@@ -61,7 +72,7 @@ fun ArrowBackIconButton(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = null,
-            modifier = Modifier.size(22.dp)
+            modifier = Modifier.size(iconSize)
         )
     }
 }
@@ -81,6 +92,12 @@ private fun ArrowBackIconButtonPreview() {
             ArrowBackIconButton(
                 onNavigateBackClick = {},
                 enabled = false
+            )
+
+            ArrowBackIconButton(
+                onNavigateBackClick = {},
+                size = 36.dp,
+                iconSize = 22.dp
             )
         }
     }
