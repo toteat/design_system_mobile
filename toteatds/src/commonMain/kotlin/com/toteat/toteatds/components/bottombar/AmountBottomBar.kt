@@ -1,6 +1,13 @@
 package com.toteat.toteatds.components.bottombar
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +38,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -92,6 +100,7 @@ fun AmountBottomBar(
     showButtons: Boolean = true,
     showPrintPreBill: Boolean = true,
     initialPaidAmountExpanded: Boolean = false,
+    isLoading: Boolean = false,
     testTag: String = ""
 ) {
     val barDescription = stringResource(Res.string.amount_bottom_bar_description)
@@ -215,6 +224,7 @@ fun AmountBottomBar(
                                     amountColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                     labelStyle = MaterialTheme.typography.helperRegular,
                                     labelColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
+                                    isLoading = isLoading,
                                     testTag = if (testTag.isNotEmpty()) "${testTag}_subtotal" else ""
                                 )
 
@@ -227,6 +237,7 @@ fun AmountBottomBar(
                                         amountColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                         labelStyle = MaterialTheme.typography.helperRegular,
                                         labelColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
+                                        isLoading = isLoading,
                                         testTag = if (testTag.isNotEmpty()) "${testTag}_paid" else ""
                                     )
                                 }
@@ -240,6 +251,7 @@ fun AmountBottomBar(
                                         amountColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
                                         labelStyle = MaterialTheme.typography.helperRegular,
                                         labelColor = MaterialTheme.colorScheme.extended.tertiaryMuted,
+                                        isLoading = isLoading,
                                         testTag = if (testTag.isNotEmpty()) "${testTag}_discount" else ""
                                     )
                                 }
@@ -251,6 +263,7 @@ fun AmountBottomBar(
                                     amountColor = MaterialTheme.colorScheme.secondary,
                                     labelStyle = MaterialTheme.typography.bodyMedium,
                                     labelColor = MaterialTheme.colorScheme.secondary,
+                                    isLoading = isLoading,
                                     testTag = if (testTag.isNotEmpty()) "${testTag}_to_pay" else ""
                                 )
                             }
@@ -523,6 +536,7 @@ private fun AmountRow(
     amountColor: Color,
     labelStyle: TextStyle,
     labelColor: Color,
+    isLoading: Boolean = false,
     testTag: String = ""
 ) {
     Row(
@@ -541,14 +555,39 @@ private fun AmountRow(
             modifier = Modifier.width(AmountBottomBarAmountWidth),
             contentAlignment = Alignment.CenterEnd
         ) {
-            Text(
-                text = amount,
-                style = amountStyle,
-                color = amountColor,
-                textAlign = TextAlign.End
-            )
+            if (isLoading) {
+                ShimmerAmountBox()
+            } else {
+                Text(
+                    text = amount,
+                    style = amountStyle,
+                    color = amountColor,
+                    textAlign = TextAlign.End
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun ShimmerAmountBox() {
+    val transition = rememberInfiniteTransition(label = "amountShimmer")
+    val alpha by transition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0.9f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 700, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "amountShimmerAlpha"
+    )
+    Box(
+        modifier = Modifier
+            .width(48.dp)
+            .height(12.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colorScheme.extended.neutral400.copy(alpha = alpha))
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
@@ -640,6 +679,35 @@ private fun AmountBottomBarPreviewWithDiscount() {
                     subtotalAmount = "$ 32.780",
                     paidAmount = "$ 0",
                     amountToPay = "$32.780",
+                    onDiscountClick = {},
+                    onPrintPreBillClick = {},
+                    onConfirmClick = {},
+                    onPayClick = {}
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun AmountBottomBarPreviewLoading() {
+    ToteatTheme {
+        Scaffold(
+            bottomBar = {
+                AmountBottomBar(
+                    subtotalAmount = "$ 32.780",
+                    paidAmount = "$ 0",
+                    amountToPay = "$32.780",
+                    discountAmount = "-$ 6.556",
+                    initialPaidAmountExpanded = true,
+                    isLoading = true,
                     onDiscountClick = {},
                     onPrintPreBillClick = {},
                     onConfirmClick = {},

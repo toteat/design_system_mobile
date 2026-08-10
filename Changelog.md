@@ -13,6 +13,7 @@
 
 ### Added
 - **ProductCardGroupItem**: New public composable rendering a single row of a `ProductCardGroup`, so hosts can emit the rows inside a `LazyColumn` when the list is long enough that composing every item in one frame causes dropped frames. Takes a `ProductCardItem` plus a `ListItemPosition` (reusing the existing `getShape(cornerRadius)` helper) and is visually identical to `ProductCardGroup`: the position drives the rounded corners and the trailing `neutral100` divider, and the group border is drawn with `drawBehind` extended past the visible height on continuing positions so two adjacent rows do not stack two 1.dp strokes at the seam. Collapsing ("ver todos") is the host's responsibility in this mode, since that state cannot live in an individual row. `ProductCardGroup` is unchanged, so existing call sites are unaffected.
+- **AmountBottomBar**: New optional parameter `isLoading: Boolean = false`. When `true`, each amount value (Subtotal, Pagado, Descuento, A pagar) is replaced by a pulsing skeleton placeholder while the labels stay in place, so hosts can signal that the totals are being recalculated (e.g. an async pre-checkout re-fetch after applying a coupon/promo) without the amount jumping from a stale value to the fresh one. Defaults to `false`, so existing call sites are unaffected.
 
 ## [0.1.41] - 2026-07-13
 ### Added
