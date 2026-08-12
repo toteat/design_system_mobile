@@ -424,6 +424,15 @@ fun ButtonShowcase() {
                 icon = { DifferentAmountPaymentsIcon(size = 36.dp) },
                 onClick = {}
             )
+            Spacer(modifier = Modifier.width(24.dp))
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "monto especifico",
+                enabled = false,
+                iconSize = 36.dp,
+                icon = { DifferentAmountPaymentsIcon(size = 36.dp) },
+                onClick = {}
+            )
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 

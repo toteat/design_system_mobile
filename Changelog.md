@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.43] - 2026-08-12
+### Changed
+- **ToteatSquareButton**: New optional parameter `enabled: Boolean = true`. When `false`, the card click is disabled and the button is rendered in a muted state (border `NeutralGray300`, title/subtitle `NeutralGray400`, icon at 0.4 alpha), so hosts can gate an action proactively instead of only reacting on tap (e.g. blocking partial-payment options when a promotion must be charged in a single payment). Independent from `comingSoon` (which keeps its "Próximamente" badge). Defaults to `true`, so existing call sites are unaffected.
 
 ## [0.1.42] - 2026-08-09
 ### Added
