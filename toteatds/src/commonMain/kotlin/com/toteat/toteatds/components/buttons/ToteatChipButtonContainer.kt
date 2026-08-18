@@ -30,8 +30,10 @@ fun ToteatChipButtonContainer(
     onItemSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    containerColor: Color? = null,
     testTag: String = "",
+    // New parameter goes after the previously published ones so positional call sites keep working;
+    // `itemModifier` stays last to preserve trailing-lambda syntax.
+    containerColor: Color? = null,
     itemModifier: (itemText: String) -> Modifier = { Modifier }
 ) {
     val containerDescription = stringResource(Res.string.chip_container_description)

@@ -46,9 +46,11 @@ fun ToteatTextFieldLayout(
     helperText: String? = null,
     enabled: Boolean = true,
     onFocusChange: (Boolean) -> Unit = {},
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working;
+    // `textField` stays last to preserve trailing-lambda syntax.
     minHeight: Dp = DefaultTextFieldMinHeight,
     shape: Shape = DefaultTextFieldShape,
-    testTag: String = "",
     textField: @Composable (Modifier, MutableInteractionSource) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }

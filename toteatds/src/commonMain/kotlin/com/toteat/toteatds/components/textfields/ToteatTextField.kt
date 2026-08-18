@@ -44,16 +44,17 @@ fun ToteatTextField(
     isError: Boolean = false,
     isWarning: Boolean = false,
     singleLine: Boolean = true,
-    maxLines: Int = Int.MAX_VALUE,
     enabled: Boolean = true,
-    minHeight: Dp = DefaultTextFieldMinHeight,
-    shape: Shape = DefaultTextFieldShape,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
     onFocusChange: (Boolean) -> Unit = {},
     focusRequester: FocusRequester? = null,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working.
+    maxLines: Int = Int.MAX_VALUE,
+    minHeight: Dp = DefaultTextFieldMinHeight,
+    shape: Shape = DefaultTextFieldShape
 ) {
     ToteatTextFieldLayout(
         modifier = modifier,
