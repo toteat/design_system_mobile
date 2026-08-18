@@ -21,9 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.icons.StatusTrailingIcon
 import com.toteat.toteatds.theme.ToteatTheme
@@ -48,7 +50,11 @@ fun ToteatTextField(
     onKeyboardAction: KeyboardActionHandler? = null,
     onFocusChange: (Boolean) -> Unit = {},
     focusRequester: FocusRequester? = null,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working.
+    maxLines: Int = Int.MAX_VALUE,
+    minHeight: Dp = DefaultTextFieldMinHeight,
+    shape: Shape = DefaultTextFieldShape
 ) {
     ToteatTextFieldLayout(
         modifier = modifier,
@@ -59,6 +65,8 @@ fun ToteatTextField(
         helperText = helperText,
         enabled = enabled,
         onFocusChange = onFocusChange,
+        minHeight = minHeight,
+        shape = shape,
         testTag = testTag
     ) { styleModifier, interactionSource ->
         BasicTextField(
@@ -66,7 +74,9 @@ fun ToteatTextField(
             enabled = enabled,
             lineLimits = if (singleLine) {
                 TextFieldLineLimits.SingleLine
-            } else TextFieldLineLimits.Default,
+            } else {
+                TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
+            },
             textStyle = MaterialTheme.typography.headingMediumRegular,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
@@ -79,11 +89,11 @@ fun ToteatTextField(
             decorator = { innerBox ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = if (singleLine) Alignment.CenterVertically else Alignment.Top
                 ) {
                     Box(
                         modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterStart
+                        contentAlignment = if (singleLine) Alignment.CenterStart else Alignment.TopStart
                     ) {
                         if (state.text.isEmpty() && placeHolder != null) {
                             Text(

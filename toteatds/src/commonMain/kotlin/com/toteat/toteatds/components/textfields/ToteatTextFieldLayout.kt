@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -18,14 +19,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
+
+/** Minimum height shared by every Toteat text field. */
+val DefaultTextFieldMinHeight = 50.dp
+
+/** Corner shape shared by every Toteat text field. */
+val DefaultTextFieldShape = RoundedCornerShape(8.dp)
 
 @Composable
 fun ToteatTextFieldLayout(
@@ -38,6 +47,10 @@ fun ToteatTextFieldLayout(
     enabled: Boolean = true,
     onFocusChange: (Boolean) -> Unit = {},
     testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working;
+    // `textField` stays last to preserve trailing-lambda syntax.
+    minHeight: Dp = DefaultTextFieldMinHeight,
+    shape: Shape = DefaultTextFieldShape,
     textField: @Composable (Modifier, MutableInteractionSource) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -50,13 +63,13 @@ fun ToteatTextFieldLayout(
 
     val textFieldStyleModifier = Modifier
         .fillMaxWidth()
-        .height(50.dp)
+        .heightIn(min = minHeight)
         .background(
             color = when {
                 !enabled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
                 else -> MaterialTheme.colorScheme.background
             },
-            shape = RoundedCornerShape(8.dp)
+            shape = shape
         )
         .border(
             width = 1.dp,
@@ -65,7 +78,7 @@ fun ToteatTextFieldLayout(
                 !enabled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.38f)
                 else -> MaterialTheme.colorScheme.outline
             },
-            shape = RoundedCornerShape(8.dp)
+            shape = shape
         )
         .padding(horizontal = 12.dp, vertical = 8.dp)
         .semantics {

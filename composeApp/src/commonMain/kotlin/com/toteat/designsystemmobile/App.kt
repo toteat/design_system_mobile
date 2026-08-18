@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronRight
@@ -50,6 +52,9 @@ import com.toteat.toteatds.components.bottombar.AmountBottomBar
 import com.toteat.toteatds.components.bottombar.FloatingTotalBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatBottomBarButtonType
+import com.toteat.toteatds.components.bottombar.ToteatCommentBottomBar
+import com.toteat.toteatds.components.bottombar.ToteatMessageInputBar
+import com.toteat.toteatds.components.icons.ToteatSendIconButton
 import com.toteat.toteatds.components.cards.ToteatCategoryCard
 import com.toteat.toteatds.components.cards.ToteatProductRow
 import com.toteat.toteatds.components.cards.ToteatSubcategoryButton
@@ -78,6 +83,7 @@ import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
 import com.toteat.toteatds.components.dropdown.ToteatDropDown
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.PrintIconButton
+import com.toteat.toteatds.components.icons.ToteatPrintIconButton
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.components.list.GroupedOrderDetail
@@ -136,6 +142,7 @@ fun App() {
                     ComponentShowcaseItem(title = "Buttons"),
                     ComponentShowcaseItem(title = "Floating Total Bar"),
                     ComponentShowcaseItem(title = "Amount Bottom Bar"),
+                    ComponentShowcaseItem(title = "Comment Bottom Bar"),
                     ComponentShowcaseItem(title = "TopBars"),
                     ComponentShowcaseItem(title = "Dropdowns"),
                     ComponentShowcaseItem(title = "Inputs"),
@@ -263,6 +270,7 @@ fun ComponentShowcaseSection(
                 "Buttons" -> ButtonShowcase()
                 "Floating Total Bar" -> FloatingTotalBarShowcase()
                 "Amount Bottom Bar" -> AmountBottomBarShowcase()
+                "Comment Bottom Bar" -> CommentBottomBarShowcase()
                 "TopBars" -> TopBarShowcase()
                 "Inputs" -> InputShowcase()
                 "Dropdowns" -> DropdownShowcase()
@@ -524,6 +532,108 @@ fun FloatingTotalBarShowcase() {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun CommentBottomBarShowcase() {
+    val suggestions = remember {
+        persistentListOf("Sin cebolla", "Sin sal", "Sin picante", "Término medio")
+    }
+    val kitchenState = rememberTextFieldState()
+    val filledState = rememberTextFieldState("Sin cebolla")
+    val plainState = rememberTextFieldState()
+    val disabledState = rememberTextFieldState("Enviando...")
+    val inputOnlyState = rememberTextFieldState("Sin cebolla")
+    var lastSent by remember { mutableStateOf<String?>(null) }
+    var printCount by remember { mutableStateOf(0) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Con sugerencias (vacío)", style = MaterialTheme.typography.titleMedium)
+        ToteatCommentBottomBar(
+            state = kitchenState,
+            onSendClick = {
+                lastSent = kitchenState.text.toString()
+                kitchenState.clearText()
+            },
+            suggestions = suggestions,
+            onSuggestionClick = { kitchenState.setTextAndPlaceCursorAtEnd(it) },
+            onPrintClick = { printCount++ },
+            placeholder = "Mensaje para cocina......",
+            testTag = "comment_bottom_bar"
+        )
+        Text(
+            "Último mensaje enviado: ${lastSent ?: "-"}",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            "Comandas impresas: $printCount",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Con texto", style = MaterialTheme.typography.titleMedium)
+        ToteatCommentBottomBar(
+            state = filledState,
+            onSendClick = {},
+            suggestions = suggestions,
+            onSuggestionClick = { filledState.setTextAndPlaceCursorAtEnd(it) },
+            onPrintClick = {},
+            placeholder = "Mensaje para cocina......",
+            testTag = "comment_bottom_bar_filled"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Sin sugerencias", style = MaterialTheme.typography.titleMedium)
+        ToteatCommentBottomBar(
+            state = plainState,
+            onSendClick = {},
+            placeholder = "Mensaje para cocina......",
+            testTag = "comment_bottom_bar_no_suggestions"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Deshabilitado", style = MaterialTheme.typography.titleMedium)
+        ToteatCommentBottomBar(
+            state = disabledState,
+            onSendClick = {},
+            suggestions = suggestions,
+            onPrintClick = {},
+            enabled = false,
+            placeholder = "Mensaje para cocina......",
+            testTag = "comment_bottom_bar_disabled"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Solo input + envío", style = MaterialTheme.typography.titleMedium)
+        ToteatMessageInputBar(
+            state = inputOnlyState,
+            onSendClick = {},
+            placeholder = "Mensaje para cocina......",
+            testTag = "message_input_bar"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Botones circulares", style = MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ToteatSendIconButton(onClick = {}, testTag = "send_icon_button")
+            ToteatSendIconButton(
+                onClick = {},
+                enabled = false,
+                testTag = "send_icon_button_disabled"
+            )
+            ToteatPrintIconButton(onClick = {}, testTag = "print_icon_button")
+            ToteatPrintIconButton(
+                onClick = {},
+                enabled = false,
+                testTag = "print_icon_button_disabled"
+            )
         }
     }
 }

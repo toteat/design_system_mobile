@@ -157,4 +157,7 @@
     <string name="diner_consumption_total">Total</string>
     <string name="comment_navigation_semantic_label">Barra de navegación de comentarios: %1$s</string>
     <string name="comment_navigation_badge_description">Referencia: %1$s</string>
+    <string name="comment_bottom_bar_description">Barra de mensaje</string>
+    <string name="message_input_placeholder">Escribe un mensaje...</string>
+    <string name="icon_send_description">Enviar mensaje</string>
 </resources>

@@ -38,7 +38,9 @@ fun ToteatChipButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameter goes after the previously published ones so positional call sites keep working.
+    containerColor: Color? = null
 ) {
     val selectedText = stringResource(Res.string.chip_selected)
     val notSelectedText = stringResource(Res.string.chip_not_selected)
@@ -48,11 +50,11 @@ fun ToteatChipButton(
         if (!enabled) NeutralGray.copy(alpha = 0.38f) else Color.Black
     }
 
-    val backgroundColor = remember(enabled, isSelected) {
+    val backgroundColor = remember(enabled, isSelected, containerColor) {
         when {
             !enabled -> NeutralGray300.copy(alpha = 0.5f)
             isSelected -> TertiaryNormal
-            else -> NeutralGray100
+            else -> containerColor ?: NeutralGray100
         }
     }
 
