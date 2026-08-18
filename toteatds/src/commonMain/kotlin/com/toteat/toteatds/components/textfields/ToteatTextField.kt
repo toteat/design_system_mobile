@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
@@ -21,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.icons.StatusTrailingIcon
 import com.toteat.toteatds.theme.ToteatTheme
@@ -43,6 +46,8 @@ fun ToteatTextField(
     isWarning: Boolean = false,
     singleLine: Boolean = true,
     enabled: Boolean = true,
+    minHeight: Dp = 50.dp,
+    shape: Shape = RoundedCornerShape(8.dp),
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
@@ -59,6 +64,8 @@ fun ToteatTextField(
         helperText = helperText,
         enabled = enabled,
         onFocusChange = onFocusChange,
+        minHeight = minHeight,
+        shape = shape,
         testTag = testTag
     ) { styleModifier, interactionSource ->
         BasicTextField(
@@ -79,11 +86,11 @@ fun ToteatTextField(
             decorator = { innerBox ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = if (singleLine) Alignment.CenterVertically else Alignment.Top
                 ) {
                     Box(
                         modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterStart
+                        contentAlignment = if (singleLine) Alignment.CenterStart else Alignment.TopStart
                     ) {
                         if (state.text.isEmpty() && placeHolder != null) {
                             Text(

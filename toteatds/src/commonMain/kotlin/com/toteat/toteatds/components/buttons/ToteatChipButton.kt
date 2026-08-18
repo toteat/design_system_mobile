@@ -38,6 +38,7 @@ fun ToteatChipButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    containerColor: Color? = null,
     testTag: String = ""
 ) {
     val selectedText = stringResource(Res.string.chip_selected)
@@ -48,11 +49,11 @@ fun ToteatChipButton(
         if (!enabled) NeutralGray.copy(alpha = 0.38f) else Color.Black
     }
 
-    val backgroundColor = remember(enabled, isSelected) {
+    val backgroundColor = remember(enabled, isSelected, containerColor) {
         when {
             !enabled -> NeutralGray300.copy(alpha = 0.5f)
             isSelected -> TertiaryNormal
-            else -> NeutralGray100
+            else -> containerColor ?: NeutralGray100
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ fun ToteatChipButtonContainer(
     onItemSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    containerColor: Color? = null,
     testTag: String = "",
     itemModifier: (itemText: String) -> Modifier = { Modifier }
 ) {
@@ -61,6 +63,7 @@ fun ToteatChipButtonContainer(
                 isSelected = item == selectedItem,
                 onClick = onClick,
                 enabled = enabled,
+                containerColor = containerColor,
                 modifier = modifierForItem
             )
         }
