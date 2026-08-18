@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.44] - 2026-08-18
 ### Added
 - **ToteatCommentBottomBar**: New bottom bar for comment / messaging screens (e.g. "Comunicación cocina"). Two rows following the design: quick-suggestion chips (`ToteatChipButtonContainer`, horizontally scrollable) with an optional circular print action on the right, and the multi-line message input with the circular send button on the right. Suggestions are reported through `onSuggestionClick` so the host decides whether to append them to the message or send them directly; the print button is rendered only when `onPrintClick` is provided. Accessibility: bar description "Barra de mensaje". Derived test tags: `_suggestions`, `_print`, `_input`, `_input_field`, `_input_send`.
 - **ToteatMessageInputBar**: Standalone message input: a multi-line `ToteatTextField` (68.dp minimum height, 12.dp corners, top-aligned text and placeholder) plus a trailing `ToteatSendIconButton`, vertically centered against the field. The field grows up to `maxLines` (default `MessageInputMaxLines` = 4) and scrolls its own content beyond that, so a long note never pushes the bar off-screen; `ToteatCommentBottomBar` forwards the same parameter. The soft keyboard exposes an `ImeAction.Send` that triggers the same `onSendClick`. Derived test tags: `_field`, `_send`.
