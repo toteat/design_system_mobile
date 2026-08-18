@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -41,6 +42,7 @@ import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.theme.BlueLight
 import com.toteat.toteatds.theme.DarkBlue
 import com.toteat.toteatds.theme.NeutralGray300
+import com.toteat.toteatds.theme.NeutralGray400
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyLargeRegular
 import com.toteat.toteatds.utils.setTestTag
@@ -57,6 +59,7 @@ fun ToteatSquareButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     comingSoon: Boolean = false,
+    enabled: Boolean = true,
     testTag: String = "",
     iconSize: Dp = 48.dp,
     icon: @Composable () -> Unit
@@ -68,6 +71,7 @@ fun ToteatSquareButton(
     val targetBorderColor =
         if (pressed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
     val borderColor by animateColorAsState(targetValue = targetBorderColor, label = "squareBorder")
+    val contentColor = if (enabled) MaterialTheme.colorScheme.secondary else NeutralGray400
 
     val description = stringResource(Res.string.square_button_description, title, subTitle)
     val comingSoonText = stringResource(Res.string.coming_soon)
@@ -77,7 +81,7 @@ fun ToteatSquareButton(
 
     OutlinedCard(
         onClick = onClick,
-        enabled = true,
+        enabled = enabled,
         modifier = modifier
             .heightIn(min = 128.dp, max = 128.dp)
             .width(150.dp)
@@ -89,7 +93,7 @@ fun ToteatSquareButton(
         interactionSource = interactionSource,
         colors = CardDefaults
             .cardColors(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, if (comingSoon) NeutralGray300 else borderColor)
+        border = BorderStroke(1.dp, if (comingSoon || !enabled) NeutralGray300 else borderColor)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -108,7 +112,7 @@ fun ToteatSquareButton(
                 verticalArrangement = Arrangement.Top
             ) {
                 Box(
-                    modifier = Modifier.size(iconSize),
+                    modifier = Modifier.size(iconSize).alpha(if (enabled) 1f else 0.4f),
                     contentAlignment = Alignment.Center
                 ) {
                     icon()
@@ -119,7 +123,7 @@ fun ToteatSquareButton(
                         .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_title") else Modifier),
                     text = title,
                     style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = contentColor,
                     textAlign = TextAlign.Center,
                     softWrap = true
                 )
@@ -128,7 +132,7 @@ fun ToteatSquareButton(
                         .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_subtitle") else Modifier),
                     text = subTitle,
                     style = MaterialTheme.typography.bodyLargeRegular,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = contentColor,
                     textAlign = TextAlign.Start,
                     softWrap = true,
                     maxLines = Int.MAX_VALUE
@@ -195,6 +199,18 @@ private fun ToteatSquareButtonPreview() {
                 title = "Pago por",
                 subTitle = "monto especifico",
                 comingSoon = true,
+                iconSize = 36.dp,
+                icon = {
+                    DifferentAmountPaymentsIcon(
+                        modifier = Modifier.size(36.dp)
+                    )
+                },
+                onClick = {}
+            )
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "monto especifico",
+                enabled = false,
                 iconSize = 36.dp,
                 icon = {
                     DifferentAmountPaymentsIcon(
