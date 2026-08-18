@@ -30,8 +30,11 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 
-private val DefaultTextFieldHeight = 50.dp
-private val DefaultTextFieldShape = RoundedCornerShape(8.dp)
+/** Minimum height shared by every Toteat text field. */
+val DefaultTextFieldMinHeight = 50.dp
+
+/** Corner shape shared by every Toteat text field. */
+val DefaultTextFieldShape = RoundedCornerShape(8.dp)
 
 @Composable
 fun ToteatTextFieldLayout(
@@ -43,7 +46,7 @@ fun ToteatTextFieldLayout(
     helperText: String? = null,
     enabled: Boolean = true,
     onFocusChange: (Boolean) -> Unit = {},
-    minHeight: Dp = DefaultTextFieldHeight,
+    minHeight: Dp = DefaultTextFieldMinHeight,
     shape: Shape = DefaultTextFieldShape,
     testTag: String = "",
     textField: @Composable (Modifier, MutableInteractionSource) -> Unit

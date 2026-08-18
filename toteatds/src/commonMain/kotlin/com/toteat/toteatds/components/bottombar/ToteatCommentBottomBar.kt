@@ -51,6 +51,8 @@ private val VerticalPadding = 8.dp
  * @param onPrintClick Invoked when the print button is tapped. Pass `null` to hide the button.
  * @param placeholder Placeholder shown while the field is empty.
  * @param enabled Whether the bar is interactive.
+ * @param maxLines Lines the message field grows to before scrolling its content, so a long note
+ * never pushes the bar off-screen.
  * @param focusRequester Optional focus requester forwarded to the text field.
  * @param testTag Optional test tag. Derived tags: `_suggestions`, `_print`, `_input`, `_input_field`,
  * `_input_send`.
@@ -65,6 +67,7 @@ fun ToteatCommentBottomBar(
     onPrintClick: (() -> Unit)? = null,
     placeholder: String? = null,
     enabled: Boolean = true,
+    maxLines: Int = MessageInputMaxLines,
     focusRequester: FocusRequester? = null,
     testTag: String = ""
 ) {
@@ -123,6 +126,7 @@ fun ToteatCommentBottomBar(
                 onSendClick = onSendClick,
                 placeholder = placeholder,
                 enabled = enabled,
+                maxLines = maxLines,
                 focusRequester = focusRequester,
                 testTag = if (testTag.isNotEmpty()) "${testTag}_input" else ""
             )

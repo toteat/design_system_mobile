@@ -536,7 +536,9 @@ fun CommentBottomBarShowcase() {
     val filledState = rememberTextFieldState("Sin cebolla")
     val plainState = rememberTextFieldState()
     val disabledState = rememberTextFieldState("Enviando...")
+    val inputOnlyState = rememberTextFieldState("Sin cebolla")
     var lastSent by remember { mutableStateOf<String?>(null) }
+    var printCount by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -553,12 +555,16 @@ fun CommentBottomBarShowcase() {
             },
             suggestions = suggestions,
             onSuggestionClick = { kitchenState.setTextAndPlaceCursorAtEnd(it) },
-            onPrintClick = { lastSent = "Imprimir comanda" },
+            onPrintClick = { printCount++ },
             placeholder = "Mensaje para cocina......",
             testTag = "comment_bottom_bar"
         )
         Text(
             "Último mensaje enviado: ${lastSent ?: "-"}",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            "Comandas impresas: $printCount",
             style = MaterialTheme.typography.bodyMedium
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
@@ -598,7 +604,7 @@ fun CommentBottomBarShowcase() {
 
         Text("Solo input + envío", style = MaterialTheme.typography.titleMedium)
         ToteatMessageInputBar(
-            state = filledState,
+            state = inputOnlyState,
             onSendClick = {},
             placeholder = "Mensaje para cocina......",
             testTag = "message_input_bar"

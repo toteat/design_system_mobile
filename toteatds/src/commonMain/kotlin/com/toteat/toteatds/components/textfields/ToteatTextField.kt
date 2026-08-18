@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
@@ -45,9 +44,10 @@ fun ToteatTextField(
     isError: Boolean = false,
     isWarning: Boolean = false,
     singleLine: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
     enabled: Boolean = true,
-    minHeight: Dp = 50.dp,
-    shape: Shape = RoundedCornerShape(8.dp),
+    minHeight: Dp = DefaultTextFieldMinHeight,
+    shape: Shape = DefaultTextFieldShape,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
@@ -73,7 +73,9 @@ fun ToteatTextField(
             enabled = enabled,
             lineLimits = if (singleLine) {
                 TextFieldLineLimits.SingleLine
-            } else TextFieldLineLimits.Default,
+            } else {
+                TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
+            },
             textStyle = MaterialTheme.typography.headingMediumRegular,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,

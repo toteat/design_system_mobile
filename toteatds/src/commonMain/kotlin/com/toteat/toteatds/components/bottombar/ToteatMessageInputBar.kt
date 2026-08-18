@@ -27,19 +27,24 @@ internal val MessageInputSpacing = 12.dp
 internal val MessageInputMinHeight = 68.dp
 internal val MessageInputShape = RoundedCornerShape(12.dp)
 
+/** Lines the message field grows to before it starts scrolling its own content. */
+const val MessageInputMaxLines = 4
+
 /**
  * Message text field with a trailing circular send button.
  *
  * The field is multi-line and taller than the standard [ToteatTextField] so a kitchen note fits
- * without scrolling; text and placeholder are top-aligned. The soft keyboard shows a "send" action
- * that triggers the same callback as the button. Sending an empty message is the host's call — the
- * button stays active while [enabled] is true, matching the design.
+ * without scrolling; text and placeholder are top-aligned. It grows up to [maxLines] and scrolls its
+ * own content beyond that, so a long message never pushes the bar off-screen. The soft keyboard
+ * shows a "send" action that triggers the same callback as the button. Sending an empty message is
+ * the host's call — the button stays active while [enabled] is true, matching the design.
  *
  * @param state Text field state owned by the host.
  * @param onSendClick Invoked when the send button (or the keyboard send action) is used.
  * @param modifier Modifier applied to the root row.
  * @param placeholder Placeholder shown while the field is empty. Defaults to "Escribe un mensaje...".
  * @param enabled Whether the whole input is interactive.
+ * @param maxLines Lines the field grows to before scrolling its content.
  * @param focusRequester Optional focus requester forwarded to the text field.
  * @param testTag Optional test tag. Derived tags: `_field`, `_send`.
  */
@@ -50,6 +55,7 @@ fun ToteatMessageInputBar(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     enabled: Boolean = true,
+    maxLines: Int = MessageInputMaxLines,
     focusRequester: FocusRequester? = null,
     testTag: String = ""
 ) {
@@ -67,6 +73,7 @@ fun ToteatMessageInputBar(
             modifier = Modifier.weight(1f),
             placeHolder = resolvedPlaceholder,
             singleLine = false,
+            maxLines = maxLines,
             enabled = enabled,
             minHeight = MessageInputMinHeight,
             shape = MessageInputShape,
