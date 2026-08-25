@@ -160,4 +160,6 @@
     <string name="comment_bottom_bar_description">Barra de mensaje</string>
     <string name="message_input_placeholder">Escribe un mensaje...</string>
     <string name="icon_send_description">Enviar mensaje</string>
+    <string name="comment_bubble_sent_description">Enviado</string>
+    <string name="icon_comment_description">Comentarios</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.utils.setTestTag
@@ -31,9 +32,10 @@ fun ToteatChipButtonContainer(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     testTag: String = "",
-    // New parameter goes after the previously published ones so positional call sites keep working;
+    // New parameters go after the previously published ones so positional call sites keep working;
     // `itemModifier` stays last to preserve trailing-lambda syntax.
     containerColor: Color? = null,
+    itemHeight: Dp? = null,
     itemModifier: (itemText: String) -> Modifier = { Modifier }
 ) {
     val containerDescription = stringResource(Res.string.chip_container_description)
@@ -66,6 +68,7 @@ fun ToteatChipButtonContainer(
                 onClick = onClick,
                 enabled = enabled,
                 containerColor = containerColor,
+                height = itemHeight,
                 modifier = modifierForItem
             )
         }

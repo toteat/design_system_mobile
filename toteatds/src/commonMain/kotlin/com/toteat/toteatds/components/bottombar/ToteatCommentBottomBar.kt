@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
@@ -20,6 +21,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
+import com.toteat.toteatds.components.icons.CircularIconButtonSize
 import com.toteat.toteatds.components.icons.ToteatPrintIconButton
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
@@ -31,9 +33,26 @@ import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-private val ContentSpacing = 8.dp
+private val SuggestionChipHeight = 18.dp
 private val HorizontalPadding = 16.dp
 private val VerticalPadding = 8.dp
+
+/**
+ * Height of the suggestions row. The circular print action is the tallest thing in it, and its
+ * 48.dp minimum touch target must not stretch the row: pinning the height keeps the reserved area
+ * from showing up as blank space between the chips and the message field.
+ */
+private val ActionRowHeight = CircularIconButtonSize
+
+/** Gap the design asks for between the suggestion pill and the message field. */
+private val SuggestionToInputSpacing = 10.dp
+
+/**
+ * The chips are centered inside [ActionRowHeight], so half of the difference against the row height
+ * already sits below the pill; only the remainder is real spacing.
+ */
+private val ContentSpacing =
+    SuggestionToInputSpacing - (ActionRowHeight - SuggestionChipHeight) / 2
 
 /**
  * Bottom bar for comment / messaging screens (e.g. "Comunicación cocina").
@@ -93,7 +112,9 @@ fun ToteatCommentBottomBar(
         ) {
             if (suggestions.isNotEmpty() || onPrintClick != null) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(ActionRowHeight),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(MessageInputSpacing)
                 ) {
@@ -105,6 +126,7 @@ fun ToteatCommentBottomBar(
                             modifier = Modifier.weight(1f),
                             enabled = enabled,
                             containerColor = MaterialTheme.colorScheme.extended.tertiarySurface,
+                            itemHeight = SuggestionChipHeight,
                             testTag = if (testTag.isNotEmpty()) "${testTag}_suggestions" else ""
                         )
                     } else {
