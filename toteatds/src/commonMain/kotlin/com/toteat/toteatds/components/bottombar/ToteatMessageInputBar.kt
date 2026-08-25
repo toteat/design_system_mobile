@@ -24,7 +24,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 internal val MessageInputSpacing = 12.dp
-internal val MessageInputMinHeight = 68.dp
+internal val MessageInputMinHeight = 72.dp
 internal val MessageInputShape = RoundedCornerShape(12.dp)
 
 /** Lines the message field grows to before it starts scrolling its own content. */

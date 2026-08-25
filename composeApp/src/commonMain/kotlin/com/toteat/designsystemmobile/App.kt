@@ -83,6 +83,7 @@ import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
 import com.toteat.toteatds.components.dropdown.ToteatDropDown
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.PrintIconButton
+import com.toteat.toteatds.components.icons.ToteatCommentIconButton
 import com.toteat.toteatds.components.icons.ToteatPrintIconButton
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
 import com.toteat.toteatds.components.icons.TotalPaymentsIcon
@@ -93,6 +94,8 @@ import com.toteat.toteatds.components.list.ProductCard
 import com.toteat.toteatds.components.list.ProductCardGroup
 import com.toteat.toteatds.components.list.ProductCardItem
 import com.toteat.toteatds.components.list.ProductCardStatus
+import com.toteat.toteatds.components.messageview.ToteatCommentBubble
+import com.toteat.toteatds.components.messageview.ToteatCommentBubbleVariant
 import com.toteat.toteatds.components.messageview.WelcomeMessage
 import com.toteat.toteatds.components.segmentbuttons.SegmentedTabs
 import com.toteat.toteatds.components.segmentbuttons.TabSelectorBadge
@@ -110,6 +113,7 @@ import com.toteat.toteatds.components.topbar.BackNavigationTopBar
 import com.toteat.toteatds.components.topbar.CenterContentTopBar
 import com.toteat.toteatds.components.topbar.CommentNavigationTopBar
 import com.toteat.toteatds.components.topbar.LoginTopBar
+import com.toteat.toteatds.components.topbar.ToteatTopBar
 import com.toteat.toteatds.components.display.ToteatAmountDisplay
 import com.toteat.toteatds.components.display.ToteatPendingAmountLabel
 import com.toteat.toteatds.components.display.ToteatPillLabel
@@ -555,6 +559,39 @@ fun CommentBottomBarShowcase() {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        Text("Mensajes enviados", style = MaterialTheme.typography.titleMedium)
+        ToteatCommentBubble(
+            message = "Cenicero para la mesa",
+            info = "Impresora bar vip - 18:00",
+            isSent = true,
+            testTag = "comment_bubble"
+        )
+        ToteatCommentBubble(
+            message = "Sin picante",
+            info = "Impresora bar vip - 18:20",
+            isSent = true,
+            variant = ToteatCommentBubbleVariant.Highlighted,
+            testTag = "comment_bubble_highlighted"
+        )
+        ToteatCommentBubble(
+            message = "Sin sal",
+            info = "Enviando...",
+            testTag = "comment_bubble_pending"
+        )
+        ToteatCommentBubble(
+            message = "La mesa 12 pidió el lomo término medio y sin salsa, " +
+                "además de una guarnición extra de papas fritas",
+            info = "Impresora cocina caliente - 18:04",
+            isSent = true,
+            variant = ToteatCommentBubbleVariant.Highlighted,
+            testTag = "comment_bubble_long"
+        )
+        ToteatCommentBubble(
+            message = "Mesa lista para el postre",
+            testTag = "comment_bubble_plain"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
         Text("Con sugerencias (vacío)", style = MaterialTheme.typography.titleMedium)
         ToteatCommentBottomBar(
             state = kitchenState,
@@ -618,6 +655,22 @@ fun CommentBottomBarShowcase() {
             placeholder = "Mensaje para cocina......",
             testTag = "message_input_bar"
         )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Botón de comentarios (sobre barra oscura)", style = MaterialTheme.typography.titleMedium)
+        Row(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.secondary)
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ToteatCommentIconButton(onClick = {}, testTag = "comment_icon_button_standalone")
+            ToteatCommentIconButton(
+                onClick = {},
+                enabled = false,
+                testTag = "comment_icon_button_disabled"
+            )
+        }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Botones circulares", style = MaterialTheme.typography.titleMedium)
@@ -1159,6 +1212,25 @@ fun TopBarShowcase() {
             badgeText = "Mesa S7",
             onNavigateBackClick = {},
             testTag = "comment_navigation_topbar_long_title"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Acceso a comentarios (icono navbar)", style = MaterialTheme.typography.titleMedium)
+        ToteatTopBar(
+            centerComponent = {
+                Text(
+                    text = "Mesa S7",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            },
+            rightComponent = {
+                ToteatCommentIconButton(
+                    onClick = {},
+                    testTag = "comment_icon_button"
+                )
+            },
+            testTag = "comment_icon_topbar"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 

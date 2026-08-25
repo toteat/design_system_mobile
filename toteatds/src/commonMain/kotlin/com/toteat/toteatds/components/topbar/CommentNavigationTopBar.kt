@@ -36,8 +36,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 private val BadgeShape = RoundedCornerShape(50)
 private val BadgeMinHeight = 30.dp
 private val BadgeMaxWidth = 140.dp
-private val BackButtonSize = 36.dp
-private val BackButtonIconSize = 22.dp
 
 /**
  * Top bar for comment / messaging screens (e.g. "Comunicación cocina").
@@ -69,8 +67,6 @@ fun CommentNavigationTopBar(
         leftComponent = {
             ArrowBackIconButton(
                 onNavigateBackClick = onNavigateBackClick,
-                size = BackButtonSize,
-                iconSize = BackButtonIconSize,
                 testTag = if (testTag.isNotEmpty()) "${testTag}_back" else ""
             )
         },
