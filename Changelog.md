@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.45] - 2026-08-25
 ### Added
 - **ToteatCommentBubble**: New bubble for the messages already sent in comment / messaging screens (e.g. "Comunicación cocina"). Shows the message (16.dp corners) and, aligned to the end, the optional `info` line (`bodyMediumRegular` over `neutral400`) with the delivery reference such as "Impresora bar vip - 18:00", plus the blue double check when `isSent = true`. Long references are ellipsized so they never push the check off the bubble. The container color is overridable via `containerColor` (`null` keeps the variant's own). Accessibility: the bubble merges its descendants into a single node and the double check is described as "Enviado". Derived test tags: `_message`, `_info`, `_sent`.
 - **ToteatCommentBubbleVariant**: The two states of the bubble, sharing the layout and differing only in container, elevation and message weight: `Default` (white card, 2.dp shadow, message in `headingMediumRegular`) and `Highlighted` (flat `TertiarySurface` cream container, message in `headlineMedium` bold) for the comments that still need attention.
