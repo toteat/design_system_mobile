@@ -93,6 +93,7 @@ import com.toteat.toteatds.components.list.GroupedOrderDetail
 import com.toteat.toteatds.components.list.OrderItem
 import com.toteat.toteatds.components.list.OrderItemExtra
 import com.toteat.toteatds.components.list.ProductCard
+import com.toteat.toteatds.components.list.ProductCardAction
 import com.toteat.toteatds.components.list.ProductCardGroup
 import com.toteat.toteatds.components.list.ProductCardItem
 import com.toteat.toteatds.components.list.ProductCardStatus
@@ -1482,7 +1483,7 @@ fun ProductCardShowcase() {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("Single", style = MaterialTheme.typography.titleMedium)
+        Text("Single (acción DELETE, por defecto)", style = MaterialTheme.typography.titleMedium)
         ProductCard(
             name = "Hamburguesa BBQ",
             description = "Unitario: $7.000",
@@ -1491,6 +1492,47 @@ fun ProductCardShowcase() {
             status = ProductCardStatus.PENDING,
             showDeleteButton = true,
             onDeleteClick = {}
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Single (acción EDIT)", style = MaterialTheme.typography.titleMedium)
+        ProductCard(
+            name = "Hamburguesa BBQ",
+            description = "Unitario: $7.000",
+            price = "$14.000",
+            quantity = 2,
+            status = ProductCardStatus.PENDING,
+            showDeleteButton = true,
+            onDeleteClick = {},
+            action = ProductCardAction.EDIT
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Grouped (acción EDIT)", style = MaterialTheme.typography.titleMedium)
+        ProductCardGroup(
+            items = persistentListOf(
+                ProductCardItem(
+                    name = "Hamburguesa BBQ",
+                    description = "Unitario: $7.000",
+                    price = "$14.000",
+                    quantity = 2,
+                    status = ProductCardStatus.PENDING,
+                    showDeleteButton = true,
+                    onDeleteClick = {},
+                    action = ProductCardAction.EDIT
+                ),
+                ProductCardItem(
+                    name = "Papas fritas grandes",
+                    description = "Unitario: $3.500",
+                    price = "$3.500",
+                    quantity = 1,
+                    status = ProductCardStatus.CONFIRMED,
+                    showDeleteButton = true,
+                    onDeleteClick = {}
+                )
+            )
         )
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)

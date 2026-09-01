@@ -88,6 +88,7 @@
     <string name="product_card_description">%1$s, %2$s, estado %3$s</string>
     <string name="product_card_group_description">Lista de productos, %1$d elementos</string>
     <string name="product_card_remove_description">Eliminar %1$s</string>
+    <string name="product_card_edit_description">Ajustar cantidad de %1$s</string>
     <string name="product_card_quantity_description">Cantidad %1$d</string>
     <string name="product_card_status_default">neutro</string>
     <string name="product_card_status_confirmed">confirmado</string>

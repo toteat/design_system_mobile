@@ -50,8 +50,10 @@ import com.toteat.toteatds.theme.bodyMediumRegular
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.icon_delete_default
+import designsystemmobile.toteatds.generated.resources.icon_edit_pencil
 import designsystemmobile.toteatds.generated.resources.icon_right_chevron
 import designsystemmobile.toteatds.generated.resources.product_card_description
+import designsystemmobile.toteatds.generated.resources.product_card_edit_description
 import designsystemmobile.toteatds.generated.resources.product_card_group_description
 import designsystemmobile.toteatds.generated.resources.product_card_quantity_description
 import designsystemmobile.toteatds.generated.resources.product_card_remove_description
@@ -77,6 +79,31 @@ enum class ProductCardStatus(val statusRes: StringResource) {
     PENDING(Res.string.product_card_status_pending)
 }
 
+/**
+ * Qué significa el botón de acción de la fila, cuando `showDeleteButton = true`.
+ *
+ * Cada variante fija su ícono, su descripción de accesibilidad y su tamaño, de modo que la
+ * iconografía siga siendo decisión del design system y el consumidor solo elija la intención.
+ *
+ * [DELETE] es el comportamiento histórico: el basurero de "Eliminar %1$s". [EDIT] es el lápiz de
+ * "Ajustar cantidad de %1$s", para las pantallas donde el ícono ya no borra el producto sino que
+ * abre el modal de ajuste de cantidad (POS, comanda por confirmar).
+ *
+ * Sobre [iconSize]: los dos drawables ocupan proporciones muy distintas de su viewport.
+ * `icon_delete_default` es un 16x16 relleno cuyo trazo llega casi al borde, así que a 12.dp se ven
+ * ~11.5.dp de tinta. `icon_edit_pencil` es un 24x24 de líneas cuyo dibujo cubre ~70% del viewport,
+ * así que a 12.dp se verían ~8.4.dp y un trazo de 0.75.dp: más chico y más delgado que el basurero.
+ * A 16.dp el lápiz recupera ~11.2.dp de tinta y un trazo de 1.dp, que es el que usa el resto de la
+ * iconografía lineal del sistema, y ópticamente pesa lo mismo que el basurero de 12.dp.
+ */
+enum class ProductCardAction {
+    DELETE,
+    EDIT
+}
+
+private val ProductCardDeleteIconSize = 12.dp
+private val ProductCardEditIconSize = 16.dp
+
 data class ProductCardItem(
     val name: String,
     val description: String?,
@@ -85,9 +112,17 @@ data class ProductCardItem(
     val status: ProductCardStatus,
     val showDeleteButton: Boolean = false,
     val onDeleteClick: (() -> Unit)? = null,
-    val onClick: (() -> Unit)? = null
+    val onClick: (() -> Unit)? = null,
+    val action: ProductCardAction = ProductCardAction.DELETE
 )
 
+/**
+ * @param action Qué representa el botón de acción que aparece con [showDeleteButton]. Por defecto
+ * [ProductCardAction.DELETE], el basurero de siempre; [ProductCardAction.EDIT] dibuja el lápiz de
+ * "ajustar cantidad". Se declara justo después de [onDeleteClick] y antes de [onClick], que hasta
+ * ahora era el octavo parámetro: cualquier llamada posicional que llegue hasta ahí tiene que pasar
+ * a nombrar sus argumentos.
+ */
 @Composable
 fun ProductCard(
     name: String,
@@ -97,6 +132,7 @@ fun ProductCard(
     status: ProductCardStatus,
     showDeleteButton: Boolean = false,
     onDeleteClick: (() -> Unit)? = null,
+    action: ProductCardAction = ProductCardAction.DELETE,
     onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     testTag: String = ""
@@ -117,6 +153,7 @@ fun ProductCard(
             status = status,
             showDeleteButton = showDeleteButton,
             onDeleteClick = onDeleteClick,
+            action = action,
             onClick = onClick,
             modifier = Modifier.fillMaxWidth(),
             testTag = testTag
@@ -158,6 +195,7 @@ fun ProductCardGroupItem(
             status = item.status,
             showDeleteButton = item.showDeleteButton,
             onDeleteClick = item.onDeleteClick,
+            action = item.action,
             onClick = item.onClick,
             modifier = Modifier.fillMaxWidth(),
             testTag = testTag
@@ -247,6 +285,7 @@ fun ProductCardGroup(
                 status = item.status,
                 showDeleteButton = item.showDeleteButton,
                 onDeleteClick = item.onDeleteClick,
+                action = item.action,
                 onClick = item.onClick,
                 modifier = Modifier.fillMaxWidth(),
                 testTag = if (testTag.isNotEmpty()) "${testTag}_item_$index" else ""
@@ -321,6 +360,7 @@ private fun ProductCardRow(
     status: ProductCardStatus,
     showDeleteButton: Boolean,
     onDeleteClick: (() -> Unit)?,
+    action: ProductCardAction,
     onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     testTag: String = ""
@@ -409,6 +449,7 @@ private fun ProductCardRow(
                 RemoveProductButton(
                     name = name,
                     onDeleteClick = onDeleteClick,
+                    action = action,
                     testTag = if (testTag.isNotEmpty()) "${testTag}_delete" else ""
                 )
             }
@@ -468,23 +509,35 @@ private fun QuantityBadge(
 private fun RemoveProductButton(
     name: String,
     onDeleteClick: (() -> Unit)?,
+    action: ProductCardAction,
     testTag: String = ""
 ) {
-    val removeDescription = stringResource(Res.string.product_card_remove_description, name)
+    val actionDescription = when (action) {
+        ProductCardAction.DELETE -> stringResource(Res.string.product_card_remove_description, name)
+        ProductCardAction.EDIT -> stringResource(Res.string.product_card_edit_description, name)
+    }
+    val actionIcon = when (action) {
+        ProductCardAction.DELETE -> Res.drawable.icon_delete_default
+        ProductCardAction.EDIT -> Res.drawable.icon_edit_pencil
+    }
+    val actionSize = when (action) {
+        ProductCardAction.DELETE -> ProductCardDeleteIconSize
+        ProductCardAction.EDIT -> ProductCardEditIconSize
+    }
 
     Icon(
-        imageVector = vectorResource(Res.drawable.icon_delete_default),
+        imageVector = vectorResource(actionIcon),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.primary,
         modifier = Modifier
-            .size(12.dp)
+            .size(actionSize)
             .then(
                 if (onDeleteClick != null) {
                     Modifier
                         .clickable(onClick = onDeleteClick)
                         .semantics {
                             role = Role.Button
-                            contentDescription = removeDescription
+                            contentDescription = actionDescription
                         }
                 } else {
                     Modifier
@@ -526,6 +579,40 @@ private fun ProductCardSinglePreview() {
 
 @Preview(showBackground = true)
 @Composable
+private fun ProductCardSingleEditActionPreview() {
+    ToteatTheme {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            ProductCard(
+                name = "Hamburguesa BBQ",
+                description = "Unitario: \$ 7.000",
+                price = "\$14.000",
+                quantity = 2,
+                status = ProductCardStatus.PENDING,
+                showDeleteButton = true,
+                onDeleteClick = {},
+                action = ProductCardAction.EDIT
+            )
+            ProductCard(
+                name = "Mojito tradicional",
+                description = "Unitario: \$ 5.290",
+                price = "\$5.290",
+                quantity = 1,
+                status = ProductCardStatus.PENDING,
+                showDeleteButton = true,
+                onDeleteClick = {},
+                action = ProductCardAction.DELETE
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 private fun ProductCardGroupedPreview() {
     ToteatTheme {
         ProductCardGroup(
@@ -544,6 +631,47 @@ private fun ProductCardGroupedPreview() {
                     price = "\$5.290",
                     quantity = 1,
                     status = ProductCardStatus.CONFIRMED
+                )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProductCardGroupedEditActionPreview() {
+    ToteatTheme {
+        ProductCardGroup(
+            modifier = Modifier.padding(16.dp),
+            items = persistentListOf(
+                ProductCardItem(
+                    name = "Hamburguesa BBQ",
+                    description = "Unitario: \$ 7.000",
+                    price = "\$14.000",
+                    quantity = 2,
+                    status = ProductCardStatus.PENDING,
+                    showDeleteButton = true,
+                    onDeleteClick = {},
+                    action = ProductCardAction.EDIT
+                ),
+                ProductCardItem(
+                    name = "Mojito tradicional",
+                    description = "Unitario: \$ 5.290",
+                    price = "\$5.290",
+                    quantity = 1,
+                    status = ProductCardStatus.PENDING,
+                    showDeleteButton = true,
+                    onDeleteClick = {},
+                    action = ProductCardAction.EDIT
+                ),
+                ProductCardItem(
+                    name = "Papas fritas grandes",
+                    description = "Unitario: \$ 3.500",
+                    price = "\$3.500",
+                    quantity = 1,
+                    status = ProductCardStatus.CONFIRMED,
+                    showDeleteButton = true,
+                    onDeleteClick = {}
                 )
             )
         )
