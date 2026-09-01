@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ProductCard**: `action` moves to the end of the signature, after `testTag`, instead of sitting between `onDeleteClick` and `onClick` as published in 0.1.47. Inserting it in the middle shifted the position of the parameters published up to 0.1.46, so any positional call that reached `onClick` broke. With the parameter last, those call sites work again exactly as they did before 0.1.47. Callers that already adopted 0.1.47 and passed `action` positionally in the 8th slot — the case this fix is aimed at — need to name the argument. `ProductCardItem.action` was already the last field and does not move.
+
 ## [0.1.47] - 2026-09-01
 ### Added
 - **ProductCardAction**: New enum (`DELETE`, `EDIT`) that says what the row's action button *means*. Each value owns its icon, its accessibility description and its size, so the iconography stays a design-system decision and the host only picks the intent — no loose `DrawableResource` in the public API. `DELETE` is the historical behaviour (`icon_delete_default`, "Eliminar %1$s"); `EDIT` is the pencil (`icon_edit_pencil`, "Ajustar cantidad de %1$s") for the screens where the icon no longer removes the product but opens the quantity adjustment modal (POS, comanda por confirmar).

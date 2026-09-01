@@ -119,9 +119,7 @@ data class ProductCardItem(
 /**
  * @param action Qué representa el botón de acción que aparece con [showDeleteButton]. Por defecto
  * [ProductCardAction.DELETE], el basurero de siempre; [ProductCardAction.EDIT] dibuja el lápiz de
- * "ajustar cantidad". Se declara justo después de [onDeleteClick] y antes de [onClick], que hasta
- * ahora era el octavo parámetro: cualquier llamada posicional que llegue hasta ahí tiene que pasar
- * a nombrar sus argumentos.
+ * "ajustar cantidad".
  */
 @Composable
 fun ProductCard(
@@ -132,10 +130,11 @@ fun ProductCard(
     status: ProductCardStatus,
     showDeleteButton: Boolean = false,
     onDeleteClick: (() -> Unit)? = null,
-    action: ProductCardAction = ProductCardAction.DELETE,
     onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working.
+    action: ProductCardAction = ProductCardAction.DELETE
 ) {
     Box(
         modifier = modifier
