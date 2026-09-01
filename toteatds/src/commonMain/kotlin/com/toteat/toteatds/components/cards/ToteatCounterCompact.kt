@@ -1,7 +1,9 @@
 package com.toteat.toteatds.components.cards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +29,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
@@ -35,11 +38,23 @@ import designsystemmobile.toteatds.generated.resources.counter_delete
 import designsystemmobile.toteatds.generated.resources.counter_description
 import designsystemmobile.toteatds.generated.resources.counter_increment
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val ContainerPadding = 4.dp
 private val ButtonSize = 28.dp
 private val IconSize = 18.dp
 
+/**
+ * Compact quantity counter: decrement / delete button, quantity and increment button inside a pill.
+ *
+ * @param allowZero Whether the counter keeps its full dial at `quantity == 0`. When `false` (the
+ * default, and the behaviour of every call site published so far) a zero quantity collapses the
+ * counter to just the "+" button, which is what the menu product row, the product detail, the diner
+ * dialog and the extras selection expect. When `true` the row is always complete — decrement button,
+ * the "0" and the increment button — with the decrement button disabled so the quantity can never go
+ * below zero. Used by screens that need to show and confirm the zero state, such as the POS quantity
+ * adjustment modal.
+ */
 @Composable
 fun ToteatCounterCompact(
     quantity: Int,
@@ -47,11 +62,16 @@ fun ToteatCounterCompact(
     onDecrement: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working.
+    allowZero: Boolean = false
 ) {
     val counterDescription = stringResource(Res.string.counter_description, quantity)
     val incrementDescription = stringResource(Res.string.counter_increment)
-    val decrementDescription = if (quantity <= 1) {
+    // The bin icon and its "Eliminar producto" description belong to quantity 1, where decrementing
+    // removes the product. At 0 the button is only there to keep the dial complete, so it goes back
+    // to the plain "Disminuir cantidad".
+    val decrementDescription = if (quantity == 1) {
         stringResource(Res.string.counter_delete)
     } else {
         stringResource(Res.string.counter_decrement)
@@ -63,6 +83,11 @@ fun ToteatCounterCompact(
     val iconTint = if (enabled) MaterialTheme.colorScheme.onSurface
         else MaterialTheme.colorScheme.outlineVariant
     val textColor = if (enabled) MaterialTheme.colorScheme.onSurface else extended.disabledContent
+
+    // Only reachable with allowZero = true; otherwise the block below is not rendered at 0.
+    val decrementEnabled = enabled && quantity > 0
+    val decrementBg = if (decrementEnabled) buttonBg else extended.counterButtonDisabled
+    val decrementIconTint = if (decrementEnabled) iconTint else MaterialTheme.colorScheme.outlineVariant
 
     Surface(
         modifier = modifier
@@ -78,13 +103,13 @@ fun ToteatCounterCompact(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (quantity > 0) {
+            if (quantity > 0 || allowZero) {
                 // Decrement / Delete button
                 CounterButton(
                     onClick = onDecrement,
-                    enabled = enabled,
-                    backgroundColor = buttonBg,
-                    iconTint = iconTint,
+                    enabled = decrementEnabled,
+                    backgroundColor = decrementBg,
+                    iconTint = decrementIconTint,
                     semanticDescription = decrementDescription,
                     testTag = if (testTag.isNotEmpty()) "${testTag}_decrement" else ""
                 ) {
@@ -153,6 +178,73 @@ fun CounterButton(
             Box(contentAlignment = Alignment.Center) {
                 content()
             }
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ToteatCounterCompactPreview() {
+    ToteatTheme {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            ToteatCounterCompact(
+                quantity = 0,
+                onIncrement = {},
+                onDecrement = {}
+            )
+            ToteatCounterCompact(
+                quantity = 1,
+                onIncrement = {},
+                onDecrement = {}
+            )
+            ToteatCounterCompact(
+                quantity = 5,
+                onIncrement = {},
+                onDecrement = {}
+            )
+            ToteatCounterCompact(
+                quantity = 2,
+                onIncrement = {},
+                onDecrement = {},
+                enabled = false
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ToteatCounterCompactAllowZeroPreview() {
+    ToteatTheme {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            ToteatCounterCompact(
+                quantity = 0,
+                onIncrement = {},
+                onDecrement = {},
+                allowZero = true
+            )
+            ToteatCounterCompact(
+                quantity = 1,
+                onIncrement = {},
+                onDecrement = {},
+                allowZero = true
+            )
+            ToteatCounterCompact(
+                quantity = 2,
+                onIncrement = {},
+                onDecrement = {},
+                allowZero = true
+            )
         }
     }
 }

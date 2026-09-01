@@ -56,6 +56,8 @@ import com.toteat.toteatds.components.bottombar.ToteatCommentBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatMessageInputBar
 import com.toteat.toteatds.components.icons.ToteatSendIconButton
 import com.toteat.toteatds.components.cards.ToteatCategoryCard
+import com.toteat.toteatds.components.cards.ToteatCounterCompact
+import com.toteat.toteatds.components.cards.ToteatCounterCompactBasic
 import com.toteat.toteatds.components.cards.ToteatProductRow
 import com.toteat.toteatds.components.cards.ToteatSubcategoryButton
 import com.toteat.toteatds.components.brand.iso.ToteatIsoBlackAndCream
@@ -159,6 +161,7 @@ fun App() {
                     ComponentShowcaseItem(title = "Chip container"),
                     ComponentShowcaseItem(title = "Category Cards"),
                     ComponentShowcaseItem(title = "Product Rows"),
+                    ComponentShowcaseItem(title = "Counters"),
                     ComponentShowcaseItem(title = "Subcategory Buttons"),
                     ComponentShowcaseItem(title = "Order detail"),
                     ComponentShowcaseItem(title = "Product card"),
@@ -287,6 +290,7 @@ fun ComponentShowcaseSection(
                 "Chip container" -> ChipButtonShowcase()
                 "Category Cards" -> CategoryCardShowcase()
                 "Product Rows" -> ProductRowShowcase()
+                "Counters" -> CounterShowcase()
                 "Subcategory Buttons" -> SubcategoryButtonShowcase()
                 "Order detail" -> OrderDetailShowcase()
                 "Product card" -> ProductCardShowcase()
@@ -1734,6 +1738,66 @@ fun ProductRowShowcase() {
             onDecrement = { if (quantity1 > 0) quantity1-- },
             statusTag = StatusTagVariant.Promotion,
             statusTagText = "50% OFF"
+        )
+    }
+}
+
+@Composable
+fun CounterShowcase() {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        var compact by remember { mutableIntStateOf(0) }
+        var compactAllowZero by remember { mutableIntStateOf(0) }
+        var basic by remember { mutableIntStateOf(0) }
+        var basicAllowZero by remember { mutableIntStateOf(0) }
+
+        Text("ToteatCounterCompact (allowZero = false)", style = MaterialTheme.typography.titleMedium)
+        ToteatCounterCompact(
+            quantity = compact,
+            onIncrement = { compact++ },
+            onDecrement = { if (compact > 0) compact-- }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("ToteatCounterCompact (allowZero = true)", style = MaterialTheme.typography.titleMedium)
+        ToteatCounterCompact(
+            quantity = compactAllowZero,
+            onIncrement = { compactAllowZero++ },
+            onDecrement = { if (compactAllowZero > 0) compactAllowZero-- },
+            allowZero = true
+        )
+        ToteatCounterCompact(
+            quantity = 0,
+            onIncrement = {},
+            onDecrement = {},
+            enabled = false,
+            allowZero = true
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("ToteatCounterCompactBasic (allowZero = false)", style = MaterialTheme.typography.titleMedium)
+        ToteatCounterCompactBasic(
+            quantity = basic,
+            onIncrement = { basic++ },
+            onDecrement = { if (basic > 0) basic-- }
+        )
+
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+        Text("ToteatCounterCompactBasic (allowZero = true)", style = MaterialTheme.typography.titleMedium)
+        ToteatCounterCompactBasic(
+            quantity = basicAllowZero,
+            onIncrement = { basicAllowZero++ },
+            onDecrement = { if (basicAllowZero > 0) basicAllowZero-- },
+            allowZero = true
+        )
+        ToteatCounterCompactBasic(
+            quantity = 0,
+            onIncrement = {},
+            onDecrement = {},
+            enabled = false,
+            allowZero = true
         )
     }
 }
