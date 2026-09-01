@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.47] - 2026-09-01
 ### Added
 - **ProductCardAction**: New enum (`DELETE`, `EDIT`) that says what the row's action button *means*. Each value owns its icon, its accessibility description and its size, so the iconography stays a design-system decision and the host only picks the intent — no loose `DrawableResource` in the public API. `DELETE` is the historical behaviour (`icon_delete_default`, "Eliminar %1$s"); `EDIT` is the pencil (`icon_edit_pencil`, "Ajustar cantidad de %1$s") for the screens where the icon no longer removes the product but opens the quantity adjustment modal (POS, comanda por confirmar).
 - **ProductCardItem / ProductCard**: New parameter `action: ProductCardAction = ProductCardAction.DELETE`, propagated through `ProductCard`, `ProductCardRow`, `ProductCardGroupItem` and `ProductCardGroup` down to the action button. With the default the render is unchanged. In `ProductCardItem` it is the last field; in `ProductCard` it sits after `onDeleteClick` and therefore *before* `onClick`, so a positional call that reaches the 8th argument has to switch to named arguments. The derived test tag stays `${testTag}_delete` for both values, since the POS E2E tests rely on it.
