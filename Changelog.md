@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.46] - 2026-09-01
 ### Added
 - **ToteatCounterCompact / ToteatCounterCompactBasic**: New optional parameter `allowZero: Boolean = false`. With the default `false` the counters keep collapsing to just the "+" button at `quantity == 0`, which is what the menu product row, the product detail, the diner dialog and the extras selection rely on. With `true` the dial stays complete at 0 — decrement button, the "0" and the increment button — and the decrement button is rendered disabled (`counterButtonDisabled` container, `outlineVariant` icon, the same treatment `CounterButton` already gives a disabled button) so the quantity can never go below zero; it is enabled only when `enabled && quantity > 0`. This is what the POS quantity adjustment modal needs to let the user go down to 0 and confirm the removal. Accessibility is unchanged: the container still announces "Cantidad: N" and the zero-state decrement button reuses "Disminuir cantidad" — in `ToteatCounterCompact` the bin icon and its "Eliminar producto" description stay exclusive to `quantity == 1`. The derived test tags `_decrement`, `_quantity` and `_increment` exist at 0 too when `allowZero = true`. The parameter is declared after the ones published in 0.1.45 (last, after `testTag`), so positional call sites are unaffected.
 - **Showcase**: New "Counters" section in the demo app covering both counters with and without `allowZero`, including the disabled zero state.
