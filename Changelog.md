@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.48] - 2026-09-01
 ### Changed
 - **ProductCard**: `action` moves to the end of the signature, after `testTag`, instead of sitting between `onDeleteClick` and `onClick` as published in 0.1.47. Inserting it in the middle shifted the position of the parameters published up to 0.1.46, so any positional call that reached `onClick` broke. With the parameter last, those call sites work again exactly as they did before 0.1.47. Callers that already adopted 0.1.47 and passed `action` positionally in the 8th slot — the case this fix is aimed at — need to name the argument. `ProductCardItem.action` was already the last field and does not move.
 
