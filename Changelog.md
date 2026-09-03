@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatTextField / ToteatMessageInputBar / ToteatCommentBottomBar**: New optional parameter `maxLength: Int? = null`, propagated down the chain. With `null` nothing changes. With a value the field rejects input that would push the text past the cap, paste included, through `InputTransformation.maxLength` on the `BasicTextField` — the rejection happens in the input transformation, so the `TextFieldState` never holds the extra text and the cursor does not jump when editing mid-text; the transformation also publishes `maxTextLength` to accessibility services. It filters user input only: text the host writes into the state (`setTextAndPlaceCursorAtEnd`, `edit { }`) is not capped, which matters for `ToteatCommentBottomBar`, where suggestions are reported through `onSuggestionClick` and appended by the host. A `maxLength <= 0` fails with `require`. Declared last in the three signatures, so positional call sites are unaffected. Test tags unchanged.
+- **Showcase**: New "Tope de 200 caracteres" entry in the "Comment Bottom Bar" section, with a live character count.
+
 ## [0.1.48] - 2026-09-01
 ### Changed
 - **ProductCard**: `action` moves to the end of the signature, after `testTag`, instead of sitting between `onDeleteClick` and `onClick` as published in 0.1.47. Inserting it in the middle shifted the position of the parameters published up to 0.1.46, so any positional call that reached `onClick` broke. With the parameter last, those call sites work again exactly as they did before 0.1.47. Callers that already adopted 0.1.47 and passed `action` positionally in the 8th slot — the case this fix is aimed at — need to name the argument. `ProductCardItem.action` was already the last field and does not move.

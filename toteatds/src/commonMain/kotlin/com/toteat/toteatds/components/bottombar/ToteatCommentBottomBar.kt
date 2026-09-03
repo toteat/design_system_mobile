@@ -75,6 +75,8 @@ private val ContentSpacing =
  * @param focusRequester Optional focus requester forwarded to the text field.
  * @param testTag Optional test tag. Derived tags: `_suggestions`, `_print`, `_input`, `_input_field`,
  * `_input_send`.
+ * @param maxLength Character cap forwarded to the message field. `null` (default) caps nothing.
+ * Suggestions go out through [onSuggestionClick], so text the host injects itself is not capped here.
  */
 @Composable
 fun ToteatCommentBottomBar(
@@ -88,7 +90,9 @@ fun ToteatCommentBottomBar(
     enabled: Boolean = true,
     maxLines: Int = MessageInputMaxLines,
     focusRequester: FocusRequester? = null,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working.
+    maxLength: Int? = null
 ) {
     val barDescription = stringResource(Res.string.comment_bottom_bar_description)
 
@@ -150,7 +154,8 @@ fun ToteatCommentBottomBar(
                 enabled = enabled,
                 maxLines = maxLines,
                 focusRequester = focusRequester,
-                testTag = if (testTag.isNotEmpty()) "${testTag}_input" else ""
+                testTag = if (testTag.isNotEmpty()) "${testTag}_input" else "",
+                maxLength = maxLength
             )
         }
     }
@@ -180,6 +185,21 @@ private fun ToteatCommentBottomBarFilledPreview() {
             suggestions = persistentListOf("Sin cebolla", "Sin sal", "Sin picante", "Término medio"),
             onPrintClick = {},
             placeholder = "Mensaje para cocina......"
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun ToteatCommentBottomBarMaxLengthPreview() {
+    ToteatTheme {
+        ToteatCommentBottomBar(
+            state = rememberTextFieldState("Hamburguesa sin mayo"),
+            onSendClick = {},
+            suggestions = persistentListOf("Sin cebolla", "Sin sal"),
+            onPrintClick = {},
+            placeholder = "Mensaje para cocina......",
+            maxLength = 20
         )
     }
 }

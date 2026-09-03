@@ -555,6 +555,7 @@ fun CommentBottomBarShowcase() {
     val plainState = rememberTextFieldState()
     val disabledState = rememberTextFieldState("Enviando...")
     val inputOnlyState = rememberTextFieldState("Sin cebolla")
+    val cappedState = rememberTextFieldState()
     var lastSent by remember { mutableStateOf<String?>(null) }
     var printCount by remember { mutableStateOf(0) }
 
@@ -659,6 +660,23 @@ fun CommentBottomBarShowcase() {
             onSendClick = {},
             placeholder = "Mensaje para cocina......",
             testTag = "message_input_bar"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Tope de 200 caracteres", style = MaterialTheme.typography.titleMedium)
+        Text(
+            "${cappedState.text.length} / 200",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        ToteatCommentBottomBar(
+            state = cappedState,
+            onSendClick = {},
+            suggestions = suggestions,
+            onPrintClick = {},
+            placeholder = "Mensaje para cocina......",
+            maxLength = 200,
+            testTag = "comment_bottom_bar_max_length"
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 

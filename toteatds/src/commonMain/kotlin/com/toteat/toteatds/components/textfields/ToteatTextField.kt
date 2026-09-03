@@ -10,13 +10,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -33,6 +36,11 @@ import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.headingMediumRegular
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * @param maxLength Tope de caracteres. `null` (default) no topa nada. Rechaza en la
+ * [InputTransformation], no recorta el state, así que tampoco filtra los cambios programáticos.
+ * `<= 0` falla con `require`.
+ */
 @Composable
 fun ToteatTextField(
     state: TextFieldState,
@@ -54,8 +62,15 @@ fun ToteatTextField(
     // New parameters go after the previously published ones so positional call sites keep working.
     maxLines: Int = Int.MAX_VALUE,
     minHeight: Dp = DefaultTextFieldMinHeight,
-    shape: Shape = DefaultTextFieldShape
+    shape: Shape = DefaultTextFieldShape,
+    maxLength: Int? = null
 ) {
+    require(maxLength == null || maxLength > 0) { "maxLength must be greater than zero, was $maxLength" }
+
+    val inputTransformation = remember(maxLength) {
+        maxLength?.let { InputTransformation.maxLength(it) }
+    }
+
     ToteatTextFieldLayout(
         modifier = modifier,
         title = title,
@@ -72,6 +87,7 @@ fun ToteatTextField(
         BasicTextField(
             state = state,
             enabled = enabled,
+            inputTransformation = inputTransformation,
             lineLimits = if (singleLine) {
                 TextFieldLineLimits.SingleLine
             } else {
@@ -170,6 +186,35 @@ private fun ToteatTextFieldPreview() {
                 title = "Email (deshabilitado)",
                 helperText = "Campo deshabilitado",
                 enabled = false
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun ToteatTextFieldMaxLengthPreview() {
+    ToteatTheme {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Tope alcanzado: 20 de 20
+            ToteatTextField(
+                state = rememberTextFieldState("Hamburguesa sin mayo"),
+                modifier = Modifier.fillMaxWidth(),
+                title = "Comentario (tope 20)",
+                helperText = "No acepta más caracteres",
+                maxLength = 20
+            )
+
+            // Bajo el tope
+            ToteatTextField(
+                state = rememberTextFieldState("Sin sal"),
+                modifier = Modifier.fillMaxWidth(),
+                title = "Comentario (tope 20)",
+                helperText = "Acepta más caracteres",
+                maxLength = 20
             )
         }
     }

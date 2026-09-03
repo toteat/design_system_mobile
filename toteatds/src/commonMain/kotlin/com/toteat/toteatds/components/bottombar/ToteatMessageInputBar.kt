@@ -47,6 +47,7 @@ const val MessageInputMaxLines = 4
  * @param maxLines Lines the field grows to before scrolling its content.
  * @param focusRequester Optional focus requester forwarded to the text field.
  * @param testTag Optional test tag. Derived tags: `_field`, `_send`.
+ * @param maxLength Character cap forwarded to the field. `null` (default) caps nothing.
  */
 @Composable
 fun ToteatMessageInputBar(
@@ -57,7 +58,9 @@ fun ToteatMessageInputBar(
     enabled: Boolean = true,
     maxLines: Int = MessageInputMaxLines,
     focusRequester: FocusRequester? = null,
-    testTag: String = ""
+    testTag: String = "",
+    // New parameters go after the previously published ones so positional call sites keep working.
+    maxLength: Int? = null
 ) {
     val resolvedPlaceholder = placeholder ?: stringResource(Res.string.message_input_placeholder)
 
@@ -80,7 +83,8 @@ fun ToteatMessageInputBar(
             imeAction = ImeAction.Send,
             onKeyboardAction = { if (enabled) onSendClick() },
             focusRequester = focusRequester,
-            testTag = if (testTag.isNotEmpty()) "${testTag}_field" else ""
+            testTag = if (testTag.isNotEmpty()) "${testTag}_field" else "",
+            maxLength = maxLength
         )
 
         ToteatSendIconButton(
@@ -112,6 +116,19 @@ private fun ToteatMessageInputBarFilledPreview() {
             state = rememberTextFieldState("Sin cebolla, por favor"),
             onSendClick = {},
             modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun ToteatMessageInputBarMaxLengthPreview() {
+    ToteatTheme {
+        ToteatMessageInputBar(
+            state = rememberTextFieldState("Hamburguesa sin mayo"),
+            onSendClick = {},
+            modifier = Modifier.padding(16.dp),
+            maxLength = 20
         )
     }
 }
