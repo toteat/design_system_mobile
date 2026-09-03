@@ -35,7 +35,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val BadgeShape = RoundedCornerShape(50)
 private val BadgeMinHeight = 30.dp
-private val BadgeMaxWidth = 140.dp
+private val BadgeMaxWidth = 100.dp
 
 /**
  * Top bar for comment / messaging screens (e.g. "Comunicación cocina").
@@ -44,10 +44,13 @@ private val BadgeMaxWidth = 140.dp
  * regular dark navigation bars, a circular back button on the left and an optional white badge
  * next to the title with the reference of the conversation (table, order, etc.).
  *
+ * The title stays on a single line and marquees when it does not fit, like [BackNavigationTopBar].
+ *
  * @param title Screen title, rendered centered next to the badge.
  * @param onNavigateBackClick Invoked when the back button is tapped.
  * @param modifier Modifier applied to the root container.
- * @param badgeText Reference shown in the trailing badge (e.g. "Mesa S7"). Pass `null` to hide it.
+ * @param badgeText Short reference shown in the trailing badge (e.g. "T1", "SP7"). Pass `null` to
+ * hide it. Capped at [BadgeMaxWidth] so it cannot squeeze the title.
  * @param testTag Optional test tag for UI testing. Derived tags: `_back`, `_title`, `_badge`.
  */
 @Composable
@@ -94,14 +97,17 @@ fun CommentNavigationTopBar(
                             }
                         )
                 )
-                if (badgeText != null) {
-                    CommentNavigationTopBarBadge(
-                        text = badgeText,
-                        testTag = if (testTag.isNotEmpty()) "${testTag}_badge" else ""
-                    )
-                }
             }
         },
+        rightComponent = badgeText?.let { badge ->
+            {
+                CommentNavigationTopBarBadge(
+                    text = badge,
+                    testTag = if (testTag.isNotEmpty()) "${testTag}_badge" else ""
+                )
+            }
+        },
+        centerFillsRemainingWidth = true,
         testTag = testTag
     )
 }
@@ -176,8 +182,30 @@ private fun CommentNavigationTopBarLongTitlePreview() {
                 onNavigateBackClick = {}
             )
             CommentNavigationTopBar(
+                title = "Comunicación con la cocina del segundo piso",
+                onNavigateBackClick = {}
+            )
+            CommentNavigationTopBar(
                 title = "Comunicación cocina",
                 badgeText = "Mesa del salón principal",
+                onNavigateBackClick = {}
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun CommentNavigationTopBarIssueTitlePreview() {
+    ToteatTheme {
+        Column {
+            CommentNavigationTopBar(
+                title = "Comunicación cocina",
+                badgeText = "T1",
+                onNavigateBackClick = {}
+            )
+            CommentNavigationTopBar(
+                title = "Comunicación cocina",
                 onNavigateBackClick = {}
             )
         }

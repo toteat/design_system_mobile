@@ -1238,6 +1238,15 @@ fun TopBarShowcase() {
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
+        Text("Comment Navigation - Badge corto", style = MaterialTheme.typography.titleMedium)
+        CommentNavigationTopBar(
+            title = "Comunicación cocina",
+            badgeText = "T1",
+            onNavigateBackClick = {},
+            testTag = "comment_navigation_topbar_short_badge"
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
         Text("Acceso a comentarios (icono navbar)", style = MaterialTheme.typography.titleMedium)
         ToteatTopBar(
             centerComponent = {

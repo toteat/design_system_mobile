@@ -30,6 +30,12 @@ import designsystemmobile.toteatds.generated.resources.topbar_semantic_label
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * @param centerFillsRemainingWidth When `false` (default) the three slots split the width 1 / 3 / 1,
+ * the historical reparto. When `true` the side slots measure to their content and the center takes
+ * whatever is left, for bars whose side content is narrower than a fifth of the width and whose
+ * center would otherwise be clipped.
+ */
 @Composable
 fun ToteatTopBar(
     modifier: Modifier = Modifier,
@@ -38,6 +44,7 @@ fun ToteatTopBar(
     containerColor: Color = MaterialTheme.colorScheme.secondary,
     leftComponent: (@Composable RowScope.() -> Unit)? = null,
     rightComponent: (@Composable RowScope.() -> Unit)? = null,
+    centerFillsRemainingWidth: Boolean = false,
     centerComponent: @Composable RowScope.() -> Unit
 ) {
     Row(
@@ -53,21 +60,28 @@ fun ToteatTopBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        val sideModifier = if (centerFillsRemainingWidth) Modifier else Modifier.weight(1f)
+        val centerModifier = if (centerFillsRemainingWidth) {
+            Modifier.weight(1f)
+        } else {
+            Modifier.weight(3f)
+        }
+
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = sideModifier,
             contentAlignment = Alignment.CenterStart
         ) {
             leftComponent?.invoke(this@Row)
         }
         Box(
-            modifier = Modifier.weight(3f),
+            modifier = centerModifier,
             contentAlignment = Alignment.Center
         ) {
             centerComponent.invoke(this@Row)
         }
 
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = sideModifier,
             contentAlignment = Alignment.CenterEnd
         ) {
             rightComponent?.invoke(this@Row)
