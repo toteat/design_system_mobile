@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.49] - 2026-09-03
 ### Added
 - **ToteatTextField / ToteatMessageInputBar / ToteatCommentBottomBar**: New optional parameter `maxLength: Int? = null`, propagated down the chain. With `null` nothing changes. With a value the field rejects input that would push the text past the cap, paste included, through `InputTransformation.maxLength` on the `BasicTextField` — the rejection happens in the input transformation, so the `TextFieldState` never holds the extra text and the cursor does not jump when editing mid-text; the transformation also publishes `maxTextLength` to accessibility services. It filters user input only: text the host writes into the state (`setTextAndPlaceCursorAtEnd`, `edit { }`) is not capped, which matters for `ToteatCommentBottomBar`, where suggestions are reported through `onSuggestionClick` and appended by the host. A `maxLength <= 0` fails with `require`. Declared last in the three signatures, so positional call sites are unaffected. Test tags unchanged.
 - **Showcase**: New "Tope de 200 caracteres" entry in the "Comment Bottom Bar" section, with a live character count.
