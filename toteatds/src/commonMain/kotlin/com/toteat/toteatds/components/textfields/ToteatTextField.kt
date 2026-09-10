@@ -82,6 +82,8 @@ fun ToteatTextField(
         onFocusChange = onFocusChange,
         minHeight = minHeight,
         shape = shape,
+        // Single-line fields keep their exact height; only the multiline ones grow with the text.
+        growsWithContent = !singleLine,
         testTag = testTag
     ) { styleModifier, interactionSource ->
         BasicTextField(

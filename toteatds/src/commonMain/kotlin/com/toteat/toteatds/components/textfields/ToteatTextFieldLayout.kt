@@ -30,12 +30,20 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 
-/** Minimum height shared by every Toteat text field. */
+/** Height shared by every single-line Toteat text field, and minimum height of the multiline ones. */
 val DefaultTextFieldMinHeight = 50.dp
 
 /** Corner shape shared by every Toteat text field. */
 val DefaultTextFieldShape = RoundedCornerShape(8.dp)
 
+/**
+ * @param minHeight With [growsWithContent] `false` (default) this is the exact height of the field
+ * box; with `true` it is only its minimum.
+ * @param growsWithContent When `false` (default) the field box keeps [minHeight] no matter how tall
+ * its content measures, which is what the single-line fields need: a trailing control taller than
+ * the box — the 48.dp touch target of the password toggle, for instance — must not stretch it. When
+ * `true` the box grows past [minHeight] with its content, for the multiline fields.
+ */
 @Composable
 fun ToteatTextFieldLayout(
     modifier: Modifier = Modifier,
@@ -51,6 +59,7 @@ fun ToteatTextFieldLayout(
     // `textField` stays last to preserve trailing-lambda syntax.
     minHeight: Dp = DefaultTextFieldMinHeight,
     shape: Shape = DefaultTextFieldShape,
+    growsWithContent: Boolean = false,
     textField: @Composable (Modifier, MutableInteractionSource) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -63,7 +72,7 @@ fun ToteatTextFieldLayout(
 
     val textFieldStyleModifier = Modifier
         .fillMaxWidth()
-        .heightIn(min = minHeight)
+        .then(if (growsWithContent) Modifier.heightIn(min = minHeight) else Modifier.height(minHeight))
         .background(
             color = when {
                 !enabled -> MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
