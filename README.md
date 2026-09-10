@@ -6,6 +6,7 @@ This repository contains Toteat’s mobile Design System implemented with Kotlin
 - Demo/Showcase: `:composeApp` (used to preview and validate Design System components)
 - Platforms: Android and iOS (KMP)
 
+
 ## How it’s consumed by the main project
 
 The Design System is used as a library that supplies components to Toteat’s main app. There are two ways to integrate it:
