@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.51] - 2026-09-30
 ### Fixed
 - **ToteatDinerList**: Diners are sorted in natural order instead of `String.CASE_INSENSITIVE_ORDER`. Numbers compare by value, so "Comensal 2" goes before "Comensal 10". Accents are ignored both when sorting and when grouping, so "Álvaro" lands under "A" instead of opening its own "Á" group after "Z". "Ñ" stays its own letter, as in the Spanish alphabet, and sorts between "N" and "O". Case is still ignored; ties fall back to the original text so the order is stable across recompositions. `Collator` and `java.text.Normalizer` are not available in commonMain, so the new internal `DinerNameOrder` strips accents by hand for accented Latin letters only. No API change.
 
