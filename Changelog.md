@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- **ToteatDinerList**: Diners are sorted in natural order instead of `String.CASE_INSENSITIVE_ORDER`. Numbers compare by value, so "Comensal 2" goes before "Comensal 10". Accents are ignored both when sorting and when grouping, so "Álvaro" lands under "A" instead of opening its own "Á" group after "Z". "Ñ" stays its own letter, as in the Spanish alphabet, and sorts between "N" and "O". Case is still ignored; ties fall back to the original text so the order is stable across recompositions. `Collator` and `java.text.Normalizer` are not available in commonMain, so the new internal `DinerNameOrder` strips accents by hand for accented Latin letters only. No API change.
+
 ## [0.1.50] - 2026-09-10
 ### Fixed
 - **ToteatPasswordTextField / ToteatTextField / ToteatPhoneNumberField**: The single-line fields go back to being exactly 50.dp tall. Since 0.1.44 `ToteatTextFieldLayout` had swapped its fixed `height(50.dp)` for `heightIn(min = minHeight)` so the new multiline message field could grow, and that let any content taller than the box stretch it: the password field's visibility toggle is a Material3 `IconButton`, which reserves a 48.dp touch target, so with the 8.dp vertical padding the field measured 64.dp instead of 50.dp. Visible on the login screen, where the password field rendered ~14.dp taller than the email field above it.

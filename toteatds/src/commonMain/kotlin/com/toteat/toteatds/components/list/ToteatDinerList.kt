@@ -38,8 +38,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 /**
  * Alphabetically grouped diner list.
  *
- * Sorts [diners] and groups them by the first letter of each name. Every
- * group renders a centered letter header over a light gray background,
+ * Sorts [diners] in natural order (numbers by value, accents ignored, Ñ after N) and groups
+ * them by the first letter of each name. Every group renders a centered letter header over a light gray background,
  * followed by one selectable bulleted row per diner. Backed by a
  * [LazyColumn], so long lists scroll vertically; when embedded inside
  * another vertical scrollable, give it a bounded height.
@@ -55,8 +55,8 @@ fun ToteatDinerList(
 
     val groups = remember(diners) {
         diners
-            .sortedWith(String.CASE_INSENSITIVE_ORDER)
-            .groupBy { it.first().uppercaseChar() }
+            .sortedWith(DinerNameOrder)
+            .groupBy { it.groupLetter() }
             .toList()
     }
 
