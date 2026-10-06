@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatTooltipBox**: New generic tooltip / coach mark that wraps any component. The wrapped content renders untouched; while `visible` is `true` a full-window `Popup` shows an optional scrim (`showScrim`) with a cut-out over the anchor, an optional primary-color ring with halo around it (`highlightAnchor`) following `highlightShape` (`CircleShape` by default, e.g. `RoundedCornerShape(50)` for pill buttons), and a white bubble with a caret pointing at the anchor center. The bubble goes below the anchor when it fits and above otherwise, centered on the anchor and clamped 16.dp from the window edges, up to `maxWidth` (`ToteatTooltipDefaultMaxWidth`, 280.dp). Taps outside the bubble and the back gesture call `onDismissRequest`; the optional `onHighlightClick` handles taps on the highlighted anchor instead (e.g. to open the feature directly). The host owns visibility and any "show once" persistence. Two overloads: one with a free `tooltip` slot, and one with `title` / `message` / `tagText` that renders `ToteatTooltipContent`.
+- **ToteatTooltipContent**: Standard bubble content: optional uppercase tag (e.g. "NUEVO") next to a bold title, a message below and a close button. Derived test tags: `_tag`, `_title`, `_message`, `_close`.
+- **tooltip_close_description**: New string "Cerrar" for the close button.
+- **Showcase**: New "Tooltip" section with the chat coach mark on a top bar and a scrim-less tooltip on a pill button.
+
 ## [0.1.51] - 2026-09-30
 ### Fixed
 - **ToteatDinerList**: Diners are sorted in natural order instead of `String.CASE_INSENSITIVE_ORDER`. Numbers compare by value, so "Comensal 2" goes before "Comensal 10". Accents are ignored both when sorting and when grouping, so "Álvaro" lands under "A" instead of opening its own "Á" group after "Z". "Ñ" stays its own letter, as in the Spanish alphabet, and sorts between "N" and "O". Case is still ignored; ties fall back to the original text so the order is stable across recompositions. `Collator` and `java.text.Normalizer` are not available in commonMain, so the new internal `DinerNameOrder` strips accents by hand for accented Latin letters only. No API change.

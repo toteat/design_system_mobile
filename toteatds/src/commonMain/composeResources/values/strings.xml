@@ -42,6 +42,7 @@
     <string name="dropdown_option_description">%s, opción %d de %d</string>
     <string name="dropdown_option_selected">seleccionada</string>
     <string name="toast_close_message">Cerrar mensaje</string>
+    <string name="tooltip_close_description">Cerrar</string>
     <string name="toast_content_description">%s: %s</string>
     <string name="toast_type_error">Error</string>
     <string name="toast_type_success">Éxito</string>

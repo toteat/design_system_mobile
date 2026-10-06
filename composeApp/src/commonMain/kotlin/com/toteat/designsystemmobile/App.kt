@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
@@ -117,6 +118,7 @@ import com.toteat.toteatds.components.topbar.CenterContentTopBar
 import com.toteat.toteatds.components.topbar.CommentNavigationTopBar
 import com.toteat.toteatds.components.topbar.LoginTopBar
 import com.toteat.toteatds.components.topbar.ToteatTopBar
+import com.toteat.toteatds.components.tooltip.ToteatTooltipBox
 import com.toteat.toteatds.components.display.ToteatAmountDisplay
 import com.toteat.toteatds.components.display.ToteatPendingAmountLabel
 import com.toteat.toteatds.components.display.ToteatPillLabel
@@ -158,6 +160,7 @@ fun App() {
                     ComponentShowcaseItem(title = "MessageView"),
                     ComponentShowcaseItem(title = "Brand"),
                     ComponentShowcaseItem(title = "Toast"),
+                    ComponentShowcaseItem(title = "Tooltip"),
                     ComponentShowcaseItem(title = "Switch container"),
                     ComponentShowcaseItem(title = "Chip container"),
                     ComponentShowcaseItem(title = "Category Cards"),
@@ -287,6 +290,7 @@ fun ComponentShowcaseSection(
                 "MessageView" -> MyShowroomScreen()
                 "Brand" -> BrandShowcase()
                 "Toast" -> ToastShowcase()
+                "Tooltip" -> TooltipShowcase()
                 "Switch container" -> SwitchButtonShowcase()
                 "Chip container" -> ChipButtonShowcase()
                 "Category Cards" -> CategoryCardShowcase()
@@ -1094,6 +1098,64 @@ fun SwitchButtonShowcase() {
             onCheckedChange = { isChecked = it },
             modifier = Modifier.padding(16.dp)
         )
+    }
+}
+
+@Composable
+fun TooltipShowcase() {
+    var showChatTooltip by remember { mutableStateOf(false) }
+    var showButtonTooltip by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Coach mark sobre icono circular", style = MaterialTheme.typography.titleMedium)
+        ToteatTopBar(
+            centerComponent = {
+                Text(
+                    text = "Mesa S7",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            },
+            rightComponent = {
+                ToteatTooltipBox(
+                    visible = showChatTooltip,
+                    title = "Chat con cocina",
+                    message = "Envía comentarios a la impresora que necesites.",
+                    tagText = "Nuevo",
+                    onDismissRequest = { showChatTooltip = false },
+                    onHighlightClick = { showChatTooltip = false },
+                    testTag = "tooltip_chat"
+                ) {
+                    ToteatCommentIconButton(onClick = {})
+                }
+            }
+        )
+        ToteatSecondaryButton(
+            text = "Mostrar tooltip del chat",
+            onClick = { showChatTooltip = true },
+            modifier = Modifier.fillMaxWidth()
+        )
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Sin scrim, sobre un botón pill", style = MaterialTheme.typography.titleMedium)
+        ToteatTooltipBox(
+            visible = showButtonTooltip,
+            title = "Pago dividido",
+            message = "Ahora puedes dividir la cuenta entre comensales.",
+            onDismissRequest = { showButtonTooltip = false },
+            highlightShape = RoundedCornerShape(50),
+            showScrim = false,
+            testTag = "tooltip_button"
+        ) {
+            ToteatPrimaryButton(
+                text = "Mostrar tooltip",
+                onClick = { showButtonTooltip = true },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
