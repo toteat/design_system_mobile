@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.52] - 2026-10-06
 ### Added
 - **ToteatTooltipBox**: New generic tooltip / coach mark that wraps any component. The wrapped content renders untouched; while `visible` is `true` a full-window `Popup` shows an optional scrim (`showScrim`) with a cut-out over the anchor, an optional primary-color ring with halo around it (`highlightAnchor`) following `highlightShape` (`CircleShape` by default, e.g. `RoundedCornerShape(50)` for pill buttons), and a white bubble with a caret pointing at the anchor center. The bubble goes below the anchor when it fits and above otherwise, centered on the anchor and clamped 16.dp from the window edges, up to `maxWidth` (`ToteatTooltipDefaultMaxWidth`, 280.dp). Taps outside the bubble and the back gesture call `onDismissRequest`; the optional `onHighlightClick` handles taps on the highlighted anchor instead (e.g. to open the feature directly). The host owns visibility and any "show once" persistence. Two overloads: one with a free `tooltip` slot, and one with `title` / `message` / `tagText` that renders `ToteatTooltipContent`.
 - **ToteatTooltipContent**: Standard bubble content: optional uppercase tag (e.g. "NUEVO") next to a bold title, a message below and a close button. Derived test tags: `_tag`, `_title`, `_message`, `_close`.
