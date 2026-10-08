@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.53] - 2026-10-08
 ### Added
 - **ToteatCommentIconButton**: New optional parameter `badgeText: String? = null`, declared before `testTag`. With `null` the button renders exactly as before. With a value, an uppercase pill label (`tagBold`, colors of `StatusTagVariant.Promotion`) is drawn over the top-end corner of the button's touch area, overhanging the circle. The label reports a 0x0 size to the layout, so the button keeps the width it takes in a `Row` / `Box` and its touch area; it has no pointer input, so taps on it reach the button. Its text is appended to the button's accessible description ("Comentarios, Nuevo") and the label itself is hidden from accessibility services. Derived test tag: `_badge`.
 - **icon_comment_badge_description**: New string "Comentarios, %1$s".
