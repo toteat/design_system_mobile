@@ -697,6 +697,11 @@ fun CommentBottomBarShowcase() {
                 enabled = false,
                 testTag = "comment_icon_button_disabled"
             )
+            ToteatCommentIconButton(
+                onClick = {},
+                badgeText = "Nuevo",
+                testTag = "comment_icon_button_badge"
+            )
         }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
@@ -1124,12 +1129,11 @@ fun TooltipShowcase() {
                     visible = showChatTooltip,
                     title = "Chat con cocina",
                     message = "Envía comentarios a la impresora que necesites.",
-                    tagText = "Nuevo",
                     onDismissRequest = { showChatTooltip = false },
                     onHighlightClick = { showChatTooltip = false },
                     testTag = "tooltip_chat"
                 ) {
-                    ToteatCommentIconButton(onClick = {})
+                    ToteatCommentIconButton(onClick = {}, badgeText = "Nuevo")
                 }
             }
         )

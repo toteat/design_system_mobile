@@ -97,7 +97,7 @@ private const val AppearDurationMillis = 200
  * @param visible Whether the tooltip is shown.
  * @param onDismissRequest Invoked when the user taps outside the bubble or presses back.
  * @param tooltip Content of the bubble. The bubble already provides background, padding and caret;
- * use [ToteatTooltipContent] for the standard tag + title + message + close layout.
+ * use [ToteatTooltipContent] for the standard title + message + close layout.
  * @param modifier Modifier applied to the anchor container.
  * @param highlightShape Shape of the anchor, used for the scrim cut-out and the ring
  * (e.g. [CircleShape] for circular icon buttons, a pill shape for buttons).
@@ -173,10 +173,10 @@ fun ToteatTooltipBox(
 }
 
 /**
- * Convenience overload of [ToteatTooltipBox] with the standard [ToteatTooltipContent]: optional tag
- * (e.g. "Nuevo"), title, message and a close button that calls [onDismissRequest].
+ * Convenience overload of [ToteatTooltipBox] with the standard [ToteatTooltipContent]: title,
+ * message and a close button that calls [onDismissRequest].
  *
- * @param testTag Optional test tag. Derived tags: `_tag`, `_title`, `_message`, `_close`.
+ * @param testTag Optional test tag. Derived tags: `_title`, `_message`, `_close`.
  */
 @Composable
 fun ToteatTooltipBox(
@@ -185,7 +185,6 @@ fun ToteatTooltipBox(
     message: String,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    tagText: String? = null,
     highlightShape: Shape = CircleShape,
     showScrim: Boolean = true,
     highlightAnchor: Boolean = true,
@@ -202,7 +201,6 @@ fun ToteatTooltipBox(
                 title = title,
                 message = message,
                 onClose = onDismissRequest,
-                tagText = tagText,
                 testTag = testTag
             )
         },
@@ -398,10 +396,9 @@ private fun ToteatTooltipBoxPreview() {
                         visible = true,
                         title = "Chat con cocina",
                         message = "Envía comentarios a la impresora que necesites.",
-                        tagText = "Nuevo",
                         onDismissRequest = {}
                     ) {
-                        ToteatCommentIconButton(onClick = {})
+                        ToteatCommentIconButton(onClick = {}, badgeText = "Nuevo")
                     }
                 }
             )

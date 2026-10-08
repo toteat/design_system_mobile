@@ -164,4 +164,5 @@
     <string name="icon_send_description">Enviar mensaje</string>
     <string name="comment_bubble_sent_description">Enviado</string>
     <string name="icon_comment_description">Comentarios</string>
+    <string name="icon_comment_badge_description">Comentarios, %1$s</string>
 </resources>
