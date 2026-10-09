@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.54] - 2026-10-09
 ### Added
 - **ToteatDinerButtonContainer**: New optional parameter `isAddEnabled: Boolean = true`, declared after `enabled` and before `testTag`. With `false` only the "Agregar" button is disabled (gray style, ignores taps, exposes the disabled state in semantics) while the diner and "Ver más" buttons keep following `enabled`; meant for the 99-diner cap in POS mobile. "Agregar" is enabled only when both `enabled` and `isAddEnabled` are `true`, so the default keeps the current behaviour. Test tags unchanged.
 - **Showcase**: The "Diner Button" section shows a container with "Agregar" disabled.
