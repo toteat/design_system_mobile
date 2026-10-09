@@ -902,6 +902,18 @@ fun DinerButtonShowcase() {
             onViewMoreClick = {},
             enabled = false
         )
+
+        Text("\"Agregar\" deshabilitado (tope de comensales)", style = MaterialTheme.typography.titleSmall)
+        ToteatDinerButtonContainer(
+            diners = diners,
+            selectedDiner = selectedDiner,
+            onDinerSelect = { diner ->
+                selectedDiner = if (selectedDiner == diner) null else diner
+            },
+            onAddClick = {},
+            onViewMoreClick = {},
+            isAddEnabled = false
+        )
     }
 }
 

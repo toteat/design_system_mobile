@@ -29,6 +29,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  * Renders an optional leading "Agregar" button, one button per diner name and
  * an optional trailing "Ver más" button. When the content is wider than the
  * screen the row scrolls horizontally.
+ *
+ * [enabled] applies to every button. [isAddEnabled] applies only to "Agregar",
+ * so it can be disabled (e.g. when the diner limit is reached) while the diner
+ * and "Ver más" buttons stay interactive.
  */
 @Composable
 fun ToteatDinerButtonContainer(
@@ -39,6 +43,7 @@ fun ToteatDinerButtonContainer(
     onAddClick: (() -> Unit)? = null,
     onViewMoreClick: (() -> Unit)? = null,
     enabled: Boolean = true,
+    isAddEnabled: Boolean = true,
     testTag: String = ""
 ) {
     val containerDescription = stringResource(Res.string.diner_container_description)
@@ -56,7 +61,7 @@ fun ToteatDinerButtonContainer(
                 ToteatDinerButton(
                     type = ToteatDinerButtonType.Add,
                     onClick = onAddClick,
-                    enabled = enabled,
+                    enabled = enabled && isAddEnabled,
                     testTag = if (testTag.isNotEmpty()) "${testTag}_add" else ""
                 )
             }
@@ -117,6 +122,15 @@ private fun ToteatDinerButtonContainerPreview() {
                 onAddClick = {},
                 onViewMoreClick = {},
                 enabled = false
+            )
+
+            ToteatDinerButtonContainer(
+                diners = persistentListOf("Trini", "Pauli", "Camila"),
+                selectedDiner = selectedDiner,
+                onDinerSelect = { selectedDiner = it },
+                onAddClick = {},
+                onViewMoreClick = {},
+                isAddEnabled = false
             )
         }
     }
