@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.55] - 2026-10-15
 ### Added
 - **ToteatDinerNameList**: New optional parameters, declared after `testTag`: `editingIndex: Int? = null`, `onEditingIndexChange: ((Int?) -> Unit)? = null` and `maxNameLength: Int? = 50`.
   - With `onEditingIndexChange = null` the list keeps the editing row in its own state, as before. When set, the list keeps no state: the pencil calls it with the row index; confirming a name (pencil, keyboard action or focus loss) calls `onNameChange(index, name)` first and then `onEditingIndexChange(null)`. Setting `editingIndex = i` opens row `i` with the text of `names[i]` and focuses the field, so going from `null` back to the same row re-opens it after its name was confirmed (repeated-name alert, #841).
