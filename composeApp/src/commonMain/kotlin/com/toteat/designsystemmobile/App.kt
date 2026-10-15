@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.WavingHand
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -36,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -946,6 +948,10 @@ fun DinerNameListShowcase() {
     var names by remember {
         mutableStateOf(persistentListOf("", "", "", "", ""))
     }
+    var controlledNames by remember { mutableStateOf(persistentListOf("Trini", "", "")) }
+    var controlledEditingIndex by remember { mutableStateOf<Int?>(null) }
+    var repeatedNameIndex by remember { mutableStateOf<Int?>(null) }
+    var limitedNames by remember { mutableStateOf(persistentListOf("", "")) }
 
     Column(
         modifier = Modifier
@@ -962,6 +968,55 @@ fun DinerNameListShowcase() {
             onNameChange = { index, name -> names = names.set(index, name) },
             // Bounded height: the list is a LazyColumn nested in the showcase scroll
             modifier = Modifier.height(300.dp)
+        )
+        Text(
+            text = "Fila controlada: un nombre repetido muestra una alerta y la fila vuelve a editarse (máx. 50 caracteres)",
+            style = MaterialTheme.typography.titleSmall
+        )
+        ToteatDinerNameList(
+            names = controlledNames,
+            onNameChange = { index, name ->
+                val isRepeated = name.isNotBlank() && controlledNames.withIndex().any { (i, other) ->
+                    i != index && other.equals(name, ignoreCase = true)
+                }
+                if (isRepeated) {
+                    repeatedNameIndex = index
+                } else {
+                    controlledNames = controlledNames.set(index, name)
+                }
+            },
+            editingIndex = controlledEditingIndex,
+            onEditingIndexChange = { controlledEditingIndex = it },
+            modifier = Modifier.height(200.dp)
+        )
+        Text(
+            text = "Largo limitado a 10 caracteres",
+            style = MaterialTheme.typography.titleSmall
+        )
+        ToteatDinerNameList(
+            names = limitedNames,
+            onNameChange = { index, name -> limitedNames = limitedNames.set(index, name) },
+            maxNameLength = 10,
+            modifier = Modifier.height(140.dp)
+        )
+    }
+
+    repeatedNameIndex?.let { index ->
+        AlertDialog(
+            onDismissRequest = {
+                repeatedNameIndex = null
+                controlledEditingIndex = index
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        repeatedNameIndex = null
+                        controlledEditingIndex = index
+                    }
+                ) { Text("Corregir") }
+            },
+            title = { Text("Nombre repetido") },
+            text = { Text("Ya hay un comensal con ese nombre en la mesa.") }
         )
     }
 }

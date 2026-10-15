@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatDinerNameList**: New optional parameters, declared after `testTag`: `editingIndex: Int? = null`, `onEditingIndexChange: ((Int?) -> Unit)? = null` and `maxNameLength: Int? = 50`.
+  - With `onEditingIndexChange = null` the list keeps the editing row in its own state, as before. When set, the list keeps no state: the pencil calls it with the row index; confirming a name (pencil, keyboard action or focus loss) calls `onNameChange(index, name)` first and then `onEditingIndexChange(null)`. Setting `editingIndex = i` opens row `i` with the text of `names[i]` and focuses the field, so going from `null` back to the same row re-opens it after its name was confirmed (repeated-name alert, #841).
+  - `maxNameLength` caps typed and pasted text with `InputTransformation.maxLength` (#843). A longer name already in `names` opens cut to the cap. `null` caps nothing; `<= 0` fails with `require`.
+- **Showcase / preview**: The "Diner Name List" section shows a controlled list that re-opens a row after a repeated-name alert, and a list capped at 10 characters.
+
+### Changed
+- **ToteatDinerNameList**: Behaviour change for existing callers: names are now capped at 50 characters by default. Pass `maxNameLength = null` to keep them uncapped.
+
+### Fixed
+- **ToteatDinerNameList**: Confirming a name reports it once per edit; the pencil or keyboard action followed by the field losing focus no longer calls `onNameChange` twice.
+
 ## [0.1.54] - 2026-10-09
 ### Added
 - **ToteatDinerButtonContainer**: New optional parameter `isAddEnabled: Boolean = true`, declared after `enabled` and before `testTag`. With `false` only the "Agregar" button is disabled (gray style, ignores taps, exposes the disabled state in semantics) while the diner and "Ver más" buttons keep following `enabled`; meant for the 99-diner cap in POS mobile. "Agregar" is enabled only when both `enabled` and `isAddEnabled` are `true`, so the default keeps the current behaviour. Test tags unchanged.
