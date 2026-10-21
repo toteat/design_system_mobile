@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.57] - 2026-10-20
 ### Changed
 - **ToteatDinerButton / ToteatDinerButtonContainer**: Smaller circles: 44.dp instead of 56.dp, with the plus and eye icons at 20.dp instead of 24.dp. The label keeps its 72.dp width and the initial its `titleMedium` style. The whole button (circle + label) is still the touch target, so it stays above 48.dp. No API change.
 
