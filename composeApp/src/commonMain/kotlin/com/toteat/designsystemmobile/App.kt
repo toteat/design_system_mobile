@@ -75,6 +75,7 @@ import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatDinerButtonContainer
 import com.toteat.toteatds.components.list.DinerConsumption
 import com.toteat.toteatds.components.list.DinerConsumptionItem
+import com.toteat.toteatds.components.list.DinerConsumptionItemKind
 import com.toteat.toteatds.components.list.ToteatDinerConsumptionList
 import com.toteat.toteatds.components.list.ToteatDinerList
 import com.toteat.toteatds.components.list.ToteatDinerNameList
@@ -87,6 +88,8 @@ import com.toteat.toteatds.components.buttons.ToteatSwitchButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
 import com.toteat.toteatds.components.dropdown.ToteatDropDown
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
+import com.toteat.toteatds.components.icons.DinerPaymentIcon
+import com.toteat.toteatds.components.icons.PaymentCardIcon
 import com.toteat.toteatds.components.icons.PrintIconButton
 import com.toteat.toteatds.components.icons.ToteatCommentIconButton
 import com.toteat.toteatds.components.icons.ToteatPrintIconButton
@@ -354,6 +357,15 @@ fun ButtonShowcase() {
             ToteatPrimaryButton(onClick = {}, text = "Default")
             ToteatPrimaryButton(onClick = {}, text = "Disabled", enabled = false)
         }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ToteatPrimaryButton(onClick = {}, text = "Pagar", leadingIcon = { PaymentCardIcon() })
+            ToteatPrimaryButton(
+                onClick = {},
+                text = "Pagar",
+                enabled = false,
+                leadingIcon = { PaymentCardIcon() }
+            )
+        }
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Secondary", style = MaterialTheme.typography.titleMedium)
@@ -431,6 +443,18 @@ fun ButtonShowcase() {
                 title = "Pagos por",
                 subTitle = "montos diferentes",
                 icon = { DifferentAmountPaymentsIcon(size = 32.dp) },
+                onClick = {}
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "comensal",
+                icon = { DinerPaymentIcon(size = 32.dp) },
                 onClick = {}
             )
         }
@@ -1030,9 +1054,14 @@ fun DinerConsumptionListShowcase() {
                     name = "Pauli",
                     items = persistentListOf(
                         DinerConsumptionItem(name = "Hamburguesa BBQ", price = "$9.000"),
-                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000")
+                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000"),
+                        DinerConsumptionItem(
+                            name = "Descuento 10%",
+                            price = "-$1.600",
+                            kind = DinerConsumptionItemKind.Discount
+                        )
                     ),
-                    total = "$16.000",
+                    total = "$14.400",
                     isChecked = true
                 ),
                 DinerConsumption(
@@ -1044,9 +1073,13 @@ fun DinerConsumptionListShowcase() {
                     total = "$12.500"
                 ),
                 DinerConsumption(
-                    name = "Vale",
-                    items = persistentListOf(),
-                    total = "$0"
+                    name = "Valentina Fernández de la Fuente",
+                    items = persistentListOf(
+                        DinerConsumptionItem(name = "Limonada", price = "$3.500")
+                    ),
+                    total = "$0",
+                    statusLabel = "Sin deuda",
+                    isSelectable = false
                 )
             )
         )

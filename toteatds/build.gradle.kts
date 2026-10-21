@@ -23,6 +23,14 @@ kotlin {
             }
         }
 
+        // Compose UI tests run on the iOS simulator: on the Android host runComposeUiTest needs Robolectric.
+        iosTest {
+            dependencies {
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.uiTest)
+            }
+        }
+
         androidMain {
             dependencies {
 

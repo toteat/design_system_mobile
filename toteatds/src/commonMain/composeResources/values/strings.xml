@@ -66,6 +66,7 @@
     <string name="icon_total_payment">Pago total</string>
     <string name="icon_id">Identificación</string>
     <string name="icon_different_payment">Pagos por montos diferentes</string>
+    <string name="icon_diner_payment">Pago por comensal</string>
     <string name="icon_change">Cambio</string>
     <string name="icon_order_list_ticket">Lista de pedidos</string>
     <string name="icon_show_password">Mostrar contraseña</string>
@@ -153,6 +154,7 @@
     <string name="diner_name_list_description">Lista para identificar comensales</string>
     <string name="diner_consumption_list_description">Consumo por comensal</string>
     <string name="diner_consumption_description">Consumo de %1$s</string>
+    <string name="diner_consumption_description_with_status">Consumo de %1$s, %2$s</string>
     <string name="diner_consumption_checkbox_description">Seleccionar a %1$s</string>
     <string name="diner_consumption_expand">Ver consumo</string>
     <string name="diner_consumption_collapse">Ocultar consumo</string>

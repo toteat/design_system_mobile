@@ -50,6 +50,7 @@ import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.diner_consumption_checkbox_description
 import designsystemmobile.toteatds.generated.resources.diner_consumption_collapse
 import designsystemmobile.toteatds.generated.resources.diner_consumption_description
+import designsystemmobile.toteatds.generated.resources.diner_consumption_description_with_status
 import designsystemmobile.toteatds.generated.resources.diner_consumption_expand
 import designsystemmobile.toteatds.generated.resources.diner_consumption_list_description
 import designsystemmobile.toteatds.generated.resources.diner_consumption_total
@@ -65,18 +66,30 @@ private val CheckboxShape = RoundedCornerShape(6.dp)
 private val DividerThickness = 2.dp
 private val HorizontalPadding = 16.dp
 
+/** How a consumption row is painted. [Discount] rows are dimmed, as in Figma "comensal - genérico". */
+enum class DinerConsumptionItemKind { Regular, Discount }
+
 @Immutable
 data class DinerConsumptionItem(
     val name: String,
-    val price: String
+    val price: String,
+    val kind: DinerConsumptionItemKind = DinerConsumptionItemKind.Regular
 )
 
+/**
+ * @param statusLabel Short, already translated text shown in the header between the name and the
+ * chevron (e.g. "Sin deuda"). `null` (default) shows nothing.
+ * @param isSelectable With `false` the checkbox is shown disabled and ignores taps; the header
+ * still expands and collapses the card so the consumption can be checked.
+ */
 @Immutable
 data class DinerConsumption(
     val name: String,
     val items: ImmutableList<DinerConsumptionItem>,
     val total: String,
-    val isChecked: Boolean = false
+    val isChecked: Boolean = false,
+    val statusLabel: String? = null,
+    val isSelectable: Boolean = true
 )
 
 /**
@@ -86,7 +99,7 @@ data class DinerConsumption(
  * shows a checkbox, the diner name and a chevron; tapping the header expands
  * the card to reveal the consumed items with their prices and a highlighted
  * total. Checkbox changes are reported through [onCheckedChange] with the
- * diner's index. Backed by a [LazyColumn], so long lists scroll vertically;
+ * diner's index; diners with [DinerConsumption.isSelectable] `false` never report them. Backed by a [LazyColumn], so long lists scroll vertically;
  * when embedded inside another vertical scrollable, give it a bounded height.
  */
 @Composable
@@ -135,7 +148,12 @@ fun ToteatDinerConsumptionCard(
     testTag: String = ""
 ) {
     var isExpanded by remember { mutableStateOf(initiallyExpanded) }
-    val cardDescription = stringResource(Res.string.diner_consumption_description, consumption.name)
+    val statusLabel = consumption.statusLabel
+    val cardDescription = if (statusLabel != null) {
+        stringResource(Res.string.diner_consumption_description_with_status, consumption.name, statusLabel)
+    } else {
+        stringResource(Res.string.diner_consumption_description, consumption.name)
+    }
 
     Column(
         modifier = modifier
@@ -146,7 +164,9 @@ fun ToteatDinerConsumptionCard(
     ) {
         DinerConsumptionHeader(
             name = consumption.name,
+            statusLabel = statusLabel,
             checked = consumption.isChecked,
+            isSelectable = consumption.isSelectable,
             isExpanded = isExpanded,
             onCheckedChange = onCheckedChange,
             onToggleExpanded = { isExpanded = !isExpanded },
@@ -166,6 +186,7 @@ fun ToteatDinerConsumptionCard(
                         name = item.name,
                         price = item.price,
                         isTotal = false,
+                        isDiscount = item.kind == DinerConsumptionItemKind.Discount,
                         testTag = if (testTag.isNotEmpty()) "${testTag}_item_$index" else ""
                     )
                 }
@@ -182,6 +203,7 @@ fun ToteatDinerConsumptionCard(
                 name = stringResource(Res.string.diner_consumption_total),
                 price = consumption.total,
                 isTotal = true,
+                isDiscount = false,
                 testTag = if (testTag.isNotEmpty()) "${testTag}_total" else ""
             )
         }
@@ -191,7 +213,9 @@ fun ToteatDinerConsumptionCard(
 @Composable
 private fun DinerConsumptionHeader(
     name: String,
+    statusLabel: String?,
     checked: Boolean,
+    isSelectable: Boolean,
     isExpanded: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onToggleExpanded: () -> Unit,
@@ -213,6 +237,7 @@ private fun DinerConsumptionHeader(
     ) {
         DinerConsumptionCheckbox(
             checked = checked,
+            enabled = isSelectable,
             onCheckedChange = onCheckedChange,
             dinerName = name,
             testTag = if (testTag.isNotEmpty()) "${testTag}_checkbox" else ""
@@ -228,6 +253,20 @@ private fun DinerConsumptionHeader(
             modifier = Modifier.weight(1f)
         )
 
+        // Unweighted, so it is measured first at its full width and the name gives up the space.
+        if (statusLabel != null) {
+            Text(
+                text = statusLabel,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.extended.neutral400,
+                maxLines = 1,
+                softWrap = false,
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 4.dp)
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_status") else Modifier)
+            )
+        }
+
         Icon(
             imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
             contentDescription = toggleDescription,
@@ -240,6 +279,7 @@ private fun DinerConsumptionHeader(
 @Composable
 private fun DinerConsumptionCheckbox(
     checked: Boolean,
+    enabled: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     dinerName: String,
     testTag: String
@@ -252,6 +292,7 @@ private fun DinerConsumptionCheckbox(
             .minimumInteractiveComponentSize()
             .toggleable(
                 value = checked,
+                enabled = enabled,
                 role = Role.Checkbox,
                 onValueChange = onCheckedChange
             )
@@ -264,11 +305,17 @@ private fun DinerConsumptionCheckbox(
                 .size(CheckboxSize)
                 .clip(CheckboxShape)
                 .then(
-                    if (checked) Modifier.background(MaterialTheme.colorScheme.secondary)
-                    else Modifier.border(1.5.dp, MaterialTheme.colorScheme.outline, CheckboxShape)
+                    when {
+                        !enabled -> Modifier
+                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .border(1.5.dp, MaterialTheme.colorScheme.extended.disabledContent, CheckboxShape)
+                        checked -> Modifier.background(MaterialTheme.colorScheme.secondary)
+                        else -> Modifier.border(1.5.dp, MaterialTheme.colorScheme.outline, CheckboxShape)
+                    }
                 )
         ) {
-            if (checked) {
+            // A diner that can't be selected never shows the check, whatever isChecked says.
+            if (checked && enabled) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
@@ -285,11 +332,20 @@ private fun DinerConsumptionRow(
     name: String,
     price: String,
     isTotal: Boolean,
+    isDiscount: Boolean,
     testTag: String
 ) {
     val extended = MaterialTheme.colorScheme.extended
-    val nameColor = if (isTotal) MaterialTheme.colorScheme.secondary else extended.neutral400
-    val priceColor = if (isTotal) MaterialTheme.colorScheme.primary else extended.neutral400
+    val nameColor = when {
+        isTotal -> MaterialTheme.colorScheme.secondary
+        isDiscount -> extended.disabledContent
+        else -> extended.neutral400
+    }
+    val priceColor = when {
+        isTotal -> MaterialTheme.colorScheme.primary
+        isDiscount -> extended.disabledContent
+        else -> extended.neutral400
+    }
     val fontWeight = if (isTotal) FontWeight.Bold else null
 
     Row(
@@ -336,9 +392,14 @@ private fun ToteatDinerConsumptionListPreview() {
                     name = "Pauli",
                     items = persistentListOf(
                         DinerConsumptionItem(name = "Hamburguesa BBQ", price = "$9.000"),
-                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000")
+                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000"),
+                        DinerConsumptionItem(
+                            name = "Descuento 10%",
+                            price = "-$1.600",
+                            kind = DinerConsumptionItemKind.Discount
+                        )
                     ),
-                    total = "$16.000",
+                    total = "$14.400",
                     isChecked = true
                 ),
                 DinerConsumption(
@@ -350,8 +411,12 @@ private fun ToteatDinerConsumptionListPreview() {
                 ),
                 DinerConsumption(
                     name = "Vale",
-                    items = persistentListOf(),
-                    total = "$0"
+                    items = persistentListOf(
+                        DinerConsumptionItem(name = "Limonada", price = "$3.500")
+                    ),
+                    total = "$0",
+                    statusLabel = "Sin deuda",
+                    isSelectable = false
                 )
             ),
             onCheckedChange = { _, _ -> },

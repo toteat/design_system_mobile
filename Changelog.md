@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **DinerConsumption**: New optional fields `statusLabel: String? = null` and `isSelectable: Boolean = true`.
+  - `statusLabel` is a short, already translated text (e.g. "Sin deuda") shown in the header after the name and before the chevron, in `bodyMedium` / `neutral400`. It is never cut: the name (still `maxLines = 1` with ellipsis) gives up the space. It is appended to the card's accessible description ("Consumo de Vale, Sin deuda"). Derived test tag: `_status`.
+  - With `isSelectable = false` the checkbox is drawn disabled (`outlineVariant` fill, `disabledContent` border, never the check), `toggleable(enabled = false)` ignores taps and exposes the disabled state, and `onCheckedChange` is never called. The header still expands and collapses the card.
+- **DinerConsumptionItem**: New optional field `kind: DinerConsumptionItemKind = Regular`. New enum `DinerConsumptionItemKind { Regular, Discount }`; `Discount` rows paint name and price in `disabledContent`. `Regular` rows are unchanged.
+- **diner_consumption_description_with_status**: New string "Consumo de %1$s, %2$s".
+- **PaymentCardIcon**: New payment card icon (18.dp, reuses `credit_card_icon`) for the `leadingIcon` of the "Pagar" `ToteatPrimaryButton`. Tinted with `LocalContentColor`, so it follows the button's content color; decorative by default (`contentDescription = null`).
+- **DinerPaymentIcon**: New icon for the "Pago por comensal" payment type option, same API as `TotalPaymentsIcon` / `SplitPaymentIcon` / `DifferentAmountPaymentsIcon` (48.dp, `icon_diner_payment` = "Pago por comensal").
+- **Tests**: First Compose UI tests (`iosTest`, `compose.uiTest`), run with `./gradlew :toteatds:iosSimulatorArm64Test`: a disabled checkbox does not call `onCheckedChange`, `statusLabel` is shown with its test tag, `Discount` rows render.
+- **Showcase / preview**: The diner consumption list shows a selected diner with a discount row, a regular one and a non-selectable one with "Sin deuda". The "Buttons" section shows the "Pagar" button with `PaymentCardIcon` and the "Pago por comensal" square button.
+
 ## [0.1.55] - 2026-10-15
 ### Added
 - **ToteatDinerNameList**: New optional parameters, declared after `testTag`: `editingIndex: Int? = null`, `onEditingIndexChange: ((Int?) -> Unit)? = null` and `maxNameLength: Int? = 50`.
