@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.56] - 2026-10-20
 ### Added
 - **DinerConsumption**: New optional fields `statusLabel: String? = null` and `isSelectable: Boolean = true`.
   - `statusLabel` is a short, already translated text (e.g. "Sin deuda") shown in the header after the name and before the chevron, in `bodyMedium` / `neutral400`. It is never cut: the name (still `maxLines = 1` with ellipsis) gives up the space. It is appended to the card's accessible description ("Consumo de Vale, Sin deuda"). Derived test tag: `_status`.
