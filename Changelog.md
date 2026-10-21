@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.58] - 2026-10-20
 ### Added
 - **StatusTagVariant**: New `Paid` variant: `GreenLight` background, `DeepGreen` text, default text "Pagado" (`status_tag_paid`). Text contrast is 5.35:1 (WCAG AA). Apps with an exhaustive `when` over `StatusTagVariant` need a `Paid` branch.
 - **DeepGreen**: New color `0xFF256B42` for text on `GreenLight`. `DarkGreen` only reaches 4.1:1 on that background, below AA for the 12.sp tag text.
