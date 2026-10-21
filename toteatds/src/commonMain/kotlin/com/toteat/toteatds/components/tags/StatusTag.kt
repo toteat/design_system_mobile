@@ -99,6 +99,14 @@ private fun StatusTagVariantPreview() {
             )
 
             StatusTag(
+                variant = StatusTagVariant.Paid
+            )
+            StatusTag(
+                variant = StatusTagVariant.Paid,
+                text = "Sin deuda"
+            )
+
+            StatusTag(
                 variant = StatusTagVariant.Pending,
                 text = "OK"
             )

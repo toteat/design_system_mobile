@@ -1,6 +1,7 @@
 package com.toteat.toteatds.components.list
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -70,7 +71,7 @@ class ToteatDinerConsumptionListTest {
     }
 
     @Test
-    fun statusLabelIsShownWithItsTestTag() = runComposeUiTest {
+    fun statusLabelIsShownAsPaidTagWithItsTestTag() = runComposeUiTest {
         setContent {
             ToteatTheme {
                 ToteatDinerConsumptionCard(
@@ -89,6 +90,9 @@ class ToteatDinerConsumptionListTest {
 
         // The clickable header merges its children's semantics, so the label lives in the unmerged tree.
         onNodeWithTag(tag("diner_status"), useUnmergedTree = true)
+            .assertIsDisplayed()
+            .assertContentDescriptionEquals("Estado: Sin deuda")
+        onNodeWithTag(tag("diner_status_text"), useUnmergedTree = true)
             .assertIsDisplayed()
             .assertTextEquals("Sin deuda")
     }

@@ -348,6 +348,7 @@ fun SectionHeader(title: String, isExpanded: Boolean, onClick: () -> Unit) {
 
 @Composable
 fun ButtonShowcase() {
+    var showDinerPaymentUnavailable by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -456,6 +457,22 @@ fun ButtonShowcase() {
                 subTitle = "comensal",
                 icon = { DinerPaymentIcon(size = 32.dp) },
                 onClick = {}
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "comensal",
+                enabled = false,
+                onDisabledClick = { showDinerPaymentUnavailable = true },
+                icon = { DinerPaymentIcon(size = 32.dp) },
+                onClick = {}
+            )
+        }
+        if (showDinerPaymentUnavailable) {
+            Text(
+                text = "Pago por comensal no disponible: la mesa tiene un solo comensal",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.clickable { showDinerPaymentUnavailable = false }
             )
         }
 

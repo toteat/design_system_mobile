@@ -42,6 +42,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.toteat.toteatds.components.tags.StatusTag
+import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyLargeRegular
 import com.toteat.toteatds.theme.extended
@@ -255,15 +257,11 @@ private fun DinerConsumptionHeader(
 
         // Unweighted, so it is measured first at its full width and the name gives up the space.
         if (statusLabel != null) {
-            Text(
+            StatusTag(
+                variant = StatusTagVariant.Paid,
                 text = statusLabel,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.extended.neutral400,
-                maxLines = 1,
-                softWrap = false,
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 4.dp)
-                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_status") else Modifier)
+                testTag = if (testTag.isNotEmpty()) "${testTag}_status" else "",
+                modifier = Modifier.padding(start = 8.dp, end = 4.dp)
             )
         }
 

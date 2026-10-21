@@ -1,5 +1,23 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **StatusTagVariant**: New `Paid` variant: `GreenLight` background, `DeepGreen` text, default text "Pagado" (`status_tag_paid`). Text contrast is 5.35:1 (WCAG AA). Apps with an exhaustive `when` over `StatusTagVariant` need a `Paid` branch.
+- **DeepGreen**: New color `0xFF256B42` for text on `GreenLight`. `DarkGreen` only reaches 4.1:1 on that background, below AA for the 12.sp tag text.
+
+- **ToteatSquareButton**: New optional parameter `onDisabledClick: (() -> Unit)? = null`, declared after `enabled`. With `enabled = false` and a callback, the card keeps its disabled look (`NeutralGray300` border, `NeutralGray400` content, icon at 0.4 alpha) but a tap calls `onDisabledClick` instead of `onClick`, with no ripple and no primary pressed border, so the app can explain why the option is unavailable. Screen readers get `role = Button` and the state "No disponible" (`square_button_unavailable`). The node is not marked `disabled()`: Android drops the click action of disabled nodes, so TalkBack could never trigger the callback. Without the callback a disabled card stays unresponsive, and with `enabled = true` the callback is ignored. Positional calls that passed `testTag` as the 7th argument must name it.
+- **Tests**: `ToteatSquareButton` UI tests: a disabled card with `onDisabledClick` calls it and not `onClick`; without it, nothing is called; an enabled card ignores it.
+- **Showcase / preview**: A disabled "Pago por comensal" card with `onDisabledClick`.
+
+### Changed
+- **ToteatDinerConsumptionList**: The header's `statusLabel` is drawn as a `StatusTag` with the `Paid` variant instead of plain gray text. It is still never cut, and the name gives up the space. Test tags: `_status` on the tag and `_status_text` on its text. No API change.
+- **Previews**: `StatusTag` shows the `Paid` variant ("Pagado" and "Sin deuda"); `ToteatSquareButton` shows "Pago total" / "de la cuenta", "Pago por" / "comensal", "Pago" / "dividido" and a two-line subtitle.
+
+### Fixed
+- **ToteatSquareButton**: The accessible description read the literal "%s, %s"; `square_button_description` now uses `%1$s, %2$s`.
+- **StatusTag**: The accessible description read the literal "Estado: %s". `status_tag_description` used `%s`, which Compose Multiplatform resources do not substitute; it now uses `%1$s` ("Estado: Sin deuda").
+- **ToteatSquareButton**: The subtitle is centered (`TextAlign.Center`) like the title; with `TextAlign.Start` a short subtitle sat at the left edge, misaligned with the title.
+
 ## [0.1.57] - 2026-10-20
 ### Changed
 - **ToteatDinerButton / ToteatDinerButtonContainer**: Smaller circles: 44.dp instead of 56.dp, with the plus and eye icons at 20.dp instead of 24.dp. The label keeps its 72.dp width and the initial its `titleMedium` style. The whole button (circle + label) is still the touch target, so it stays above 48.dp. No API change.

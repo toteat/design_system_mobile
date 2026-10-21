@@ -37,6 +37,8 @@ val BlueNormal = Color(0xFF275FFD)
 val BlueLight = Color(0xFFCEF3F7)
 val DarkYellow = Color(0xFFC48930)
 val DarkGreen = Color(0xFF2C7F4F)
+// Text on GreenLight: 5.35:1 (WCAG AA). DarkGreen only reaches 4.1:1 there.
+val DeepGreen = Color(0xFF256B42)
 val DarkRed = Color(0xFF6B0414)
 val DarkBlue = Color(0xFF123599)
 val WarningDark = Color(0xFFFBCC29)

@@ -15,7 +15,8 @@
     <string name="switch_subtitle">Esta opción es para POS compartidas</string>
     <string name="switch_disabled_subtitle">Esta opción está deshabilitada</string>
     <string name="rectangle_button_description">%s, %s</string>
-    <string name="square_button_description">%s, %s</string>
+    <string name="square_button_description">%1$s, %2$s</string>
+    <string name="square_button_unavailable">No disponible</string>
     <string name="topbar_semantic_label">Barra de navegación superior</string>
     <string name="login_topbar_semantic_label">Barra de navegación de inicio de sesión</string>
     <string name="back_navigation_semantic_label">Barra de navegación con retroceso: %s</string>
@@ -111,7 +112,8 @@
     <string name="status_tag_ended">Finalizado</string>
     <string name="status_tag_cancelled">Cancelado</string>
     <string name="status_tag_in_promotion">En promoción</string>
-    <string name="status_tag_description">Estado: %s</string>
+    <string name="status_tag_paid">Pagado</string>
+    <string name="status_tag_description">Estado: %1$s</string>
     <string name="order_list_ticket">order_list_ticket</string>
     <string name="action_bottom_sheet_description">Panel de acciones</string>
     <string name="action_item_description">Acción: %s</string>

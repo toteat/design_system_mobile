@@ -3,11 +3,13 @@ package com.toteat.toteatds.components.buttons
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +33,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -38,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
+import com.toteat.toteatds.components.icons.DinerPaymentIcon
 import com.toteat.toteatds.components.icons.SplitPaymentIcon
+import com.toteat.toteatds.components.icons.TotalPaymentsIcon
 import com.toteat.toteatds.theme.BlueLight
 import com.toteat.toteatds.theme.DarkBlue
 import com.toteat.toteatds.theme.NeutralGray300
@@ -49,9 +54,16 @@ import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.coming_soon
 import designsystemmobile.toteatds.generated.resources.square_button_description
+import designsystemmobile.toteatds.generated.resources.square_button_unavailable
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * @param onDisabledClick Called when the card is tapped while [enabled] is `false`, so the app can
+ * explain why the option is not available. The card keeps its disabled look, shows no pressed
+ * border nor ripple, and announces "No disponible" while staying actionable for screen readers.
+ * `null` (default) keeps a disabled card unresponsive. Ignored while [enabled] is `true`.
+ */
 @Composable
 fun ToteatSquareButton(
     title: String,
@@ -60,6 +72,7 @@ fun ToteatSquareButton(
     modifier: Modifier = Modifier,
     comingSoon: Boolean = false,
     enabled: Boolean = true,
+    onDisabledClick: (() -> Unit)? = null,
     testTag: String = "",
     iconSize: Dp = 48.dp,
     icon: @Composable () -> Unit
@@ -75,26 +88,23 @@ fun ToteatSquareButton(
 
     val description = stringResource(Res.string.square_button_description, title, subTitle)
     val comingSoonText = stringResource(Res.string.coming_soon)
+    val unavailableText = stringResource(Res.string.square_button_unavailable)
 
     // Cache static modifiers
     val spacerModifier = remember { Modifier.height(8.dp) }
 
-    OutlinedCard(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = modifier
-            .heightIn(min = 128.dp, max = 128.dp)
-            .width(150.dp)
-            .semantics {
-                contentDescription = if (comingSoon) "$description, $comingSoonText" else description
-                role = Role.Button
-            }
-            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier),
-        interactionSource = interactionSource,
-        colors = CardDefaults
-            .cardColors(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, if (comingSoon || !enabled) NeutralGray300 else borderColor)
-    ) {
+    val cardModifier = modifier
+        .heightIn(min = 128.dp, max = 128.dp)
+        .width(150.dp)
+        .semantics {
+            contentDescription = if (comingSoon) "$description, $comingSoonText" else description
+            role = Role.Button
+        }
+        .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+    val cardColors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
+    val border = BorderStroke(1.dp, if (comingSoon || !enabled) NeutralGray300 else borderColor)
+
+    val content: @Composable ColumnScope.() -> Unit = {
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.TopCenter
@@ -133,7 +143,7 @@ fun ToteatSquareButton(
                     text = subTitle,
                     style = MaterialTheme.typography.bodyLargeRegular,
                     color = contentColor,
-                    textAlign = TextAlign.Start,
+                    textAlign = TextAlign.Center,
                     softWrap = true,
                     maxLines = Int.MAX_VALUE
                 )
@@ -166,6 +176,39 @@ fun ToteatSquareButton(
             }
         }
     }
+
+    if (!enabled && onDisabledClick != null) {
+        // Same look as a disabled card, but tappable: no indication, so no ripple, and the card's
+        // own interaction source is not used, so the border never turns primary.
+        // No disabled() semantics: Android drops the click action of disabled nodes, so TalkBack
+        // could never reach onDisabledClick. The state is announced through stateDescription instead.
+        OutlinedCard(
+            modifier = cardModifier
+                .clickable(
+                    interactionSource = null,
+                    indication = null,
+                    role = Role.Button,
+                    onClick = onDisabledClick
+                )
+                .semantics { stateDescription = unavailableText },
+            colors = CardDefaults.cardColors(
+                containerColor = cardColors.disabledContainerColor,
+                contentColor = cardColors.disabledContentColor
+            ),
+            border = border,
+            content = content
+        )
+    } else {
+        OutlinedCard(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = cardModifier,
+            interactionSource = interactionSource,
+            colors = cardColors,
+            border = border,
+            content = content
+        )
+    }
 }
 
 @Composable
@@ -175,6 +218,31 @@ private fun ToteatSquareButtonPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            ToteatSquareButton(
+                title = "Pago total",
+                subTitle = "de la cuenta",
+                icon = { TotalPaymentsIcon(size = 48.dp) },
+                onClick = {}
+            )
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "comensal",
+                icon = { DinerPaymentIcon(size = 48.dp) },
+                onClick = {}
+            )
+            ToteatSquareButton(
+                title = "Pago",
+                subTitle = "dividido",
+                icon = { SplitPaymentIcon(size = 48.dp) },
+                onClick = {}
+            )
+            // Subtitle wrapping to two lines
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "montos diferentes entre comensales",
+                icon = { DifferentAmountPaymentsIcon(size = 48.dp) },
+                onClick = {}
+            )
             ToteatSquareButton(
                 title = "Dividir pago",
                 subTitle = "En partes iguales",
@@ -205,6 +273,14 @@ private fun ToteatSquareButtonPreview() {
                         modifier = Modifier.size(36.dp)
                     )
                 },
+                onClick = {}
+            )
+            ToteatSquareButton(
+                title = "Pago por",
+                subTitle = "comensal",
+                enabled = false,
+                onDisabledClick = {},
+                icon = { DinerPaymentIcon(size = 48.dp) },
                 onClick = {}
             )
             ToteatSquareButton(

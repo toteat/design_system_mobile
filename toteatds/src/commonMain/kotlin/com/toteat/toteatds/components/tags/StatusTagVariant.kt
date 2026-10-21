@@ -3,6 +3,8 @@ package com.toteat.toteatds.components.tags
 import androidx.compose.ui.graphics.Color
 import com.toteat.toteatds.theme.BlueLight
 import com.toteat.toteatds.theme.BlueNormal
+import com.toteat.toteatds.theme.DeepGreen
+import com.toteat.toteatds.theme.GreenLight
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray200
 import com.toteat.toteatds.theme.NeutralGray400
@@ -13,6 +15,7 @@ import designsystemmobile.toteatds.generated.resources.status_tag_cancelled
 import designsystemmobile.toteatds.generated.resources.status_tag_confirmed
 import designsystemmobile.toteatds.generated.resources.status_tag_ended
 import designsystemmobile.toteatds.generated.resources.status_tag_in_promotion
+import designsystemmobile.toteatds.generated.resources.status_tag_paid
 import designsystemmobile.toteatds.generated.resources.status_tag_pending
 import org.jetbrains.compose.resources.StringResource
 
@@ -45,5 +48,10 @@ enum class StatusTagVariant(
         backgroundColor = BlueLight,
         textColor = BlueNormal,
         defaultTextRes = Res.string.status_tag_in_promotion
+    ),
+    Paid(
+        backgroundColor = GreenLight,
+        textColor = DeepGreen,
+        defaultTextRes = Res.string.status_tag_paid
     )
 }
