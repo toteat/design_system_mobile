@@ -56,9 +56,9 @@ sealed interface ToteatDinerButtonType {
     data object ViewMore : ToteatDinerButtonType
 }
 
-private val DinerCircleSize = 56.dp
+private val DinerCircleSize = 44.dp
 private val DinerBorderWidth = 1.5.dp
-private val DinerIconSize = 24.dp
+private val DinerIconSize = 20.dp
 private val DinerLabelWidth = 72.dp
 
 /**
