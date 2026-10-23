@@ -71,8 +71,8 @@ private const val DefaultDinerNameMaxLength = 50
  * Editable list used to identify diners by name.
  *
  * Renders one card per entry in [names]. An empty name shows the
- * "Comensal N" placeholder; tapping the trailing pencil turns the row
- * into a text field so the name can be typed. The new value is reported
+ * "Comensal N" placeholder; tapping anywhere on the row (or its trailing
+ * pencil) turns it into a text field so the name can be typed. The new value is reported
  * through [onNameChange] when the keyboard action confirms or the field
  * loses focus. Backed by a [LazyColumn], so long lists scroll vertically;
  * when embedded inside another vertical scrollable, give it a bounded
@@ -81,7 +81,7 @@ private const val DefaultDinerNameMaxLength = 50
  * @param editingIndex Row being edited when the screen controls editing, `null` for none.
  * Ignored unless [onEditingIndexChange] is set.
  * @param onEditingIndexChange When `null` (default) the list keeps the editing row in its own
- * state, as before. When set, the list keeps no state: the pencil calls it with the row index,
+ * state, as before. When set, the list keeps no state: tapping a row calls it with the row index,
  * and confirming a name calls [onNameChange] first and then this with `null`. Setting
  * [editingIndex] to a row opens it with the text of `names[i]` and focuses the field, so going
  * back from `null` to the same row re-opens it after its name was confirmed (e.g. after an alert
@@ -194,6 +194,19 @@ private fun DinerNameRow(
             .height(DinerNameRowHeight)
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.background)
+            // While not editing, tapping anywhere on the card opens it, not only the pencil.
+            // While editing, the card takes no taps so the text field keeps them.
+            .then(
+                if (fieldState == null) {
+                    Modifier.clickable(
+                        onClickLabel = editDescription,
+                        role = Role.Button,
+                        onClick = onEditClick
+                    )
+                } else {
+                    Modifier
+                }
+            )
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .padding(start = 20.dp, end = 4.dp)
     ) {
