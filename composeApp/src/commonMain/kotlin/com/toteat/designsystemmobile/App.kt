@@ -885,6 +885,53 @@ fun AmountBottomBarShowcase() {
                 onPayClick = {}
             )
         }
+
+        Text("Solo Confirmar (dispositivo sin cobro, orden sin pagar)", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 32.780",
+                paidAmount = "$ 0",
+                amountToPay = "$32.780",
+                showPayButton = false,
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
+        }
+
+        Text("Sin botón de pago, orden pagada: Confirmar y detalle", style = MaterialTheme.typography.bodyMedium)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .background(color = Color.White, shape = MaterialTheme.shapes.medium)
+        ) {
+            AmountBottomBar(
+                subtotalAmount = "$ 32.780",
+                paidAmount = "$ 32.780",
+                amountToPay = "$ 0",
+                fullPaid = true,
+                showPayButton = false,
+                initialPaidAmountExpanded = true,
+                onPaymentDetailClick = {},
+                onPrintPreBillClick = {},
+                onConfirmClick = {},
+                onPayClick = {}
+            )
+        }
     }
 }
 

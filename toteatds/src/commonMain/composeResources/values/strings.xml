@@ -36,6 +36,9 @@
     <string name="print_prebill">Imprimir precuenta</string>
     <string name="discount">Descuento</string>
     <string name="amount_bottom_bar_description">Barra inferior de montos y acciones</string>
+    <string name="amount_bottom_bar_toggle_details">Mostrar u ocultar el detalle de montos</string>
+    <string name="amount_bottom_bar_expanded">Expandido</string>
+    <string name="amount_bottom_bar_collapsed">Contraído</string>
     <string name="dropdown_select_placeholder">Seleccionar</string>
     <string name="dropdown_description">%s, dropdown</string>
     <string name="dropdown_expanded">expandido</string>

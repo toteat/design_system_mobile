@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,10 +42,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,7 +60,10 @@ import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.theme.helperRegular
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
+import designsystemmobile.toteatds.generated.resources.amount_bottom_bar_collapsed
 import designsystemmobile.toteatds.generated.resources.amount_bottom_bar_description
+import designsystemmobile.toteatds.generated.resources.amount_bottom_bar_expanded
+import designsystemmobile.toteatds.generated.resources.amount_bottom_bar_toggle_details
 import designsystemmobile.toteatds.generated.resources.amount_paid
 import designsystemmobile.toteatds.generated.resources.amount_to_pay
 import designsystemmobile.toteatds.generated.resources.confirm
@@ -79,6 +87,8 @@ private val AmountBottomBarTopHeight = 70.dp
 private val AmountBottomBarBottomHeight = 77.dp
 private val AmountBottomBarActionHeight = 45.dp
 private val AmountBottomBarAmountWidth = 74.dp
+private val AmountBottomBarToggleSize = 48.dp
+private val AmountBottomBarToggleIconSize = 20.dp
 
 @Composable
 fun AmountBottomBar(
@@ -99,6 +109,7 @@ fun AmountBottomBar(
     paymentDetailContainerColor: Color = SecondaryNormal,
     showButtons: Boolean = true,
     showPrintPreBill: Boolean = true,
+    showPayButton: Boolean = true,
     initialPaidAmountExpanded: Boolean = false,
     isLoading: Boolean = false,
     testTag: String = ""
@@ -112,6 +123,9 @@ fun AmountBottomBar(
     val confirmText = stringResource(Res.string.confirm)
     val payText = stringResource(Res.string.pay)
     val paymentDetailText = stringResource(Res.string.payment_detail)
+    val toggleDetailsLabel = stringResource(Res.string.amount_bottom_bar_toggle_details)
+    val expandedText = stringResource(Res.string.amount_bottom_bar_expanded)
+    val collapsedText = stringResource(Res.string.amount_bottom_bar_collapsed)
     var showPaidAmount by remember(paidAmount, initialPaidAmountExpanded) {
         mutableStateOf(initialPaidAmountExpanded)
     }
@@ -208,9 +222,19 @@ fun AmountBottomBar(
                             .padding(start = 10.dp),
                         horizontalAlignment = Alignment.End
                     ) {
+                        val hasExtraRows = !paidAmount.isNullOrBlank() || !discountAmount.isNullOrBlank()
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .then(
+                                    if (hasExtraRows && enabled) {
+                                        Modifier.pointerInput(Unit) {
+                                            detectTapGestures { showPaidAmount = !showPaidAmount }
+                                        }
+                                    } else {
+                                        Modifier
+                                    }
+                                ),
                             verticalAlignment = Alignment.Top,
                             horizontalArrangement = Arrangement.End
                         ) {
@@ -268,25 +292,22 @@ fun AmountBottomBar(
                                 )
                             }
 
-                            // The expand/collapse arrow appears when there is at least one
-                            // optional row (paid amount or discount) beyond the always-visible
-                            // Subtotal + A pagar. Both extra rows share the `showPaidAmount`
-                            // toggle.
-                            if (!paidAmount.isNullOrBlank() || !discountAmount.isNullOrBlank()) {
-                                Spacer(modifier = Modifier.width(4.dp))
+                            if (hasExtraRows) {
                                 Box(
                                     modifier = Modifier
-                                        .size(14.dp)
-                                        .then(
-                                            if (enabled) {
-                                                Modifier.noRippleClick { showPaidAmount = !showPaidAmount }
-                                            } else {
-                                                Modifier
-                                            }
-                                        )
+                                        .size(AmountBottomBarToggleSize)
                                         .semantics {
                                             role = Role.Button
-                                            contentDescription = amountPaidText
+                                            contentDescription = toggleDetailsLabel
+                                            stateDescription = if (showPaidAmount) expandedText else collapsedText
+                                            if (enabled) {
+                                                onClick(label = toggleDetailsLabel) {
+                                                    showPaidAmount = !showPaidAmount
+                                                    true
+                                                }
+                                            } else {
+                                                disabled()
+                                            }
                                         }
                                         .then(
                                             if (testTag.isNotEmpty()) {
@@ -305,7 +326,7 @@ fun AmountBottomBar(
                                         },
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.extended.tertiaryMuted,
-                                        modifier = Modifier.size(14.dp)
+                                        modifier = Modifier.size(AmountBottomBarToggleIconSize)
                                     )
                                 }
                             }
@@ -372,7 +393,7 @@ fun AmountBottomBar(
                                     }
                                 )
                         )
-                    } else {
+                    } else if (showPayButton) {
                         AmountActionButton(
                             onClick = onPayClick,
                             enabled = payEnabled,
@@ -680,6 +701,32 @@ private fun AmountBottomBarPreviewWithDiscount() {
                     paidAmount = "$ 0",
                     amountToPay = "$32.780",
                     onDiscountClick = {},
+                    onPrintPreBillClick = {},
+                    onConfirmClick = {},
+                    onPayClick = {}
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun AmountBottomBarPreviewConfirmOnly() {
+    ToteatTheme {
+        Scaffold(
+            bottomBar = {
+                AmountBottomBar(
+                    subtotalAmount = "$ 32.780",
+                    paidAmount = "$ 0",
+                    amountToPay = "$32.780",
+                    showPayButton = false,
                     onPrintPreBillClick = {},
                     onConfirmClick = {},
                     onPayClick = {}

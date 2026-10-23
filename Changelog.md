@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.60] - 2026-10-23
+### Added
+- **AmountBottomBar**: New optional parameter `showPayButton: Boolean = true`, declared after `showPrintPreBill`. With `showPayButton = false` and `fullPaid = false` the bar shows only the Confirmar button, full width, for devices that cannot charge (phones). With `fullPaid = true` it still shows Confirmar and the payment detail button, whatever `showPayButton` says, so a paid order exposes the detail. Default behavior is unchanged.
+- **Tests**: `AmountBottomBar` UI tests (iOS simulator) for the default buttons, Confirmar alone, Confirmar plus detail on a paid order, the expand toggle, its accessible state, its touch target, the absence of the toggle without extra rows and the disabled bar.
+- **Showcase / preview**: "Solo Confirmar" and "Sin botón de pago, orden pagada" states, and a `Confirm only` preview.
+
+### Changed
+- **Requirements for consuming apps**: this version resolves Compose Multiplatform 1.12.x, whose Android artifacts (`androidx.compose.*-android:1.12.1`) declare `minCompileSdk=37` and require Android Gradle plugin 9.1.0 or higher. An Android app that depends on it must compile against API 37 and use AGP 9.1.0 or higher; otherwise `checkAarMetadata` fails. `targetSdk` and `minSdk` are not affected.
+- **Toolchain and Compose**: Compose Multiplatform 1.12.2 (was 1.11.1), JetBrains lifecycle 2.11.0 (was 2.9.4), Gradle 9.6.1, Android Gradle plugin 9.3.3 and `compileSdk` 37. Compose 1.12.1 for Android requires AGP 9.1.0 or higher in any application, so the showcase app needs it. Kotlin stays at 2.3.21 on purpose, so consumers on Kotlin 2.3 can still read the klibs. `android.builtInKotlin=false` and `android.newDsl=false` are set while the build still applies the Kotlin Multiplatform plugin together with the Android plugins. The library convention plugin took `compileSdk = 34` and `minSdk = 24` from hardcoded values; both now come from `gradle/libs.versions.toml` (`compileSdk` 37, `minSdk` 24). Material3 stays at 1.9.0, the latest stable release. Library API unchanged.
+- **AmountBottomBar**: The detail (paid amount and discount) now expands and collapses by tapping anywhere on the amounts block, not only on the arrow. The arrow is a 20.dp icon inside a 48.dp touch target, and it is the accessible node: `role = Button`, content description "Mostrar u ocultar el detalle de montos" and the state "Expandido" / "Contraído" (`amount_bottom_bar_expanded` and `amount_bottom_bar_collapsed`). The block itself adds no semantics, so the `_subtotal`, `_paid` and `_to_pay` test tags stay reachable. `_toggle_paid` stays on the arrow. With `enabled = false` the block ignores taps and the arrow is marked disabled.
+
 ## [0.1.59] - 2026-10-23
 ### Changed
 - **ToteatDinerNameList**: Tapping anywhere on a row opens it for editing, not only the pencil. The whole card shows the ripple and is exposed as a button with the edit description as its click label. While a row is editing, the card takes no taps, so the text field keeps them and the pencil still confirms the name. No API change.
