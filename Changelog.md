@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.59] - 2026-10-23
 ### Changed
 - **ToteatDinerNameList**: Tapping anywhere on a row opens it for editing, not only the pencil. The whole card shows the ripple and is exposed as a button with the edit description as its click label. While a row is editing, the card takes no taps, so the text field keeps them and the pencil still confirms the name. No API change.
 
