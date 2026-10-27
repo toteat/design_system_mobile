@@ -59,7 +59,7 @@ sealed interface ToteatDinerButtonType {
 private val DinerCircleSize = 40.dp
 private val DinerBorderWidth = 1.5.dp
 private val DinerIconSize = 18.dp
-private val DinerLabelWidth = 60.dp
+private val DinerLabelWidth = 64.dp
 
 /**
  * Circular button used to assign an order item to a diner.
@@ -153,7 +153,7 @@ fun ToteatDinerButton(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLargeRegular,
-            fontSize = MaterialTheme.typography.bodyLargeRegular.fontSize,
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -185,7 +185,7 @@ private fun ToteatDinerButtonPreview() {
                 onClick = {}
             )
             ToteatDinerButton(
-                type = ToteatDinerButtonType.Diner("Camila"),
+                type = ToteatDinerButtonType.Diner("Comensal 1"),
                 enabled = false,
                 onClick = {}
             )

@@ -40,6 +40,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -83,15 +84,20 @@ private val HorizontalPadding = 16.dp
 /** How a consumption row is painted. [Discount] rows are dimmed, as in Figma "comensal - genérico". */
 enum class DinerConsumptionItemKind { Regular, Discount }
 
+/**
+ * @param quantity Already formatted quantity (e.g. "2"), shown before the name as "2x", also when it
+ * is "1". `null` (default) shows nothing.
+ */
 @Immutable
 data class DinerConsumptionExtra(
     val name: String,
-    val price: String
+    val price: String,
+    val quantity: String? = null
 )
 
 /**
- * @param quantity Already formatted quantity (e.g. "6"), shown after the name as "x6". `null`
- * (default) shows nothing.
+ * @param quantity Already formatted quantity (e.g. "6"), shown before the name as "6x", also when it
+ * is "1" ("1x"). `null` (default) shows nothing, e.g. for discounts.
  * @param extras Shown under the product, indented and in a smaller gray style, each with its price
  * aligned to the right.
  */
@@ -406,7 +412,14 @@ private fun DinerConsumptionRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f)
         ) {
-            // fill = false keeps the quantity right after the name; the name gives up the space.
+            if (quantity != null) {
+                QuantityText(
+                    quantity = quantity,
+                    style = MaterialTheme.typography.bodyLargeRegular,
+                    isDiscount = isDiscount,
+                    testTag = if (testTag.isNotEmpty()) "${testTag}_quantity" else ""
+                )
+            }
             Text(
                 text = name,
                 style = MaterialTheme.typography.bodyLargeRegular,
@@ -414,20 +427,8 @@ private fun DinerConsumptionRow(
                 color = nameColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f, fill = false)
+                modifier = Modifier.weight(1f)
             )
-            if (quantity != null) {
-                Text(
-                    text = "x$quantity",
-                    style = MaterialTheme.typography.bodyLargeRegular,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (isDiscount) extended.disabledContent else MaterialTheme.colorScheme.primary,
-                    maxLines = 1,
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_quantity") else Modifier)
-                )
-            }
         }
         Text(
             text = price,
@@ -436,6 +437,26 @@ private fun DinerConsumptionRow(
             color = priceColor
         )
     }
+}
+
+/** "6x" before a product or extra name, in the row's gray. Never cut: the name gives up the space. */
+@Composable
+private fun QuantityText(
+    quantity: String,
+    style: TextStyle,
+    isDiscount: Boolean,
+    testTag: String
+) {
+    Text(
+        text = "${quantity}x",
+        style = style,
+        fontWeight = FontWeight.SemiBold,
+        color = if (isDiscount) MaterialTheme.colorScheme.extended.disabledContent else MaterialTheme.colorScheme.extended.neutral400,
+        maxLines = 1,
+        modifier = Modifier
+            .padding(end = 4.dp)
+            .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+    )
 }
 
 /**
@@ -475,15 +496,29 @@ private fun DinerConsumptionExtras(
                             .alpha(0f)
                             .clearAndSetSemantics {}
                     )
-                    Text(
-                        text = extra.name,
-                        style = MaterialTheme.typography.bodyMediumRegular,
-                        fontSize = 12.sp,
-                        color = color,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.weight(1f)
-                    )
+                    ) {
+                        val quantity = extra.quantity
+                        if (quantity != null) {
+                            QuantityText(
+                                quantity = quantity,
+                                style = MaterialTheme.typography.bodyMediumRegular.copy(fontSize = 12.sp),
+                                isDiscount = isDiscount,
+                                testTag = if (testTag.isNotEmpty()) "${testTag}_extra_${index}_quantity" else ""
+                            )
+                        }
+                        Text(
+                            text = extra.name,
+                            style = MaterialTheme.typography.bodyMediumRegular,
+                            fontSize = 12.sp,
+                            color = color,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                     Text(
                         text = extra.price,
                         style = MaterialTheme.typography.bodyMediumRegular,
@@ -579,11 +614,11 @@ private fun ToteatDinerConsumptionCardWithExtrasPreview() {
                         price = "$15.600",
                         quantity = "6",
                         extras = persistentListOf(
-                            DinerConsumptionExtra(name = "Pebre", price = "$600"),
-                            DinerConsumptionExtra(name = "Salsa picante", price = "$0")
+                            DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2"),
+                            DinerConsumptionExtra(name = "Salsa picante", price = "$0", quantity = "1")
                         )
                     ),
-                    DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000")
+                    DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000", quantity = "1")
                 ),
                 total = "$22.600"
             ),

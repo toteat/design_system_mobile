@@ -1138,8 +1138,8 @@ fun DinerConsumptionListShowcase() {
                             price = "$15.600",
                             quantity = "6",
                             extras = persistentListOf(
-                                DinerConsumptionExtra(name = "Pebre", price = "$600"),
-                                DinerConsumptionExtra(name = "Salsa picante", price = "$0")
+                                DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2"),
+                                DinerConsumptionExtra(name = "Salsa picante", price = "$0", quantity = "1")
                             )
                         )
                     ),

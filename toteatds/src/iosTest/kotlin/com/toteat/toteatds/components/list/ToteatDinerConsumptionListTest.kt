@@ -25,6 +25,7 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
+import com.toteat.toteatds.theme.extended
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -179,7 +180,7 @@ class ToteatDinerConsumptionListTest {
 
         onNodeWithTag(tag("diner_item_0_quantity"))
             .assertIsDisplayed()
-            .assertTextEquals("x6")
+            .assertTextEquals("6x")
         onNodeWithTag(tag("diner_item_0_extra_0")).assertIsDisplayed()
         onNodeWithTag(tag("diner_item_0_extra_1")).assertIsDisplayed()
         onNodeWithText("Pebre").assertIsDisplayed()
@@ -191,6 +192,56 @@ class ToteatDinerConsumptionListTest {
         val productBottom = onNodeWithTag(tag("diner_item_0")).fetchSemanticsNode().boundsInRoot.bottom
         val extraTop = onNodeWithTag(tag("diner_item_0_extra_0")).fetchSemanticsNode().boundsInRoot.top
         assertTrue(extraTop >= productBottom)
+    }
+
+    @Test
+    fun quantitiesAreShownBeforeTheNameIncludingOneUnitAndExtras() = runComposeUiTest {
+        var gray = Color.Unspecified
+        setContent {
+            ToteatTheme {
+                gray = MaterialTheme.colorScheme.extended.neutral400
+                ToteatDinerConsumptionCard(
+                    consumption = DinerConsumption(
+                        name = "Pauli",
+                        items = persistentListOf(
+                            DinerConsumptionItem(
+                                name = "Empanada de pino",
+                                price = "$15.600",
+                                quantity = "6",
+                                extras = persistentListOf(
+                                    DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2"),
+                                    DinerConsumptionExtra(name = "Salsa picante", price = "$0")
+                                )
+                            ),
+                            DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000", quantity = "1")
+                        ),
+                        total = "$23.200"
+                    ),
+                    onCheckedChange = {},
+                    initiallyExpanded = true,
+                    testTag = "diner"
+                )
+            }
+        }
+
+        fun left(node: SemanticsNodeInteraction) = node.fetchSemanticsNode().boundsInRoot.left
+
+        val productQuantity = onNodeWithTag(tag("diner_item_0_quantity")).assertTextEquals("6x")
+        assertTrue(left(productQuantity) < left(onNodeWithText("Empanada de pino")))
+
+        onNodeWithTag(tag("diner_item_1_quantity")).assertTextEquals("1x")
+
+        val extraQuantity = onNodeWithTag(tag("diner_item_0_extra_0_quantity"), useUnmergedTree = true)
+            .assertTextEquals("2x")
+        assertTrue(left(extraQuantity) < left(onNodeWithText("Pebre")))
+        // Extra quantities line up with the product's.
+        assertEquals(left(productQuantity), left(extraQuantity))
+
+        // Gray like the name, not primary.
+        assertEquals(gray, textColor(productQuantity))
+        assertEquals(gray, textColor(extraQuantity))
+
+        onNodeWithTag(tag("diner_item_0_extra_1_quantity"), useUnmergedTree = true).assertDoesNotExist()
     }
 
     @Test

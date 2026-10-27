@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **DinerConsumptionExtra**: New optional field `quantity: String? = null`, declared after `price`, already formatted by the caller (e.g. "2"). Shown before the extra's name as "2x", in 12.sp SemiBold / `neutral400` (`disabledContent` on `Discount` rows), lined up with the product's quantity. Derived test tag: `_item_<i>_extra_<j>_quantity`.
+
+### Changed
+- **DinerConsumptionItem**: `quantity` is now shown before the name as "6x" ("• 6x Empanada de pino") instead of "x6" after it. Any non-null value is shown, so "1" reads "1x"; `null` still shows nothing (e.g. discounts). It is painted in `neutral400` (was `primary`), still SemiBold; `disabledContent` on `Discount` rows. Same `_quantity` test tag.
+- **Tests**: Quantity before the name for products and extras, "1" shown as "1x", extra quantities aligned with the product's.
+- **Showcase / preview**: Extras with quantity ("2x Pebre", "1x Salsa picante") and a product with "1x".
+
 ## [0.1.62] - 2026-10-27
 ### Changed
 - **ToteatDinerConsumptionCard**: Header and total adjusted to Figma "comensal - genérico". No API or test tag change.
