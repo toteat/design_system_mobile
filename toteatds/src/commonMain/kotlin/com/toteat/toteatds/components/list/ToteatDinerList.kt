@@ -103,6 +103,7 @@ private fun DinerListHeader(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
+            .height(29.dp)
             .background(MaterialTheme.colorScheme.extended.neutral100)
             .padding(vertical = 4.dp)
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
@@ -126,7 +127,7 @@ private fun DinerListRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
+            .height(26.dp)
             .clickable(
                 onClick = onClick,
                 role = Role.Button

@@ -66,11 +66,11 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-private val HeaderHeight = 56.dp
-private val ItemRowHeight = 48.dp
+private val HeaderHeight = 36.dp
+private val ItemRowHeight = 36.dp
 // Figma "comensal - genérico" icon/ checkbox: a 14.dp icon whose box is inset 0.875.dp (12.25.dp),
 // with a 2.625.dp radius, a ~1.dp border and a check about 7.5.dp wide.
-private val CheckboxSize = 14.dp
+private val CheckboxSize = 16.dp
 private val CheckboxInset = 0.875.dp
 private val CheckboxShape = RoundedCornerShape(2.625.dp)
 private val CheckboxBorderWidth = 1.dp
@@ -186,7 +186,7 @@ fun ToteatDinerConsumptionCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large)
+            .clip(MaterialTheme.shapes.medium)
             .semantics { contentDescription = cardDescription }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
