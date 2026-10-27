@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.62] - 2026-10-27
 ### Changed
 - **ToteatDinerConsumptionCard**: Header and total adjusted to Figma "comensal - genérico". No API or test tag change.
   - Smaller checkbox: a 14.dp icon whose box is 12.25.dp (0.875.dp inset), with a 2.625.dp radius, a 1.dp border (was 24.dp, 6.dp radius and 1.5.dp border) and a 10.dp check (was 16.dp). The touch target is still at least 48.dp (`minimumInteractiveComponentSize`), with the same `role = Checkbox`, accessible description and `_checkbox` test tag.
