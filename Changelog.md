@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.61] - 2026-10-27
 ### Added
 - **DinerConsumptionItem**: New optional fields `quantity: String? = null` and `extras: ImmutableList<DinerConsumptionExtra> = persistentListOf()`, declared after `kind`.
   - `quantity` is already formatted by the caller (e.g. "6") and shown right after the name as "x6", in `bodyLarge` SemiBold / `primary` (`disabledContent` on `Discount` rows), like the quantity in `GroupedOrderDetail`. It is never cut: the name gives up the space. Derived test tag: `_item_<i>_quantity`.
