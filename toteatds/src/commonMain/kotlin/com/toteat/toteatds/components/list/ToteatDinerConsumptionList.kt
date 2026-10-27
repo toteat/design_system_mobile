@@ -35,17 +35,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.toteat.toteatds.components.tags.StatusTag
 import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyLargeRegular
+import com.toteat.toteatds.theme.bodyMediumRegular
 import com.toteat.toteatds.theme.extended
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
@@ -72,10 +76,24 @@ private val HorizontalPadding = 16.dp
 enum class DinerConsumptionItemKind { Regular, Discount }
 
 @Immutable
+data class DinerConsumptionExtra(
+    val name: String,
+    val price: String
+)
+
+/**
+ * @param quantity Already formatted quantity (e.g. "6"), shown after the name as "x6". `null`
+ * (default) shows nothing.
+ * @param extras Shown under the product, indented and in a smaller gray style, each with its price
+ * aligned to the right.
+ */
+@Immutable
 data class DinerConsumptionItem(
     val name: String,
     val price: String,
-    val kind: DinerConsumptionItemKind = DinerConsumptionItemKind.Regular
+    val kind: DinerConsumptionItemKind = DinerConsumptionItemKind.Regular,
+    val quantity: String? = null,
+    val extras: ImmutableList<DinerConsumptionExtra> = persistentListOf()
 )
 
 /**
@@ -184,13 +202,23 @@ fun ToteatDinerConsumptionCard(
                             color = MaterialTheme.colorScheme.extended.neutral100
                         )
                     }
+                    val isDiscount = item.kind == DinerConsumptionItemKind.Discount
+                    val itemTestTag = if (testTag.isNotEmpty()) "${testTag}_item_$index" else ""
                     DinerConsumptionRow(
                         name = item.name,
                         price = item.price,
                         isTotal = false,
-                        isDiscount = item.kind == DinerConsumptionItemKind.Discount,
-                        testTag = if (testTag.isNotEmpty()) "${testTag}_item_$index" else ""
+                        isDiscount = isDiscount,
+                        quantity = item.quantity,
+                        testTag = itemTestTag
                     )
+                    if (item.extras.isNotEmpty()) {
+                        DinerConsumptionExtras(
+                            extras = item.extras,
+                            isDiscount = isDiscount,
+                            testTag = itemTestTag
+                        )
+                    }
                 }
             }
 
@@ -331,7 +359,8 @@ private fun DinerConsumptionRow(
     price: String,
     isTotal: Boolean,
     isDiscount: Boolean,
-    testTag: String
+    testTag: String,
+    quantity: String? = null
 ) {
     val extended = MaterialTheme.colorScheme.extended
     val nameColor = when {
@@ -362,21 +391,97 @@ private fun DinerConsumptionRow(
             fontWeight = fontWeight,
             color = nameColor
         )
-        Text(
-            text = name,
-            style = MaterialTheme.typography.bodyLargeRegular,
-            fontWeight = fontWeight,
-            color = nameColor,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f)
-        )
+        ) {
+            // fill = false keeps the quantity right after the name; the name gives up the space.
+            Text(
+                text = name,
+                style = MaterialTheme.typography.bodyLargeRegular,
+                fontWeight = fontWeight,
+                color = nameColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false)
+            )
+            if (quantity != null) {
+                Text(
+                    text = "x$quantity",
+                    style = MaterialTheme.typography.bodyLargeRegular,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isDiscount) extended.disabledContent else MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_quantity") else Modifier)
+                )
+            }
+        }
         Text(
             text = price,
             style = MaterialTheme.typography.bodyLargeRegular,
             fontWeight = fontWeight,
             color = priceColor
         )
+    }
+}
+
+/**
+ * Extras of a product, drawn under its row. The name starts where the product name does (an
+ * invisible bullet keeps the indent in step with the product row) and the price lines up with the
+ * product price.
+ */
+@Composable
+private fun DinerConsumptionExtras(
+    extras: ImmutableList<DinerConsumptionExtra>,
+    isDiscount: Boolean,
+    testTag: String
+) {
+    val extended = MaterialTheme.colorScheme.extended
+    val color = if (isDiscount) extended.disabledContent else extended.neutral400
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(start = HorizontalPadding, end = HorizontalPadding, bottom = 12.dp)
+    ) {
+        extras.forEachIndexed { index, extra ->
+            key(extra.name, index) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_extra_$index") else Modifier)
+                        .padding(vertical = 2.dp)
+                ) {
+                    Text(
+                        text = "•",
+                        style = MaterialTheme.typography.bodyLargeRegular,
+                        modifier = Modifier
+                            .alpha(0f)
+                            .clearAndSetSemantics {}
+                    )
+                    Text(
+                        text = extra.name,
+                        style = MaterialTheme.typography.bodyMediumRegular,
+                        fontSize = 12.sp,
+                        color = color,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = extra.price,
+                        style = MaterialTheme.typography.bodyMediumRegular,
+                        fontSize = 12.sp,
+                        color = color
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -418,6 +523,34 @@ private fun ToteatDinerConsumptionListPreview() {
                 )
             ),
             onCheckedChange = { _, _ -> },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA)
+@Composable
+private fun ToteatDinerConsumptionCardWithExtrasPreview() {
+    ToteatTheme {
+        ToteatDinerConsumptionCard(
+            consumption = DinerConsumption(
+                name = "Pauli",
+                items = persistentListOf(
+                    DinerConsumptionItem(
+                        name = "Empanada de pino",
+                        price = "$15.600",
+                        quantity = "6",
+                        extras = persistentListOf(
+                            DinerConsumptionExtra(name = "Pebre", price = "$600"),
+                            DinerConsumptionExtra(name = "Salsa picante", price = "$0")
+                        )
+                    ),
+                    DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000")
+                ),
+                total = "$22.600"
+            ),
+            onCheckedChange = {},
+            initiallyExpanded = true,
             modifier = Modifier.padding(16.dp)
         )
     }

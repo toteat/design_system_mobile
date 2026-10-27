@@ -74,6 +74,7 @@ import com.toteat.toteatds.components.buttons.ToteatButtonTable
 import com.toteat.toteatds.components.buttons.ToteatChipButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatDinerButtonContainer
 import com.toteat.toteatds.components.list.DinerConsumption
+import com.toteat.toteatds.components.list.DinerConsumptionExtra
 import com.toteat.toteatds.components.list.DinerConsumptionItem
 import com.toteat.toteatds.components.list.DinerConsumptionItemKind
 import com.toteat.toteatds.components.list.ToteatDinerConsumptionList
@@ -1132,9 +1133,17 @@ fun DinerConsumptionListShowcase() {
                     name = "Trini",
                     items = persistentListOf(
                         DinerConsumptionItem(name = "Lasagna vegetariana", price = "$8.500"),
-                        DinerConsumptionItem(name = "Copa de vino", price = "$4.000")
+                        DinerConsumptionItem(
+                            name = "Empanada de pino",
+                            price = "$15.600",
+                            quantity = "6",
+                            extras = persistentListOf(
+                                DinerConsumptionExtra(name = "Pebre", price = "$600"),
+                                DinerConsumptionExtra(name = "Salsa picante", price = "$0")
+                            )
+                        )
                     ),
-                    total = "$12.500"
+                    total = "$24.700"
                 ),
                 DinerConsumption(
                     name = "Valentina Fernández de la Fuente",

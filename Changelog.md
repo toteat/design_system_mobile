@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **DinerConsumptionItem**: New optional fields `quantity: String? = null` and `extras: ImmutableList<DinerConsumptionExtra> = persistentListOf()`, declared after `kind`.
+  - `quantity` is already formatted by the caller (e.g. "6") and shown right after the name as "x6", in `bodyLarge` SemiBold / `primary` (`disabledContent` on `Discount` rows), like the quantity in `GroupedOrderDetail`. It is never cut: the name gives up the space. Derived test tag: `_item_<i>_quantity`.
+  - `extras` are drawn under their product, without a bullet, with the name aligned to the product name and the price aligned to the right with the product price, in `bodyMedium` 12.sp / `neutral400` (`disabledContent` on `Discount` rows). Derived test tag: `_item_<i>_extra_<j>`.
+  - With the defaults, rows look as before.
+- **DinerConsumptionExtra**: New `@Immutable data class DinerConsumptionExtra(name: String, price: String)`.
+- **Tests**: `ToteatDinerConsumptionList` UI tests: quantity "x6" and two extras shown under their product; an item without them shows neither.
+- **Showcase / preview**: A product with quantity and two extras ("Empanada de pino" x6 with "Pebre" and "Salsa picante").
+
 ## [0.1.60] - 2026-10-23
 ### Added
 - **AmountBottomBar**: New optional parameter `showPayButton: Boolean = true`, declared after `showPrintPreBill`. With `showPayButton = false` and `fullPaid = false` the bar shows only the Confirmar button, full width, for devices that cannot charge (phones). With `fullPaid = true` it still shows Confirmar and the payment detail button, whatever `showPayButton` says, so a paid order exposes the detail. Default behavior is unchanged.
