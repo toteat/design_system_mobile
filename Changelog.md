@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.65] - 2026-10-27
 ### Added
 - **DinerConsumptionExtra**: New optional field `quantity: String? = null`, declared after `price`, already formatted by the caller (e.g. "2"). Shown before the extra's name as "2x", in 12.sp SemiBold / `neutral400` (`disabledContent` on `Discount` rows), lined up with the product's quantity. Derived test tag: `_item_<i>_extra_<j>_quantity`.
 
