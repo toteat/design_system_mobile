@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ToteatDinerConsumptionCard**: Header and total adjusted to Figma "comensal - genérico". No API or test tag change.
+  - Smaller checkbox: a 14.dp icon whose box is 12.25.dp (0.875.dp inset), with a 2.625.dp radius, a 1.dp border (was 24.dp, 6.dp radius and 1.5.dp border) and a 10.dp check (was 16.dp). The touch target is still at least 48.dp (`minimumInteractiveComponentSize`), with the same `role = Checkbox`, accessible description and `_checkbox` test tag.
+  - Thin chevron: the DS `icon_right_chevron` turned down (collapsed) or up (expanded) at 16.dp, instead of Material's `KeyboardArrowDown` / `KeyboardArrowUp` at 24.dp. Same `secondary` tint, same "Ver consumo" / "Ocultar consumo" description, same header tap.
+  - Total row: the bullet and "Total" are now `primary`, like the amount (they were `secondary`). Still bold. Other rows are unchanged.
+- **Tests**: `ToteatDinerConsumptionList` UI tests for the total row color (bullet, "Total" and amount in `primary`), the checkbox's 48.dp touch target with its role and description, and the chevron description following the expanded state.
+- **Preview**: An expanded, selected card like the Figma frame (Hamburguesa BBQ, Bebida, Descuento and Total).
+
 ## [0.1.61] - 2026-10-27
 ### Added
 - **DinerConsumptionItem**: New optional fields `quantity: String? = null` and `extras: ImmutableList<DinerConsumptionExtra> = persistentListOf()`, declared after `kind`.

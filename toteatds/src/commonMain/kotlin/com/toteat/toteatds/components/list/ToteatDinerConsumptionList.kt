@@ -19,8 +19,6 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -60,15 +59,24 @@ import designsystemmobile.toteatds.generated.resources.diner_consumption_descrip
 import designsystemmobile.toteatds.generated.resources.diner_consumption_expand
 import designsystemmobile.toteatds.generated.resources.diner_consumption_list_description
 import designsystemmobile.toteatds.generated.resources.diner_consumption_total
+import designsystemmobile.toteatds.generated.resources.icon_right_chevron
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val HeaderHeight = 56.dp
 private val ItemRowHeight = 48.dp
-private val CheckboxSize = 24.dp
-private val CheckboxShape = RoundedCornerShape(6.dp)
+// Figma "comensal - genérico" icon/ checkbox: a 14.dp icon whose box is inset 0.875.dp (12.25.dp),
+// with a 2.625.dp radius, a ~1.dp border and a check about 7.5.dp wide.
+private val CheckboxSize = 14.dp
+private val CheckboxInset = 0.875.dp
+private val CheckboxShape = RoundedCornerShape(2.625.dp)
+private val CheckboxBorderWidth = 1.dp
+private val CheckIconSize = 10.dp
+// Figma icon/ chevron-strokes: the DS right chevron turned to point down or up.
+private val ChevronSize = 16.dp
 private val DividerThickness = 2.dp
 private val HorizontalPadding = 16.dp
 
@@ -294,10 +302,12 @@ private fun DinerConsumptionHeader(
         }
 
         Icon(
-            imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+            imageVector = vectorResource(Res.drawable.icon_right_chevron),
             contentDescription = toggleDescription,
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier
+                .size(ChevronSize)
+                .rotate(if (isExpanded) -90f else 90f)
         )
     }
 }
@@ -329,14 +339,15 @@ private fun DinerConsumptionCheckbox(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(CheckboxSize)
+                .padding(CheckboxInset)
                 .clip(CheckboxShape)
                 .then(
                     when {
                         !enabled -> Modifier
                             .background(MaterialTheme.colorScheme.outlineVariant)
-                            .border(1.5.dp, MaterialTheme.colorScheme.extended.disabledContent, CheckboxShape)
+                            .border(CheckboxBorderWidth, MaterialTheme.colorScheme.extended.disabledContent, CheckboxShape)
                         checked -> Modifier.background(MaterialTheme.colorScheme.secondary)
-                        else -> Modifier.border(1.5.dp, MaterialTheme.colorScheme.outline, CheckboxShape)
+                        else -> Modifier.border(CheckboxBorderWidth, MaterialTheme.colorScheme.outline, CheckboxShape)
                     }
                 )
         ) {
@@ -346,7 +357,7 @@ private fun DinerConsumptionCheckbox(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSecondary,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(CheckIconSize)
                 )
             }
         }
@@ -364,7 +375,7 @@ private fun DinerConsumptionRow(
 ) {
     val extended = MaterialTheme.colorScheme.extended
     val nameColor = when {
-        isTotal -> MaterialTheme.colorScheme.secondary
+        isTotal -> MaterialTheme.colorScheme.primary
         isDiscount -> extended.disabledContent
         else -> extended.neutral400
     }
@@ -523,6 +534,33 @@ private fun ToteatDinerConsumptionListPreview() {
                 )
             ),
             onCheckedChange = { _, _ -> },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+// Mirrors Figma "comensal - genérico": selected diner, expanded, with a discount and the total in primary.
+@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA)
+@Composable
+private fun ToteatDinerConsumptionCardExpandedPreview() {
+    ToteatTheme {
+        ToteatDinerConsumptionCard(
+            consumption = DinerConsumption(
+                name = "Pauli",
+                items = persistentListOf(
+                    DinerConsumptionItem(name = "Hamburguesa BBQ", price = "$9.000"),
+                    DinerConsumptionItem(name = "Bebida", price = "$1.000"),
+                    DinerConsumptionItem(
+                        name = "Descuento",
+                        price = "-$200",
+                        kind = DinerConsumptionItemKind.Discount
+                    )
+                ),
+                total = "$9.800",
+                isChecked = true
+            ),
+            onCheckedChange = {},
+            initiallyExpanded = true,
             modifier = Modifier.padding(16.dp)
         )
     }
