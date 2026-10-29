@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.67] - 2026-10-29
 ### Changed
 - **ToteatDinerConsumptionCard**: `Discount` rows (bullet, name, price, quantity and extras) are now painted in `neutral400` (`NeutralGray400`, #A1A1A1), like paid rows, instead of `disabledContent` (`NeutralGray300`, #CFCFCF), which was lighter than Figma's neutral-gray400 and hard to read. Pending rows stay `secondary` (secondary-normal).
 - **Tests**: Discount rows expect `neutral400`.
