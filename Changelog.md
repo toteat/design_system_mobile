@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **DinerConsumptionItem / DinerConsumptionExtra**: New optional field `statusLabel: String? = null`, declared last, already translated by the caller (e.g. "Pagado"). When set, the row shows a `Paid` `StatusTag` between the name and the price and keeps the `neutral400` tone. Derived test tags: `_item_<i>_status` and `_item_<i>_extra_<j>_status`. The row then merges its children's semantics, so it is read as one node that includes the tag's description (the tag and the row's quantity are found in the unmerged tree).
+
+### Changed
+- **ToteatDinerConsumptionCard**: A `Regular` product or extra without `statusLabel` (pending) is now painted in `secondary` (bullet, quantity, name and price), darker than the `neutral400` it used before. This applies to existing callers too, since none send `statusLabel` yet. The exact tone is pending design's confirmation. `Discount` rows, the total row and the header are unchanged, as are the existing test tags.
+- **Tests**: Paid rows show their tag with its test tag and description and keep `neutral400`; pending rows use `secondary`; discounts keep `disabledContent`. The quantity test now expects the pending tone.
+- **Showcase / preview**: A partially paid diner ("Cata") with paid and pending products and extras.
+
 ## [0.1.65] - 2026-10-27
 ### Added
 - **DinerConsumptionExtra**: New optional field `quantity: String? = null`, declared after `price`, already formatted by the caller (e.g. "2"). Shown before the extra's name as "2x", in 12.sp SemiBold / `neutral400` (`disabledContent` on `Discount` rows), lined up with the product's quantity. Derived test tag: `_item_<i>_extra_<j>_quantity`.

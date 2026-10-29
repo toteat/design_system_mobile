@@ -13,6 +13,7 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertContentDescriptionContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
@@ -196,10 +197,10 @@ class ToteatDinerConsumptionListTest {
 
     @Test
     fun quantitiesAreShownBeforeTheNameIncludingOneUnitAndExtras() = runComposeUiTest {
-        var gray = Color.Unspecified
+        var pending = Color.Unspecified
         setContent {
             ToteatTheme {
-                gray = MaterialTheme.colorScheme.extended.neutral400
+                pending = MaterialTheme.colorScheme.secondary
                 ToteatDinerConsumptionCard(
                     consumption = DinerConsumption(
                         name = "Pauli",
@@ -237,9 +238,9 @@ class ToteatDinerConsumptionListTest {
         // Extra quantities line up with the product's.
         assertEquals(left(productQuantity), left(extraQuantity))
 
-        // Gray like the name, not primary.
-        assertEquals(gray, textColor(productQuantity))
-        assertEquals(gray, textColor(extraQuantity))
+        // In the row's tone like the name (pending here), not primary.
+        assertEquals(pending, textColor(productQuantity))
+        assertEquals(pending, textColor(extraQuantity))
 
         onNodeWithTag(tag("diner_item_0_extra_1_quantity"), useUnmergedTree = true).assertDoesNotExist()
     }
@@ -324,6 +325,74 @@ class ToteatDinerConsumptionListTest {
 
         onNodeWithContentDescription("Ocultar consumo", useUnmergedTree = true).assertIsDisplayed()
         onNodeWithTag(tag("diner_total")).assertIsDisplayed()
+    }
+
+    @Test
+    fun paidRowsShowAStatusTagAndKeepTheGrayToneWhilePendingRowsAreDarker() = runComposeUiTest {
+        var gray = Color.Unspecified
+        var pending = Color.Unspecified
+        var dimmed = Color.Unspecified
+        setContent {
+            ToteatTheme {
+                gray = MaterialTheme.colorScheme.extended.neutral400
+                pending = MaterialTheme.colorScheme.secondary
+                dimmed = MaterialTheme.colorScheme.extended.disabledContent
+                ToteatDinerConsumptionCard(
+                    consumption = DinerConsumption(
+                        name = "Pauli",
+                        items = persistentListOf(
+                            DinerConsumptionItem(
+                                name = "Empanada de pino",
+                                price = "$15.600",
+                                quantity = "6",
+                                statusLabel = "Pagado",
+                                extras = persistentListOf(
+                                    DinerConsumptionExtra(name = "Pebre", price = "$600", statusLabel = "Pagado"),
+                                    DinerConsumptionExtra(name = "Salsa picante", price = "$500")
+                                )
+                            ),
+                            DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000"),
+                            DinerConsumptionItem(
+                                name = "Descuento",
+                                price = "-$200",
+                                kind = DinerConsumptionItemKind.Discount
+                            )
+                        ),
+                        total = "$7.300"
+                    ),
+                    onCheckedChange = {},
+                    initiallyExpanded = true,
+                    testTag = "diner"
+                )
+            }
+        }
+
+        // Rows with a tag merge their children, so the tag lives in the unmerged tree.
+        onNodeWithTag(tag("diner_item_0_status"), useUnmergedTree = true)
+            .assertIsDisplayed()
+            .assertContentDescriptionEquals("Estado: Pagado")
+        onNodeWithTag(tag("diner_item_0_extra_0_status"), useUnmergedTree = true)
+            .assertIsDisplayed()
+            .assertContentDescriptionEquals("Estado: Pagado")
+        onNodeWithTag(tag("diner_item_0_extra_1_status"), useUnmergedTree = true).assertDoesNotExist()
+        onNodeWithTag(tag("diner_item_1_status"), useUnmergedTree = true).assertDoesNotExist()
+
+        // The paid row is read as one node that includes the tag.
+        onNodeWithTag(tag("diner_item_0"))
+            .assertContentDescriptionContains("Estado: Pagado")
+            .assert(hasText("Empanada de pino") and hasText("$15.600"))
+
+        fun color(text: String) = textColor(onNodeWithText(text, useUnmergedTree = true))
+        assertEquals(gray, color("Empanada de pino"))
+        assertEquals(gray, color("$15.600"))
+        assertEquals(gray, textColor(onNodeWithTag(tag("diner_item_0_quantity"), useUnmergedTree = true)))
+        assertEquals(gray, color("Pebre"))
+        assertEquals(pending, color("Salsa picante"))
+        assertEquals(pending, color("$500"))
+        assertEquals(pending, color("Mojito tradicional"))
+        assertEquals(pending, color("$7.000"))
+        assertEquals(dimmed, color("Descuento"))
+        assertNotEquals(gray, pending)
     }
 
     @Test

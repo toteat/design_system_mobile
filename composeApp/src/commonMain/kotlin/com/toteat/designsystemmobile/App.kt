@@ -1145,6 +1145,24 @@ fun DinerConsumptionListShowcase() {
                     ),
                     total = "$24.700"
                 ),
+                // Paid before, with products added after the payment
+                DinerConsumption(
+                    name = "Cata",
+                    items = persistentListOf(
+                        DinerConsumptionItem(
+                            name = "Empanada de pino",
+                            price = "$15.600",
+                            quantity = "6",
+                            statusLabel = "Pagado",
+                            extras = persistentListOf(
+                                DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2", statusLabel = "Pagado"),
+                                DinerConsumptionExtra(name = "Salsa picante", price = "$500", quantity = "1")
+                            )
+                        ),
+                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000", quantity = "1")
+                    ),
+                    total = "$7.500"
+                ),
                 DinerConsumption(
                     name = "Valentina Fernández de la Fuente",
                     items = persistentListOf(
