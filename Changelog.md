@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ToteatDinerConsumptionCard**: `Discount` rows (bullet, name, price, quantity and extras) are now painted in `neutral400` (`NeutralGray400`, #A1A1A1), like paid rows, instead of `disabledContent` (`NeutralGray300`, #CFCFCF), which was lighter than Figma's neutral-gray400 and hard to read. Pending rows stay `secondary` (secondary-normal).
+- **Tests**: Discount rows expect `neutral400`.
+
 ## [0.1.66] - 2026-10-29
 ### Added
 - **DinerConsumptionItem**: New optional field `statusLabel: String? = null`, declared last, already translated by the caller (e.g. "Pagado"). When set, the row shows a `Paid` `StatusTag` between the name and the price and keeps the `neutral400` tone. Derived test tag: `_item_<i>_status`. The row then merges its children's semantics, so it is read as one node that includes the tag's description (the tag and the row's quantity are found in the unmerged tree). Extras show no tag: they take their product's tone.

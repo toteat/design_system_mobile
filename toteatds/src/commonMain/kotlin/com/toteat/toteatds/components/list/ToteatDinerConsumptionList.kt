@@ -82,7 +82,7 @@ private val ChevronSize = 16.dp
 private val DividerThickness = 2.dp
 private val HorizontalPadding = 16.dp
 
-/** How a consumption row is painted. [Discount] rows are dimmed, as in Figma "comensal - genérico". */
+/** How a consumption row is painted. [Discount] rows are gray (neutral-gray400), as in Figma "comensal - genérico". */
 enum class DinerConsumptionItemKind { Regular, Discount }
 
 /**
@@ -106,7 +106,7 @@ data class DinerConsumptionExtra(
  * @param statusLabel Short, already translated text (e.g. "Pagado") shown as a `Paid` [StatusTag]
  * before the price; the row keeps the gray tone. `null` (default) shows no tag and paints a
  * [DinerConsumptionItemKind.Regular] row in the darker pending tone. Its extras take the same tone
- * without a tag of their own. [DinerConsumptionItemKind.Discount] rows keep their dimmed tone either way.
+ * without a tag of their own. [DinerConsumptionItemKind.Discount] rows stay gray either way.
  */
 @Immutable
 data class DinerConsumptionItem(
@@ -448,18 +448,16 @@ private fun DinerConsumptionRow(
 }
 
 /**
- * Tone of a product row and its extras: dimmed for discounts, gray once paid (it has a status label)
- * and darker while still pending.
+ * Tone of a product row and its extras, as in Figma: neutral-gray400 for discounts and paid rows (with
+ * a status label), secondary-normal while still pending.
  */
 @Composable
-private fun consumptionRowColor(isDiscount: Boolean, statusLabel: String?): Color {
-    val extended = MaterialTheme.colorScheme.extended
-    return when {
-        isDiscount -> extended.disabledContent
-        statusLabel != null -> extended.neutral400
-        else -> MaterialTheme.colorScheme.secondary
+private fun consumptionRowColor(isDiscount: Boolean, statusLabel: String?): Color =
+    if (isDiscount || statusLabel != null) {
+        MaterialTheme.colorScheme.extended.neutral400
+    } else {
+        MaterialTheme.colorScheme.secondary
     }
-}
 
 // A row with a status tag is read as one node, so the tag's description is read with its name and price.
 private fun statusRowSemantics(statusLabel: String?): Modifier =

@@ -333,12 +333,10 @@ class ToteatDinerConsumptionListTest {
     fun paidProductsShowAStatusTagAndTheirExtrasFollowTheProductTone() = runComposeUiTest {
         var gray = Color.Unspecified
         var pending = Color.Unspecified
-        var dimmed = Color.Unspecified
         setContent {
             ToteatTheme {
                 gray = MaterialTheme.colorScheme.extended.neutral400
                 pending = MaterialTheme.colorScheme.secondary
-                dimmed = MaterialTheme.colorScheme.extended.disabledContent
                 ToteatDinerConsumptionCard(
                     consumption = DinerConsumption(
                         name = "Pauli",
@@ -399,7 +397,9 @@ class ToteatDinerConsumptionListTest {
         assertEquals(pending, color("$7.000"))
         assertEquals(pending, color("Extra menta"))
         assertEquals(pending, color("$500"))
-        assertEquals(dimmed, color("Descuento"))
+        // Discounts use the same neutral-gray400 as paid rows (Figma), not the lighter disabled gray.
+        assertEquals(gray, color("Descuento"))
+        assertEquals(gray, color("-$200"))
         assertNotEquals(gray, pending)
     }
 
