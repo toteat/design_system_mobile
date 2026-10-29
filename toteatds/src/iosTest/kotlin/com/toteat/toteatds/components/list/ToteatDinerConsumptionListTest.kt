@@ -18,6 +18,8 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -328,7 +330,7 @@ class ToteatDinerConsumptionListTest {
     }
 
     @Test
-    fun paidRowsShowAStatusTagAndKeepTheGrayToneWhilePendingRowsAreDarker() = runComposeUiTest {
+    fun paidProductsShowAStatusTagAndTheirExtrasFollowTheProductTone() = runComposeUiTest {
         var gray = Color.Unspecified
         var pending = Color.Unspecified
         var dimmed = Color.Unspecified
@@ -347,11 +349,16 @@ class ToteatDinerConsumptionListTest {
                                 quantity = "6",
                                 statusLabel = "Pagado",
                                 extras = persistentListOf(
-                                    DinerConsumptionExtra(name = "Pebre", price = "$600", statusLabel = "Pagado"),
-                                    DinerConsumptionExtra(name = "Salsa picante", price = "$500")
+                                    DinerConsumptionExtra(name = "Pebre", price = "$600")
                                 )
                             ),
-                            DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000"),
+                            DinerConsumptionItem(
+                                name = "Mojito tradicional",
+                                price = "$7.000",
+                                extras = persistentListOf(
+                                    DinerConsumptionExtra(name = "Extra menta", price = "$500")
+                                )
+                            ),
                             DinerConsumptionItem(
                                 name = "Descuento",
                                 price = "-$200",
@@ -371,11 +378,10 @@ class ToteatDinerConsumptionListTest {
         onNodeWithTag(tag("diner_item_0_status"), useUnmergedTree = true)
             .assertIsDisplayed()
             .assertContentDescriptionEquals("Estado: Pagado")
-        onNodeWithTag(tag("diner_item_0_extra_0_status"), useUnmergedTree = true)
-            .assertIsDisplayed()
-            .assertContentDescriptionEquals("Estado: Pagado")
-        onNodeWithTag(tag("diner_item_0_extra_1_status"), useUnmergedTree = true).assertDoesNotExist()
         onNodeWithTag(tag("diner_item_1_status"), useUnmergedTree = true).assertDoesNotExist()
+        // Extras never show a tag: only their product does.
+        onNodeWithTag(tag("diner_item_0_extra_0_status"), useUnmergedTree = true).assertDoesNotExist()
+        onAllNodesWithContentDescription("Estado: Pagado", useUnmergedTree = true).assertCountEquals(1)
 
         // The paid row is read as one node that includes the tag.
         onNodeWithTag(tag("diner_item_0"))
@@ -386,11 +392,13 @@ class ToteatDinerConsumptionListTest {
         assertEquals(gray, color("Empanada de pino"))
         assertEquals(gray, color("$15.600"))
         assertEquals(gray, textColor(onNodeWithTag(tag("diner_item_0_quantity"), useUnmergedTree = true)))
+        // Extras take their product's tone.
         assertEquals(gray, color("Pebre"))
-        assertEquals(pending, color("Salsa picante"))
-        assertEquals(pending, color("$500"))
+        assertEquals(gray, color("$600"))
         assertEquals(pending, color("Mojito tradicional"))
         assertEquals(pending, color("$7.000"))
+        assertEquals(pending, color("Extra menta"))
+        assertEquals(pending, color("$500"))
         assertEquals(dimmed, color("Descuento"))
         assertNotEquals(gray, pending)
     }

@@ -1,13 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.66] - 2026-10-29
 ### Added
-- **DinerConsumptionItem / DinerConsumptionExtra**: New optional field `statusLabel: String? = null`, declared last, already translated by the caller (e.g. "Pagado"). When set, the row shows a `Paid` `StatusTag` between the name and the price and keeps the `neutral400` tone. Derived test tags: `_item_<i>_status` and `_item_<i>_extra_<j>_status`. The row then merges its children's semantics, so it is read as one node that includes the tag's description (the tag and the row's quantity are found in the unmerged tree).
+- **DinerConsumptionItem**: New optional field `statusLabel: String? = null`, declared last, already translated by the caller (e.g. "Pagado"). When set, the row shows a `Paid` `StatusTag` between the name and the price and keeps the `neutral400` tone. Derived test tag: `_item_<i>_status`. The row then merges its children's semantics, so it is read as one node that includes the tag's description (the tag and the row's quantity are found in the unmerged tree). Extras show no tag: they take their product's tone.
 
 ### Changed
-- **ToteatDinerConsumptionCard**: A `Regular` product or extra without `statusLabel` (pending) is now painted in `secondary` (bullet, quantity, name and price), darker than the `neutral400` it used before. This applies to existing callers too, since none send `statusLabel` yet. The exact tone is pending design's confirmation. `Discount` rows, the total row and the header are unchanged, as are the existing test tags.
-- **Tests**: Paid rows show their tag with its test tag and description and keep `neutral400`; pending rows use `secondary`; discounts keep `disabledContent`. The quantity test now expects the pending tone.
-- **Showcase / preview**: A partially paid diner ("Cata") with paid and pending products and extras.
+- **ToteatDinerConsumptionCard**: A `Regular` product without `statusLabel` (pending) and its extras are now painted in `secondary` (bullet, quantity, name and price), darker than the `neutral400` they used before. This applies to existing callers too, since none send `statusLabel` yet. The exact tone is pending design's confirmation. `Discount` rows, the total row and the header are unchanged, as are the existing test tags.
+- **Tests**: Paid products show their tag with its test tag and description and keep `neutral400`; pending products use `secondary`; extras follow their product's tone and show no tag; discounts keep `disabledContent`. The quantity test now expects the pending tone.
+- **Showcase / preview**: A partially paid diner ("Cata") with a paid and a pending product, each with extras.
 
 ## [0.1.65] - 2026-10-27
 ### Added

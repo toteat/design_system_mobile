@@ -88,16 +88,14 @@ enum class DinerConsumptionItemKind { Regular, Discount }
 /**
  * @param quantity Already formatted quantity (e.g. "2"), shown before the name as "2x", also when it
  * is "1". `null` (default) shows nothing.
- * @param statusLabel Short, already translated text (e.g. "Pagado") shown as a `Paid` [StatusTag]
- * before the price; the extra keeps the gray tone. `null` (default) shows no tag and, on a
- * [DinerConsumptionItemKind.Regular] product, paints the extra in the darker pending tone.
+ *
+ * An extra has no status of its own: it takes its product's tone (see [DinerConsumptionItem.statusLabel]).
  */
 @Immutable
 data class DinerConsumptionExtra(
     val name: String,
     val price: String,
-    val quantity: String? = null,
-    val statusLabel: String? = null
+    val quantity: String? = null
 )
 
 /**
@@ -107,8 +105,8 @@ data class DinerConsumptionExtra(
  * aligned to the right.
  * @param statusLabel Short, already translated text (e.g. "Pagado") shown as a `Paid` [StatusTag]
  * before the price; the row keeps the gray tone. `null` (default) shows no tag and paints a
- * [DinerConsumptionItemKind.Regular] row in the darker pending tone. [DinerConsumptionItemKind.Discount]
- * rows keep their dimmed tone either way.
+ * [DinerConsumptionItemKind.Regular] row in the darker pending tone. Its extras take the same tone
+ * without a tag of their own. [DinerConsumptionItemKind.Discount] rows keep their dimmed tone either way.
  */
 @Immutable
 data class DinerConsumptionItem(
@@ -240,7 +238,7 @@ fun ToteatDinerConsumptionCard(
                     if (item.extras.isNotEmpty()) {
                         DinerConsumptionExtras(
                             extras = item.extras,
-                            isDiscount = isDiscount,
+                            color = consumptionRowColor(isDiscount, item.statusLabel),
                             testTag = itemTestTag
                         )
                     }
@@ -450,8 +448,8 @@ private fun DinerConsumptionRow(
 }
 
 /**
- * Tone of a product or extra row: dimmed for discounts, gray once paid (it has a status label) and
- * darker while still pending.
+ * Tone of a product row and its extras: dimmed for discounts, gray once paid (it has a status label)
+ * and darker while still pending.
  */
 @Composable
 private fun consumptionRowColor(isDiscount: Boolean, statusLabel: String?): Color {
@@ -488,14 +486,14 @@ private fun QuantityText(
 }
 
 /**
- * Extras of a product, drawn under its row, each in its own tone (see [consumptionRowColor]). The name starts where the product name does (an
- * invisible bullet keeps the indent in step with the product row) and the price lines up with the
- * product price.
+ * Extras of a product, drawn under its row in the product's [color]. The name starts where the
+ * product name does (an invisible bullet keeps the indent in step with the product row) and the price
+ * lines up with the product price.
  */
 @Composable
 private fun DinerConsumptionExtras(
     extras: ImmutableList<DinerConsumptionExtra>,
-    isDiscount: Boolean,
+    color: Color,
     testTag: String
 ) {
     Column(
@@ -506,14 +504,12 @@ private fun DinerConsumptionExtras(
     ) {
         extras.forEachIndexed { index, extra ->
             key(extra.name, index) {
-                val color = consumptionRowColor(isDiscount, extra.statusLabel)
                 val extraTestTag = if (testTag.isNotEmpty()) "${testTag}_extra_$index" else ""
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(statusRowSemantics(extra.statusLabel))
                         .then(if (extraTestTag.isNotEmpty()) Modifier.setTestTag(extraTestTag) else Modifier)
                         .padding(vertical = 2.dp)
                 ) {
@@ -545,14 +541,6 @@ private fun DinerConsumptionExtras(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f)
-                        )
-                    }
-                    val statusLabel = extra.statusLabel
-                    if (statusLabel != null) {
-                        StatusTag(
-                            variant = StatusTagVariant.Paid,
-                            text = statusLabel,
-                            testTag = if (extraTestTag.isNotEmpty()) "${extraTestTag}_status" else ""
                         )
                     }
                     Text(
@@ -680,11 +668,18 @@ private fun ToteatDinerConsumptionCardPartiallyPaidPreview() {
                         quantity = "6",
                         statusLabel = "Pagado",
                         extras = persistentListOf(
-                            DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2", statusLabel = "Pagado"),
-                            DinerConsumptionExtra(name = "Salsa picante", price = "$500", quantity = "1")
+                            DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2"),
+                            DinerConsumptionExtra(name = "Salsa picante", price = "$0", quantity = "1")
                         )
                     ),
-                    DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000", quantity = "1")
+                    DinerConsumptionItem(
+                        name = "Mojito tradicional",
+                        price = "$7.000",
+                        quantity = "1",
+                        extras = persistentListOf(
+                            DinerConsumptionExtra(name = "Extra menta", price = "$500")
+                        )
+                    )
                 ),
                 total = "$7.500"
             ),

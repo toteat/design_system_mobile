@@ -1155,11 +1155,18 @@ fun DinerConsumptionListShowcase() {
                             quantity = "6",
                             statusLabel = "Pagado",
                             extras = persistentListOf(
-                                DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2", statusLabel = "Pagado"),
-                                DinerConsumptionExtra(name = "Salsa picante", price = "$500", quantity = "1")
+                                DinerConsumptionExtra(name = "Pebre", price = "$600", quantity = "2"),
+                                DinerConsumptionExtra(name = "Salsa picante", price = "$0", quantity = "1")
                             )
                         ),
-                        DinerConsumptionItem(name = "Mojito tradicional", price = "$7.000", quantity = "1")
+                        DinerConsumptionItem(
+                            name = "Mojito tradicional",
+                            price = "$7.000",
+                            quantity = "1",
+                            extras = persistentListOf(
+                                DinerConsumptionExtra(name = "Extra menta", price = "$500")
+                            )
+                        )
                     ),
                     total = "$7.500"
                 ),
