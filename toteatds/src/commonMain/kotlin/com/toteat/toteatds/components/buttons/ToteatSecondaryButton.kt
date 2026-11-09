@@ -2,6 +2,7 @@ package com.toteat.toteatds.components.buttons
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -30,6 +31,12 @@ import com.toteat.toteatds.utils.setTestTag
 private val ButtonShape = RoundedCornerShape(50)
 private val ButtonHeight = 48.dp
 
+/**
+ * @param contentPadding Espaciado interno entre el borde del botón y su contenido.
+ * Por defecto usa [ButtonDefaults.ContentPadding]. Conviene reducirlo cuando el botón tiene poco
+ * ancho (por ejemplo, dos botones con `weight(1f)` en pantallas de ~360 dp) para que el
+ * texto no se corte.
+ */
 @Composable
 fun ToteatSecondaryButton(
     onClick: () -> Unit,
@@ -39,7 +46,8 @@ fun ToteatSecondaryButton(
     contentDescription: String? = null,
     testTag: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -72,6 +80,7 @@ fun ToteatSecondaryButton(
             disabledContainerColor = NeutralGray300,
             disabledContentColor = NeutralGray500
         ),
+        contentPadding = contentPadding,
         interactionSource = interactionSource
     ) {
         ButtonContent(text = text, leadingIcon = leadingIcon, trailingIcon = trailingIcon)

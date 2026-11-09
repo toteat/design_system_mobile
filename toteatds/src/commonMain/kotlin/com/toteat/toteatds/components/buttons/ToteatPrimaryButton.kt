@@ -2,8 +2,12 @@ package com.toteat.toteatds.components.buttons
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -24,11 +28,19 @@ import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.NeutralGray
 import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.PrimaryLight
+import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.utils.setTestTag
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val ButtonShape = RoundedCornerShape(50)
 private val ButtonHeight = 48.dp
 
+/**
+ * @param contentPadding Espaciado interno entre el borde del botón y su contenido.
+ * Por defecto usa [ButtonDefaults.ContentPadding]. Conviene reducirlo cuando el botón tiene poco
+ * ancho (por ejemplo, dos botones con `weight(1f)` en pantallas de ~360 dp) para que el
+ * texto no se corte.
+ */
 @Composable
 fun ToteatPrimaryButton(
     onClick: () -> Unit,
@@ -38,7 +50,8 @@ fun ToteatPrimaryButton(
     contentDescription: String? = null,
     testTag: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -71,6 +84,7 @@ fun ToteatPrimaryButton(
             disabledContainerColor = NeutralGray300,
             disabledContentColor = NeutralGray
         ),
+        contentPadding = contentPadding,
         interactionSource = interactionSource
     ) {
         ButtonContent(text = text, leadingIcon = leadingIcon, trailingIcon = trailingIcon)
@@ -99,5 +113,32 @@ private fun ButtonContent(
     if (trailingIcon != null) {
         Spacer(Modifier.width(8.dp))
         trailingIcon()
+    }
+}
+
+@Composable
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 360)
+private fun ToteatButtonsReducedPaddingPreview() {
+    val reducedPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+    ToteatTheme {
+        Row(
+            modifier = Modifier
+                .width(360.dp)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ToteatTertiaryButton(
+                onClick = {},
+                text = "Volver a la mesa",
+                modifier = Modifier.weight(1f),
+                contentPadding = reducedPadding
+            )
+            ToteatPrimaryButton(
+                onClick = {},
+                text = "Cobrar pendiente",
+                modifier = Modifier.weight(1f),
+                contentPadding = reducedPadding
+            )
+        }
     }
 }

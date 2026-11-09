@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ToteatPrimaryButton / ToteatSecondaryButton / ToteatTertiaryButton**: New optional parameter `contentPadding: PaddingValues = ButtonDefaults.ContentPadding`, declared last and passed to the Material3 `Button` / `OutlinedButton`. The default keeps the current padding, so existing screens don't change. It lets narrow layouts (e.g. two buttons with `weight(1f)` on ~360 dp POS devices) reduce the horizontal padding so the text isn't ellipsized. Typography, height, shape and colors are unchanged.
+- **Preview**: Two buttons side by side with `weight(1f)` at 360 dp and `PaddingValues(horizontal = 12.dp, vertical = 8.dp)` ("Volver a la mesa" / "Cobrar pendiente").
+
 ## [0.1.67] - 2026-10-29
 ### Changed
 - **ToteatDinerConsumptionCard**: `Discount` rows (bullet, name, price, quantity and extras) are now painted in `neutral400` (`NeutralGray400`, #A1A1A1), like paid rows, instead of `disabledContent` (`NeutralGray300`, #CFCFCF), which was lighter than Figma's neutral-gray400 and hard to read. Pending rows stay `secondary` (secondary-normal).
