@@ -35,6 +35,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.bodyMediumRegular
 import com.toteat.toteatds.theme.extended
@@ -45,6 +46,10 @@ import designsystemmobile.toteatds.generated.resources.search_bar_icon
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * @param iconTint Color de la lupa cuando el campo está habilitado. Si es `null`, usa el
+ * color secundario del tema. Deshabilitado, la lupa siempre usa neutral400.
+ */
 @Composable
 fun ToteatSearchBar(
     value: String,
@@ -52,6 +57,7 @@ fun ToteatSearchBar(
     modifier: Modifier = Modifier,
     placeholder: String = "",
     enabled: Boolean = true,
+    iconTint: Color? = null,
     onSearch: () -> Unit = {},
     testTag: String = ""
 ) {
@@ -117,7 +123,7 @@ fun ToteatSearchBar(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = searchIconDescription,
-                    tint = if (enabled) MaterialTheme.colorScheme.secondary
+                    tint = if (enabled) iconTint ?: MaterialTheme.colorScheme.secondary
                            else MaterialTheme.colorScheme.extended.neutral400,
                     modifier = Modifier.size(24.dp)
                 )
@@ -161,6 +167,20 @@ private fun ToteatSearchBarDisabledPreview() {
             onValueChange = {},
             placeholder = "Buscar productos...",
             enabled = false
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ToteatSearchBarIconTintPreview() {
+    ToteatTheme {
+        var value by remember { mutableStateOf("") }
+        ToteatSearchBar(
+            value = value,
+            onValueChange = { value = it },
+            placeholder = "Buscar comensal",
+            iconTint = NeutralGray300
         )
     }
 }

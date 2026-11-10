@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ToteatDinerList**: Adjusted to Figma "Comensales" (Toteat Go). Letter headers use `bodyMedium` (Bold 12 sp) instead of `headlineMedium` (16 sp); the "•" and the name use `bodyMediumRegular` (12 sp) instead of `bodyLargeRegular` (14 sp). The list is now a card: 12.dp radius, 2.dp shadow, white background and a 1.dp `NeutralGray100` border (was `MaterialTheme.shapes.medium`, no border or shadow). Header height, colors, row layout, semantics and test tags are unchanged.
+
+### Added
+- **ToteatSearchBar**: New optional parameter `iconTint: Color? = null`, declared after `enabled` and before `onSearch`. When set, the search icon uses it while the field is enabled; `null` keeps the current colors (`secondary` enabled, `neutral400` disabled). Height, background, typography and placeholder are unchanged.
+- **Preview**: `ToteatSearchBar` with `iconTint = NeutralGray300`.
+
 ## [0.1.70] - 2026-11-09
 ### Added
 - **ChevronDownIcon** (`components/icons`): Thin down chevron, decorative (`contentDescription = null`). `size: Dp = 16.dp`, `tint: Color = LocalContentColor.current`. New drawable `icon_chevron_down.xml` (16x16).
