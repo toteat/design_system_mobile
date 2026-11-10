@@ -59,6 +59,15 @@ import com.toteat.toteatds.components.bottombar.ToteatCommentBottomBar
 import com.toteat.toteatds.components.bottombar.ToteatMessageInputBar
 import com.toteat.toteatds.components.icons.ToteatSendIconButton
 import com.toteat.toteatds.components.cards.ToteatCategoryCard
+import com.toteat.toteatds.components.cards.ToteatDetailCard
+import com.toteat.toteatds.components.cards.ToteatDetailDivider
+import com.toteat.toteatds.components.cards.ToteatTotalsCard
+import com.toteat.toteatds.components.cards.ToteatTotalsRow
+import com.toteat.toteatds.components.icons.ChevronDownIcon
+import com.toteat.toteatds.components.list.ToteatDetailAccordion
+import com.toteat.toteatds.components.list.ToteatDetailRow
+import com.toteat.toteatds.components.list.ToteatDetailStatus
+import com.toteat.toteatds.components.skeleton.ToteatSkeletonBlock
 import com.toteat.toteatds.components.cards.ToteatCounterCompact
 import com.toteat.toteatds.components.cards.ToteatCounterCompactBasic
 import com.toteat.toteatds.components.cards.ToteatProductRow
@@ -180,7 +189,8 @@ fun App() {
                     ComponentShowcaseItem(title = "Diner Buttons"),
                     ComponentShowcaseItem(title = "Diner List"),
                     ComponentShowcaseItem(title = "Diner Name List"),
-                    ComponentShowcaseItem(title = "Diner Consumption List")
+                    ComponentShowcaseItem(title = "Diner Consumption List"),
+                    ComponentShowcaseItem(title = "Payment Summary")
                 )
             )
         }
@@ -311,6 +321,7 @@ fun ComponentShowcaseSection(
                 "Diner List" -> DinerListShowcase()
                 "Diner Name List" -> DinerNameListShowcase()
                 "Diner Consumption List" -> DinerConsumptionListShowcase()
+                "Payment Summary" -> PaymentSummaryShowcase()
             }
         }
     }
@@ -1107,6 +1118,56 @@ fun DinerNameListShowcase() {
             title = { Text("Nombre repetido") },
             text = { Text("Ya hay un comensal con ese nombre en la mesa.") }
         )
+    }
+}
+
+@Composable
+fun PaymentSummaryShowcase() {
+    var expandedIndex by remember { mutableStateOf<Int?>(0) }
+    val details = remember {
+        persistentListOf(
+            Triple(
+                "Detalle de pago 01",
+                ToteatDetailStatus.Success,
+                persistentListOf(
+                    ToteatDetailRow(label = "• Monto pagado", value = "$ 15.700"),
+                    ToteatDetailRow(label = "• Propina", value = "10%")
+                )
+            ),
+            Triple("Detalle de pago 02", ToteatDetailStatus.Pending, persistentListOf<ToteatDetailRow>())
+        )
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text("Detail card", style = MaterialTheme.typography.titleMedium)
+        ToteatDetailCard {
+            details.forEachIndexed { index, (title, status, rows) ->
+                if (index > 0) ToteatDetailDivider()
+                ToteatDetailAccordion(
+                    title = title,
+                    status = status,
+                    rows = rows,
+                    expanded = expandedIndex == index,
+                    onToggle = { expandedIndex = if (expandedIndex == index) null else index }
+                )
+            }
+        }
+
+        Text("Totals card", style = MaterialTheme.typography.titleMedium)
+        ToteatTotalsCard(
+            rows = persistentListOf(
+                ToteatTotalsRow(label = "Subtotal:", value = "$ 31.400"),
+                ToteatTotalsRow(label = "Descuento:", value = "$ 1.000"),
+                ToteatTotalsRow(label = "Pagado:", value = "$ 15.700"),
+                ToteatTotalsRow(label = "Pendiente a pagar:", value = "$ 14.700", emphasized = true)
+            )
+        )
+
+        Text("Skeleton", style = MaterialTheme.typography.titleMedium)
+        ToteatSkeletonBlock(height = 17.dp, cornerRadius = 4.dp, modifier = Modifier.width(120.dp))
+        ToteatSkeletonBlock(height = 84.dp, cornerRadius = 12.dp, modifier = Modifier.fillMaxWidth())
+
+        Text("Chevron", style = MaterialTheme.typography.titleMedium)
+        ChevronDownIcon()
     }
 }
 

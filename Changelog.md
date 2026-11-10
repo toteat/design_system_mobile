@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- **ChevronDownIcon** (`components/icons`): Thin down chevron, decorative (`contentDescription = null`). `size: Dp = 16.dp`, `tint: Color = LocalContentColor.current`. New drawable `icon_chevron_down.xml` (16x16).
+- **ToteatDetailCard** (`components/cards`): White card (12.dp radius, 2.dp shadow, 1.dp `NeutralGray100` border) that groups detail accordions; `content: @Composable ColumnScope.() -> Unit` last. **ToteatDetailDivider**: `HorizontalDivider` in `NeutralGray100` to separate them.
+- **ToteatDetailAccordion** (`components/list`): Header with title, status icon and chevron (always pointing down), min height 42.dp. `ToteatDetailStatus.Success` shows a green check and, when `expanded`, its `ToteatDetailRow(label, value)` rows; `Pending` is greyed out with a warning icon and doesn't respond to taps. `onToggle` last. The header carries `stateDescription` ("Expandido" / "Contraído", new strings `detail_accordion_expanded` / `detail_accordion_collapsed`) when it can be toggled. Derived test tags: `_header`, `_row_<i>`.
+- **ToteatTotalsCard** (`components/cards`): `TertiaryLight` card (8.dp radius, 1.dp shadow) with `ToteatTotalsRow(label, value, emphasized = false)` rows; emphasized rows use `bodyLarge` / `SecondaryNormal`, the rest `bodyMediumRegular` / `NeutralGray500`. Derived test tag: `_row_<i>`.
+- **ToteatSkeletonBlock** (`components/skeleton`): Pulsing loading block (`height`, `cornerRadius`; width from `modifier`). The alpha (0.3–0.7, 1000 ms, reverse) is read in the draw phase, so it doesn't recompose every frame.
+- **Showcase / previews**: "Payment Summary" section and previews for the new components.
+
 ## [0.1.69] - 2026-11-09
 ### Fixed
 - **ToteatPrimaryButton / ToteatSecondaryButton / ToteatTertiaryButton**: `contentPadding` (added in 0.1.68) is now declared before `leadingIcon` and `trailingIcon`, so `trailingIcon` is the last parameter again. In 0.1.68 a lambda written outside the parentheses (e.g. `ToteatTertiaryButton(onClick = onBack) { Text("Volver") }`) went to `contentPadding` and failed to compile with "Argument type mismatch". Its name, type, default (`ButtonDefaults.ContentPadding`) and KDoc are unchanged. Calls that pass `contentPadding` by name are unaffected.

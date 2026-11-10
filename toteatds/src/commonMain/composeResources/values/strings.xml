@@ -172,4 +172,6 @@
     <string name="comment_bubble_sent_description">Enviado</string>
     <string name="icon_comment_description">Comentarios</string>
     <string name="icon_comment_badge_description">Comentarios, %1$s</string>
+    <string name="detail_accordion_expanded">Expandido</string>
+    <string name="detail_accordion_collapsed">Contraído</string>
 </resources>
