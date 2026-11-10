@@ -45,9 +45,9 @@ fun ToteatSecondaryButton(
     text: String? = null,
     contentDescription: String? = null,
     testTag: String = "",
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()

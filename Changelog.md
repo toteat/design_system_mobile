@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- **ToteatPrimaryButton / ToteatSecondaryButton / ToteatTertiaryButton**: `contentPadding` (added in 0.1.68) is now declared before `leadingIcon` and `trailingIcon`, so `trailingIcon` is the last parameter again. In 0.1.68 a lambda written outside the parentheses (e.g. `ToteatTertiaryButton(onClick = onBack) { Text("Volver") }`) went to `contentPadding` and failed to compile with "Argument type mismatch". Its name, type, default (`ButtonDefaults.ContentPadding`) and KDoc are unchanged. Calls that pass `contentPadding` by name are unaffected.
+- **Preview**: The three buttons called with a lambda outside the parentheses, so the compiler covers this case.
+
 ## [0.1.68] - 2026-11-09
 ### Added
 - **ToteatPrimaryButton / ToteatSecondaryButton / ToteatTertiaryButton**: New optional parameter `contentPadding: PaddingValues = ButtonDefaults.ContentPadding`, declared last and passed to the Material3 `Button` / `OutlinedButton`. The default keeps the current padding, so existing screens don't change. It lets narrow layouts (e.g. two buttons with `weight(1f)` on ~360 dp POS devices) reduce the horizontal padding so the text isn't ellipsized. Typography, height, shape and colors are unchanged.
