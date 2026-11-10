@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.74] - 2026-11-10
 ### Fixed
 - **ToteatDinerConsumptionCard / ToteatDinerConsumptionList**: Expanding a card near the bottom edge of a scrollable container left its products and total hidden under the edge, so it looked like it hadn't opened. Once the card has its expanded size, it now asks its scrollable ancestors (`Modifier.bringIntoViewRequester`) to show it whole; if it is taller than the viewport, its header is kept at the top. It doesn't scroll when the content is already visible, when collapsing, or for `initiallyExpanded`. Works inside `ToteatDinerConsumptionList` and for a standalone card inside any scrollable (e.g. `verticalScroll`). Public API, look, semantics and test tags are unchanged.
 
