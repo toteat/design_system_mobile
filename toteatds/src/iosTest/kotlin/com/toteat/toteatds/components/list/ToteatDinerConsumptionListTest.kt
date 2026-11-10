@@ -1,6 +1,15 @@
 package com.toteat.toteatds.components.list
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
@@ -19,6 +28,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -26,10 +36,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpRect
 import androidx.compose.ui.unit.dp
 import com.toteat.toteatds.theme.ToteatTheme
 import com.toteat.toteatds.theme.extended
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -43,6 +56,27 @@ private fun textColor(node: SemanticsNodeInteraction): Color {
     val results = mutableListOf<TextLayoutResult>()
     node.fetchSemanticsNode().config[SemanticsActions.GetTextLayoutResult].action?.invoke(results)
     return results.single().layoutInput.style.color
+}
+
+private fun diner(name: String, itemCount: Int) = DinerConsumption(
+    name = name,
+    items = List(itemCount) { DinerConsumptionItem(name = "Producto $it", price = "$1.000") }.toImmutableList(),
+    total = "$$itemCount.000"
+)
+
+private val PixelTolerance = 1.dp
+
+// Bounds compared before clipping, so a row hidden under the viewport edge does not count as inside.
+private fun assertInside(viewport: DpRect, node: SemanticsNodeInteraction, what: String) {
+    val bounds = node.getUnclippedBoundsInRoot()
+    assertTrue(
+        bounds.top >= viewport.top - PixelTolerance && bounds.bottom <= viewport.bottom + PixelTolerance,
+        "$what $bounds should be inside the viewport $viewport"
+    )
+}
+
+private fun assertClose(expected: Dp, actual: Dp, message: String) {
+    assertTrue((expected - actual).value in -PixelTolerance.value..PixelTolerance.value, "$message: expected $expected, was $actual")
 }
 
 @OptIn(ExperimentalTestApi::class)
@@ -425,5 +459,128 @@ class ToteatDinerConsumptionListTest {
         onNodeWithTag(tag("diner_item_0")).assertIsDisplayed()
         onNodeWithTag(tag("diner_item_0_quantity")).assertDoesNotExist()
         onNodeWithTag(tag("diner_item_0_extra_0")).assertDoesNotExist()
+    }
+
+    @Test
+    fun expandingLastDinerOfBoundedListScrollsItsContentIntoView() = runComposeUiTest {
+        setContent {
+            ToteatTheme {
+                ToteatDinerConsumptionList(
+                    diners = List(5) { diner("Comensal $it", itemCount = 3) }.toImmutableList(),
+                    onCheckedChange = { _, _ -> },
+                    modifier = Modifier.height(260.dp),
+                    testTag = "diners"
+                )
+            }
+        }
+        val viewport = onNodeWithTag(tag("diners")).getUnclippedBoundsInRoot()
+
+        onNodeWithTag(tag("diners_card_4_header")).performClick()
+        waitForIdle()
+
+        assertInside(viewport, onNodeWithTag(tag("diners_card_4_header")), "Header")
+        assertInside(viewport, onNodeWithTag(tag("diners_card_4_item_2")), "Last item")
+        assertInside(viewport, onNodeWithTag(tag("diners_card_4_total")), "Total")
+        onNodeWithTag(tag("diners_card_4_total")).assertIsDisplayed()
+    }
+
+    @Test
+    fun expandingDinerTallerThanListBringsItsHeaderToTheTop() = runComposeUiTest {
+        setContent {
+            ToteatTheme {
+                ToteatDinerConsumptionList(
+                    diners = persistentListOf(
+                        diner("Pauli", itemCount = 1),
+                        diner("Trini", itemCount = 1),
+                        diner("Vale", itemCount = 10)
+                    ),
+                    onCheckedChange = { _, _ -> },
+                    modifier = Modifier.height(160.dp),
+                    testTag = "diners"
+                )
+            }
+        }
+        val viewport = onNodeWithTag(tag("diners")).getUnclippedBoundsInRoot()
+
+        onNodeWithTag(tag("diners_card_2_header")).performClick()
+        waitForIdle()
+
+        val header = onNodeWithTag(tag("diners_card_2_header"))
+        assertInside(viewport, header, "Header")
+        assertClose(viewport.top, header.getUnclippedBoundsInRoot().top, "Header top")
+    }
+
+    @Test
+    fun expandingStandaloneCardInsideVerticalScrollScrollsItsContentIntoView() = runComposeUiTest {
+        lateinit var scrollState: ScrollState
+        setContent {
+            ToteatTheme {
+                scrollState = rememberScrollState()
+                ScrollableCard(scrollState, spaceBefore = 150.dp, itemCount = 3)
+            }
+        }
+        val viewport = onNodeWithTag("scroll").getUnclippedBoundsInRoot()
+
+        onNodeWithTag(tag("diner_header")).performClick()
+        waitForIdle()
+
+        assertTrue(scrollState.value > 0, "The container should have scrolled")
+        assertInside(viewport, onNodeWithTag(tag("diner_header")), "Header")
+        assertInside(viewport, onNodeWithTag(tag("diner_total")), "Total")
+    }
+
+    @Test
+    fun expandingCardWhoseContentIsAlreadyVisibleDoesNotScroll() = runComposeUiTest {
+        lateinit var scrollState: ScrollState
+        setContent {
+            ToteatTheme {
+                scrollState = rememberScrollState()
+                ScrollableCard(scrollState, spaceBefore = 0.dp, itemCount = 2)
+            }
+        }
+
+        onNodeWithTag(tag("diner_header")).performClick()
+        waitForIdle()
+
+        onNodeWithTag(tag("diner_total")).assertIsDisplayed()
+        assertEquals(0, scrollState.value)
+    }
+
+    @Test
+    fun collapsingCardDoesNotScroll() = runComposeUiTest {
+        lateinit var scrollState: ScrollState
+        setContent {
+            ToteatTheme {
+                scrollState = rememberScrollState()
+                ScrollableCard(scrollState, spaceBefore = 150.dp, itemCount = 3)
+            }
+        }
+        onNodeWithTag(tag("diner_header")).performClick()
+        waitForIdle()
+        val scrolledTo = scrollState.value
+
+        onNodeWithTag(tag("diner_header")).performClick()
+        waitForIdle()
+
+        onNodeWithTag(tag("diner_total")).assertDoesNotExist()
+        assertEquals(scrolledTo, scrollState.value)
+    }
+}
+
+@Composable
+private fun ScrollableCard(scrollState: ScrollState, spaceBefore: Dp, itemCount: Int) {
+    Column(
+        modifier = Modifier
+            .height(200.dp)
+            .testTag("scroll")
+            .verticalScroll(scrollState)
+    ) {
+        Spacer(Modifier.height(spaceBefore))
+        ToteatDinerConsumptionCard(
+            consumption = diner("Pauli", itemCount),
+            onCheckedChange = {},
+            testTag = "diner"
+        )
+        Spacer(Modifier.height(400.dp))
     }
 }
