@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.69] - 2026-11-09
 ### Fixed
 - **ToteatPrimaryButton / ToteatSecondaryButton / ToteatTertiaryButton**: `contentPadding` (added in 0.1.68) is now declared before `leadingIcon` and `trailingIcon`, so `trailingIcon` is the last parameter again. In 0.1.68 a lambda written outside the parentheses (e.g. `ToteatTertiaryButton(onClick = onBack) { Text("Volver") }`) went to `contentPadding` and failed to compile with "Argument type mismatch". Its name, type, default (`ButtonDefaults.ContentPadding`) and KDoc are unchanged. Calls that pass `contentPadding` by name are unaffected.
 - **Preview**: The three buttons called with a lambda outside the parentheses, so the compiler covers this case.
