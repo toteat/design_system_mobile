@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.70] - 2026-11-09
 ### Added
 - **ChevronDownIcon** (`components/icons`): Thin down chevron, decorative (`contentDescription = null`). `size: Dp = 16.dp`, `tint: Color = LocalContentColor.current`. New drawable `icon_chevron_down.xml` (16x16).
 - **ToteatDetailCard** (`components/cards`): White card (12.dp radius, 2.dp shadow, 1.dp `NeutralGray100` border) that groups detail accordions; `content: @Composable ColumnScope.() -> Unit` last. **ToteatDetailDivider**: `HorizontalDivider` in `NeutralGray100` to separate them.
