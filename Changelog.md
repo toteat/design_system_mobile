@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- **ToteatDinerConsumptionCard / ToteatDinerConsumptionList**: Expanding a card near the bottom edge of a scrollable container left its products and total hidden under the edge, so it looked like it hadn't opened. Once the card has its expanded size, it now asks its scrollable ancestors (`Modifier.bringIntoViewRequester`) to show it whole; if it is taller than the viewport, its header is kept at the top. It doesn't scroll when the content is already visible, when collapsing, or for `initiallyExpanded`. Works inside `ToteatDinerConsumptionList` and for a standalone card inside any scrollable (e.g. `verticalScroll`). Public API, look, semantics and test tags are unchanged.
+
 ## [0.1.71] - 2026-11-10
 ### Changed
 - **ToteatDinerList**: Adjusted to Figma "Comensales" (Toteat Go). Letter headers use `bodyMedium` (Bold 12 sp) instead of `headlineMedium` (16 sp); the "•" and the name use `bodyMediumRegular` (12 sp) instead of `bodyLargeRegular` (14 sp). The list is now a card: 12.dp radius, 2.dp shadow, white background and a 1.dp `NeutralGray100` border (was `MaterialTheme.shapes.medium`, no border or shadow). Header height, colors, row layout, semantics and test tags are unchanged.

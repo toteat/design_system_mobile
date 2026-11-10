@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,17 +28,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -44,6 +51,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.toteat.toteatds.components.tags.StatusTag
@@ -64,6 +72,8 @@ import designsystemmobile.toteatds.generated.resources.diner_consumption_total
 import designsystemmobile.toteatds.generated.resources.icon_right_chevron
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -143,6 +153,7 @@ data class DinerConsumption(
  * total. Checkbox changes are reported through [onCheckedChange] with the
  * diner's index; diners with [DinerConsumption.isSelectable] `false` never report them. Backed by a [LazyColumn], so long lists scroll vertically;
  * when embedded inside another vertical scrollable, give it a bounded height.
+ * Expanding a card scrolls the list so its content is visible (see [ToteatDinerConsumptionCard]).
  */
 @Composable
 fun ToteatDinerConsumptionList(
@@ -180,6 +191,11 @@ fun ToteatDinerConsumptionList(
  * gray pill-cornered surface. Tapping the header toggles the expanded state,
  * revealing one row per [DinerConsumption.items] entry plus a total row where
  * the amount is highlighted with the primary color.
+ *
+ * When the user expands it inside a scrollable container (such as [ToteatDinerConsumptionList] or a
+ * `verticalScroll` column), the container scrolls just enough to show the whole card once it has
+ * its expanded size; if the card is taller than the viewport, its header is kept at the top. It
+ * does not scroll when the content is already visible, when collapsing, or for [initiallyExpanded].
  */
 @Composable
 fun ToteatDinerConsumptionCard(
@@ -190,6 +206,7 @@ fun ToteatDinerConsumptionCard(
     testTag: String = ""
 ) {
     var isExpanded by remember { mutableStateOf(initiallyExpanded) }
+    val revealRequester = rememberExpansionRevealRequester()
     val statusLabel = consumption.statusLabel
     val cardDescription = if (statusLabel != null) {
         stringResource(Res.string.diner_consumption_description_with_status, consumption.name, statusLabel)
@@ -200,6 +217,7 @@ fun ToteatDinerConsumptionCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .revealOnExpand(revealRequester)
             .clip(MaterialTheme.shapes.medium)
             .semantics { contentDescription = cardDescription }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
@@ -211,7 +229,10 @@ fun ToteatDinerConsumptionCard(
             isSelectable = consumption.isSelectable,
             isExpanded = isExpanded,
             onCheckedChange = onCheckedChange,
-            onToggleExpanded = { isExpanded = !isExpanded },
+            onToggleExpanded = {
+                isExpanded = !isExpanded
+                revealRequester.revealOnNextResize = isExpanded
+            },
             testTag = testTag
         )
 
@@ -262,6 +283,45 @@ fun ToteatDinerConsumptionCard(
         }
     }
 }
+
+/**
+ * Asks the scrollable ancestors of an expanded card to show it once it has its expanded size.
+ *
+ * [BringIntoViewRequester.bringIntoView] skips the request when the bounds it reads are already
+ * visible, so it must run after the card is remeasured, not when the tap is handled; [onSizeChanged]
+ * runs right after that measurement. The second request keeps the header visible when the card is
+ * taller than the viewport and the default spec would leave it where it was.
+ */
+@Stable
+private class ExpansionRevealRequester(
+    val bringIntoViewRequester: BringIntoViewRequester,
+    private val scope: CoroutineScope,
+    private val headerHeightPx: Float
+) {
+    var revealOnNextResize = false
+
+    fun onResized(size: IntSize) {
+        if (!revealOnNextResize) return
+        revealOnNextResize = false
+        scope.launch {
+            bringIntoViewRequester.bringIntoView()
+            bringIntoViewRequester.bringIntoView(Rect(0f, 0f, size.width.toFloat(), headerHeightPx))
+        }
+    }
+}
+
+@Composable
+private fun rememberExpansionRevealRequester(): ExpansionRevealRequester {
+    val scope = rememberCoroutineScope()
+    val headerHeightPx = with(LocalDensity.current) { HeaderHeight.toPx() }
+    return remember(scope, headerHeightPx) {
+        ExpansionRevealRequester(BringIntoViewRequester(), scope, headerHeightPx)
+    }
+}
+
+private fun Modifier.revealOnExpand(requester: ExpansionRevealRequester): Modifier = this
+    .bringIntoViewRequester(requester.bringIntoViewRequester)
+    .onSizeChanged(requester::onResized)
 
 @Composable
 private fun DinerConsumptionHeader(
