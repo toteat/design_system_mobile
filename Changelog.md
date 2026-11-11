@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.76] - 2026-11-11
 ### Changed
 - **ToteatDinerList**: Diner rows are now 48.dp tall (was 26.dp), meeting the minimum touch target. Headers, typography, colors, semantics and test tags are unchanged.
 
