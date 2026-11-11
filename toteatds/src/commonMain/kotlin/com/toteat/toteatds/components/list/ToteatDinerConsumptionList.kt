@@ -6,12 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -39,9 +41,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
@@ -51,15 +55,17 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.toteat.toteatds.components.tags.StatusTag
 import com.toteat.toteatds.components.tags.StatusTagVariant
+import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.ToteatTheme
-import com.toteat.toteatds.theme.bodyLargeRegular
 import com.toteat.toteatds.theme.bodyMediumRegular
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.theme.helperBold
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.diner_consumption_checkbox_description
@@ -69,7 +75,7 @@ import designsystemmobile.toteatds.generated.resources.diner_consumption_descrip
 import designsystemmobile.toteatds.generated.resources.diner_consumption_expand
 import designsystemmobile.toteatds.generated.resources.diner_consumption_list_description
 import designsystemmobile.toteatds.generated.resources.diner_consumption_total
-import designsystemmobile.toteatds.generated.resources.icon_right_chevron
+import designsystemmobile.toteatds.generated.resources.icon_chevron_down
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -78,19 +84,36 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+// Figma "comensal - genérico" (Toteat Go, 23838:22702).
 private val HeaderHeight = 36.dp
 private val ItemRowHeight = 36.dp
-// Figma "comensal - genérico" icon/ checkbox: a 14.dp icon whose box is inset 0.875.dp (12.25.dp),
-// with a 2.625.dp radius, a ~1.dp border and a check about 7.5.dp wide.
-private val CheckboxSize = 16.dp
-private val CheckboxInset = 0.875.dp
-private val CheckboxShape = RoundedCornerShape(2.625.dp)
-private val CheckboxBorderWidth = 1.dp
-private val CheckIconSize = 10.dp
-// Figma icon/ chevron-strokes: the DS right chevron turned to point down or up.
+private val CardSpacing = 12.dp
+// Figma icon/ checkbox is 14.dp (box inset 0.875.dp, 2.625.dp radius, ~1.dp border, check ~7.5.dp).
+// It is drawn at 20.dp with the same proportions so it doesn't read as a tiny button. It sits 12.dp
+// from the card's edge inside a 48.dp-wide touch area, so the name starts at 48.dp.
+private val CheckboxSize = 20.dp
+private val CheckboxInset = 1.25.dp
+private val CheckboxShape = RoundedCornerShape(3.75.dp)
+private val CheckboxBorderWidth = 1.5.dp
+private val CheckIconSize = 13.dp
+private val CheckboxTouchSize = 48.dp
+// Figma icon/ chevron-strokes "4-down" (the DS icon_chevron_down), turned up when expanded.
 private val ChevronSize = 16.dp
-private val DividerThickness = 2.dp
-private val HorizontalPadding = 16.dp
+private val DividerThickness = 1.dp
+private val HorizontalPadding = 12.dp
+// Figma list bullets: the text starts 18.dp after the row padding; the bullet sits at the end of
+// a 10.dp slot followed by the row's 8.dp spacing.
+private val BulletSlotWidth = 10.dp
+private val ContentSpacing = 8.dp
+
+// "tab-light": offset (0, 1), blur radius 2, #D0D0D0 at 52 %. NeutralGray300 (#CFCFCF) is the
+// palette's closest color.
+private val CardShadowRadius = 2.dp
+private val CardShadowOffset = DpOffset(0.dp, 1.dp)
+private const val CardShadowAlpha = 0.52f
+// The LazyColumn clips its content: keeps the first card's shadow (1.dp above) and the last one's
+// (offset + blur, 3.dp below) visible.
+private val ListShadowPadding = PaddingValues(top = 1.dp, bottom = 3.dp)
 
 /** How a consumption row is painted. [Discount] rows are gray (neutral-gray400), as in Figma "comensal - genérico". */
 enum class DinerConsumptionItemKind { Regular, Discount }
@@ -165,7 +188,8 @@ fun ToteatDinerConsumptionList(
     val listDescription = stringResource(Res.string.diner_consumption_list_description)
 
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(CardSpacing),
+        contentPadding = ListShadowPadding,
         modifier = modifier
             .semantics { contentDescription = listDescription }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
@@ -218,6 +242,15 @@ fun ToteatDinerConsumptionCard(
         modifier = modifier
             .fillMaxWidth()
             .revealOnExpand(revealRequester)
+            // Before the clip so the shadow is drawn outside the card.
+            .dropShadow(
+                shape = MaterialTheme.shapes.medium,
+                shadow = Shadow(
+                    radius = CardShadowRadius,
+                    color = NeutralGray300.copy(alpha = CardShadowAlpha),
+                    offset = CardShadowOffset
+                )
+            )
             .clip(MaterialTheme.shapes.medium)
             .semantics { contentDescription = cardDescription }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
@@ -346,7 +379,7 @@ private fun DinerConsumptionHeader(
             .background(MaterialTheme.colorScheme.extended.neutral100)
             .clickable(role = Role.Button, onClickLabel = toggleDescription) { onToggleExpanded() }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_header") else Modifier)
-            .padding(start = 4.dp, end = HorizontalPadding)
+            .padding(end = HorizontalPadding)
     ) {
         DinerConsumptionCheckbox(
             checked = checked,
@@ -358,9 +391,8 @@ private fun DinerConsumptionHeader(
 
         Text(
             text = name,
-            style = MaterialTheme.typography.bodyLargeRegular,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.secondary,
+            style = headerNameStyle(),
+            color = MaterialTheme.colorScheme.extended.neutral500,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
@@ -377,12 +409,12 @@ private fun DinerConsumptionHeader(
         }
 
         Icon(
-            imageVector = vectorResource(Res.drawable.icon_right_chevron),
+            imageVector = vectorResource(Res.drawable.icon_chevron_down),
             contentDescription = toggleDescription,
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
                 .size(ChevronSize)
-                .rotate(if (isExpanded) -90f else 90f)
+                .rotate(if (isExpanded) 180f else 0f)
         )
     }
 }
@@ -397,10 +429,14 @@ private fun DinerConsumptionCheckbox(
 ) {
     val description = stringResource(Res.string.diner_consumption_checkbox_description, dinerName)
 
+    // 48.dp-wide touch area from the card's edge with the 14.dp box 12.dp inside it, as in Figma.
+    // sizeIn makes the toggleable node itself 48.dp wide: minimumInteractiveComponentSize alone
+    // would center the box. The 36.dp header limits the height; the touch area still reaches 48.dp.
     Box(
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.CenterStart,
         modifier = Modifier
             .minimumInteractiveComponentSize()
+            .sizeIn(minWidth = CheckboxTouchSize, minHeight = CheckboxTouchSize)
             .toggleable(
                 value = checked,
                 enabled = enabled,
@@ -409,6 +445,7 @@ private fun DinerConsumptionCheckbox(
             )
             .semantics { contentDescription = description }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+            .padding(start = HorizontalPadding)
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -422,7 +459,8 @@ private fun DinerConsumptionCheckbox(
                             .background(MaterialTheme.colorScheme.outlineVariant)
                             .border(CheckboxBorderWidth, MaterialTheme.colorScheme.extended.disabledContent, CheckboxShape)
                         checked -> Modifier.background(MaterialTheme.colorScheme.secondary)
-                        else -> Modifier.border(CheckboxBorderWidth, MaterialTheme.colorScheme.outline, CheckboxShape)
+                        // Figma "not-selected": neutral-gray400 outline.
+                        else -> Modifier.border(CheckboxBorderWidth, MaterialTheme.colorScheme.extended.neutral400, CheckboxShape)
                     }
                 )
         ) {
@@ -450,11 +488,12 @@ private fun DinerConsumptionRow(
     statusLabel: String? = null
 ) {
     val color = if (isTotal) MaterialTheme.colorScheme.primary else consumptionRowColor(isDiscount, statusLabel)
-    val fontWeight = if (isTotal) FontWeight.Bold else null
+    // Figma Body-base/B12 B on every row, the total included.
+    val style = rowTextStyle()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(ContentSpacing),
         modifier = Modifier
             .fillMaxWidth()
             .height(ItemRowHeight)
@@ -463,12 +502,7 @@ private fun DinerConsumptionRow(
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
             .padding(horizontal = HorizontalPadding)
     ) {
-        Text(
-            text = "•",
-            style = MaterialTheme.typography.bodyLargeRegular,
-            fontWeight = fontWeight,
-            color = color
-        )
+        Bullet(style = style, color = color)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f)
@@ -476,15 +510,14 @@ private fun DinerConsumptionRow(
             if (quantity != null) {
                 QuantityText(
                     quantity = quantity,
-                    style = MaterialTheme.typography.bodyLargeRegular,
+                    style = style,
                     color = color,
                     testTag = if (testTag.isNotEmpty()) "${testTag}_quantity" else ""
                 )
             }
             Text(
                 text = name,
-                style = MaterialTheme.typography.bodyLargeRegular,
-                fontWeight = fontWeight,
+                style = style,
                 color = color,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -500,11 +533,32 @@ private fun DinerConsumptionRow(
         }
         Text(
             text = price,
-            style = MaterialTheme.typography.bodyLargeRegular,
-            fontWeight = fontWeight,
+            style = style,
             color = color
         )
     }
+}
+
+/** List bullet at the end of its slot, so the text starts 18.dp after the row padding as in Figma. */
+@Composable
+private fun Bullet(style: TextStyle, color: Color, modifier: Modifier = Modifier) {
+    Box(contentAlignment = Alignment.CenterEnd, modifier = modifier.width(BulletSlotWidth)) {
+        Text(text = "•", style = style, color = color)
+    }
+}
+
+/** Figma Body-base/B12 B: Manrope Bold 12, line height 1.5. */
+@Composable
+private fun rowTextStyle(): TextStyle {
+    val base = MaterialTheme.typography.bodyMedium
+    return remember(base) { base.copy(lineHeight = 18.sp) }
+}
+
+/** Figma Body-base/helper B: Manrope Bold 11, line height 1.8. */
+@Composable
+private fun headerNameStyle(): TextStyle {
+    val base = MaterialTheme.typography.helperBold
+    return remember(base) { base.copy(lineHeight = 19.8.sp) }
 }
 
 /**
@@ -565,15 +619,15 @@ private fun DinerConsumptionExtras(
                 val extraTestTag = if (testTag.isNotEmpty()) "${testTag}_extra_$index" else ""
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(ContentSpacing),
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(if (extraTestTag.isNotEmpty()) Modifier.setTestTag(extraTestTag) else Modifier)
                         .padding(vertical = 2.dp)
                 ) {
-                    Text(
-                        text = "•",
-                        style = MaterialTheme.typography.bodyLargeRegular,
+                    Bullet(
+                        style = rowTextStyle(),
+                        color = color,
                         modifier = Modifier
                             .alpha(0f)
                             .clearAndSetSemantics {}

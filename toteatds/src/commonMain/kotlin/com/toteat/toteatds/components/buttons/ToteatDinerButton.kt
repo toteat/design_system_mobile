@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -30,7 +33,7 @@ import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.PrimaryNormal
 import com.toteat.toteatds.theme.SecondaryNormal
 import com.toteat.toteatds.theme.ToteatTheme
-import com.toteat.toteatds.theme.bodyLargeRegular
+import com.toteat.toteatds.theme.tagSemiBold
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.chip_not_selected
@@ -39,7 +42,6 @@ import designsystemmobile.toteatds.generated.resources.diner_add
 import designsystemmobile.toteatds.generated.resources.diner_button_description
 import designsystemmobile.toteatds.generated.resources.diner_view_more
 import designsystemmobile.toteatds.generated.resources.icon_eye_open
-import designsystemmobile.toteatds.generated.resources.plus_stroke_icon
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -56,10 +58,15 @@ sealed interface ToteatDinerButtonType {
     data object ViewMore : ToteatDinerButtonType
 }
 
+// Figma "card-option" (Toteat Go, 23838:17777): 40 dp circle with a 1 dp border, Bold 12
+// initial, SemiBold 10 name 2 dp below. Figma's name is 40 dp wide; 56 dp keeps ~9 visible
+// characters (as the previous 64 dp at Regular 12 did) while bringing the circles closer.
 private val DinerCircleSize = 40.dp
-private val DinerBorderWidth = 1.5.dp
-private val DinerIconSize = 18.dp
-private val DinerLabelWidth = 64.dp
+private val DinerBorderWidth = 1.dp
+private val DinerViewMoreIconSize = 16.dp
+private val DinerAddGlyphOffset = (-4).dp
+private val DinerLabelWidth = 56.dp
+private val DinerLabelSpacing = 2.dp
 
 /**
  * Circular button used to assign an order item to a diner.
@@ -101,7 +108,7 @@ fun ToteatDinerButton(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(DinerLabelSpacing),
         modifier = modifier
             .clip(MaterialTheme.shapes.small)
             .clickable(
@@ -115,7 +122,6 @@ fun ToteatDinerButton(
                 contentDescription = accessibilityDescription
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
-            .padding(4.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -130,30 +136,44 @@ fun ToteatDinerButton(
             when (type) {
                 is ToteatDinerButtonType.Diner -> Text(
                     text = type.name.take(1).uppercase(),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = contentColor
                 )
 
-                ToteatDinerButtonType.Add -> Icon(
-                    imageVector = vectorResource(Res.drawable.plus_stroke_icon),
-                    contentDescription = null,
-                    tint = contentColor,
-                    modifier = Modifier.size(DinerIconSize)
+                // Figma draws the "+" as text (Titles/Display SB, SemiBold 34), not as an icon.
+                // The line height is trimmed so the text box fits the 40 dp circle; Manrope draws
+                // "+" 4 dp below the middle of that box, so it is moved up to sit centered.
+                // It carries no semantics, like the decorative icons.
+                ToteatDinerButtonType.Add -> Text(
+                    text = "+",
+                    style = MaterialTheme.typography.displayLarge.copy(
+                        lineHeight = MaterialTheme.typography.displayLarge.fontSize,
+                        lineHeightStyle = LineHeightStyle(
+                            alignment = LineHeightStyle.Alignment.Center,
+                            trim = LineHeightStyle.Trim.Both
+                        )
+                    ),
+                    color = contentColor,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Visible,
+                    modifier = Modifier
+                        .offset(y = DinerAddGlyphOffset)
+                        .clearAndSetSemantics {}
                 )
 
                 ToteatDinerButtonType.ViewMore -> Icon(
                     imageVector = vectorResource(Res.drawable.icon_eye_open),
                     contentDescription = null,
                     tint = contentColor,
-                    modifier = Modifier.size(DinerIconSize)
+                    modifier = Modifier.size(DinerViewMoreIconSize)
                 )
             }
         }
 
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLargeRegular,
-            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            style = MaterialTheme.typography.tagSemiBold,
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

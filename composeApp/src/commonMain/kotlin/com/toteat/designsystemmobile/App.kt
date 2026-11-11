@@ -26,6 +26,7 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.WavingHand
@@ -89,6 +90,7 @@ import com.toteat.toteatds.components.list.DinerConsumptionItemKind
 import com.toteat.toteatds.components.list.ToteatDinerConsumptionList
 import com.toteat.toteatds.components.list.ToteatDinerList
 import com.toteat.toteatds.components.list.ToteatDinerNameList
+import com.toteat.toteatds.components.buttons.ToteatButtonSize
 import com.toteat.toteatds.components.buttons.ToteatPrimaryButton
 import com.toteat.toteatds.components.buttons.ToteatPrintButton
 import com.toteat.toteatds.components.buttons.ToteatRectangleButton
@@ -97,6 +99,7 @@ import com.toteat.toteatds.components.buttons.ToteatSquareButton
 import com.toteat.toteatds.components.buttons.ToteatSwitchButtonContainer
 import com.toteat.toteatds.components.buttons.ToteatTertiaryButton
 import com.toteat.toteatds.components.dropdown.ToteatDropDown
+import com.toteat.toteatds.components.dropdown.ToteatSelectDropDown
 import com.toteat.toteatds.components.icons.DifferentAmountPaymentsIcon
 import com.toteat.toteatds.components.icons.DinerPaymentIcon
 import com.toteat.toteatds.components.icons.PaymentCardIcon
@@ -125,6 +128,9 @@ import com.toteat.toteatds.components.tags.StatusTagVariant
 import com.toteat.toteatds.components.textfields.ToteatPasswordTextField
 import com.toteat.toteatds.components.textfields.ToteatPhoneNumberField
 import com.toteat.toteatds.components.textfields.ToteatSearchBar
+import com.toteat.toteatds.components.textfields.ToteatSearchInput
+import com.toteat.toteatds.components.textfields.ToteatSearchInputColor
+import com.toteat.toteatds.components.textfields.ToteatSearchSuggestion
 import com.toteat.toteatds.components.textfields.ToteatTextField
 import com.toteat.toteatds.components.toast.ToteatToastMessage
 import com.toteat.toteatds.components.toast.ToteatToastMessageType
@@ -142,6 +148,7 @@ import com.toteat.toteatds.components.topbar.ProcessNameTopBarItem
 import com.toteat.toteatds.components.topbar.RestaurantNameTopBarItem
 import com.toteat.toteatds.theme.ToteatTheme
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -418,6 +425,29 @@ fun ButtonShowcase() {
                         modifier = Modifier.size(32.dp)
                     )
                 })
+        }
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+        Text("Size S (Figma)", style = MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ToteatTertiaryButton(onClick = {}, text = "Cancelar", size = ToteatButtonSize.S)
+            ToteatPrimaryButton(onClick = {}, text = "Agregar", size = ToteatButtonSize.S)
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ToteatSecondaryButton(onClick = {}, text = "Secundario", size = ToteatButtonSize.S)
+            ToteatPrimaryButton(
+                onClick = {},
+                text = "Agregar",
+                size = ToteatButtonSize.S,
+                leadingIcon = {
+                    Icon(Icons.Default.Add, null, modifier = Modifier.size(ToteatButtonSize.S.iconSize))
+                }
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ToteatTertiaryButton(onClick = {}, text = "Disabled", enabled = false, size = ToteatButtonSize.S)
+            ToteatSecondaryButton(onClick = {}, text = "Disabled", enabled = false, size = ToteatButtonSize.S)
+            ToteatPrimaryButton(onClick = {}, text = "Disabled", enabled = false, size = ToteatButtonSize.S)
         }
 
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
@@ -1307,6 +1337,39 @@ fun InputShowcase() {
         )
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
+        Text("SearchInput (Figma Input/ search)", style = MaterialTheme.typography.titleMedium)
+        val products = remember {
+            persistentListOf(
+                ToteatSearchSuggestion("1", "Donut arcoiris"),
+                ToteatSearchSuggestion("2", "Donut chocolate"),
+                ToteatSearchSuggestion("3", "Donut manjar"),
+                ToteatSearchSuggestion("4", "Hamburguesa BBQ")
+            )
+        }
+        ToteatSearchInputColor.entries.forEach { color ->
+            var query by remember { mutableStateOf("") }
+            var picked by remember { mutableStateOf<String?>(null) }
+            val results = remember(query, picked) {
+                if (query.isBlank() || query == picked) persistentListOf()
+                else products.filter { it.label.contains(query, ignoreCase = true) }.toImmutableList()
+            }
+            ToteatSearchInput(
+                value = query,
+                onValueChange = { query = it },
+                placeholder = "Buscar producto (${color.name})",
+                color = color,
+                suggestions = results,
+                onSuggestionClick = {
+                    picked = it.label
+                    query = it.label
+                },
+                suggestionImage = {
+                    Icon(Icons.Default.Fastfood, null, modifier = Modifier.size(24.dp))
+                }
+            )
+        }
+        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
         HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
 
         Text("Phone Number", style = MaterialTheme.typography.titleMedium)
@@ -1335,11 +1398,27 @@ fun DropdownShowcase() {
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        Text("ToteatDropDown", style = MaterialTheme.typography.titleMedium)
         ToteatDropDown(
             label = "Meseros turno",
             options = options,
             selectedOption = selectedOption,
             onOptionSelect = { selectedOption = it }
+        )
+
+        Text("ToteatSelectDropDown (Figma select-options)", style = MaterialTheme.typography.titleMedium)
+        ToteatSelectDropDown(
+            label = "Meseros turno",
+            options = options,
+            selectedOption = selectedOption,
+            onOptionSelect = { selectedOption = it }
+        )
+        ToteatSelectDropDown(
+            label = "Deshabilitado",
+            options = options,
+            selectedOption = "Mesero 2",
+            onOptionSelect = {},
+            enabled = false
         )
     }
 }

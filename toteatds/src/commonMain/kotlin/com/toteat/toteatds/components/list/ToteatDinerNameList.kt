@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -35,35 +37,58 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.toteat.toteatds.theme.NeutralGray300
 import com.toteat.toteatds.theme.SecondaryNormal
 import com.toteat.toteatds.theme.ToteatTheme
-import com.toteat.toteatds.theme.bodyLargeRegular
 import com.toteat.toteatds.theme.extended
+import com.toteat.toteatds.theme.helperBold
 import com.toteat.toteatds.utils.setTestTag
 import designsystemmobile.toteatds.generated.resources.Res
 import designsystemmobile.toteatds.generated.resources.diner_name_edit_description
 import designsystemmobile.toteatds.generated.resources.diner_name_list_description
 import designsystemmobile.toteatds.generated.resources.diner_name_placeholder
-import designsystemmobile.toteatds.generated.resources.icon_edit_pencil
+import designsystemmobile.toteatds.generated.resources.icon_edit_pen
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-private val DinerNameRowHeight = 48.dp
-private val DinerNameEditIconSize = 20.dp
+// Figma "Identificar comensales" (Toteat Go, Abrir mesa, selector 23838:17199): 52 dp rows
+// (16 + 20 dp of Bold 11 at 1.8 line height + 16) 8 dp apart, 12 dp side padding, a 16 dp pencil
+// 12 dp from the right edge and the "tab-light" shadow.
+private val DinerNameRowHeight = 52.dp
+private val DinerNameRowSpacing = 8.dp
+private val DinerNameRowHorizontalPadding = 12.dp
+private val DinerNameEditIconSize = 16.dp
+private val DinerNameEditTouchSize = 48.dp
+private val DinerNameTextLineHeight = 19.8.sp
+
+// "tab-light": offset (0, 1), blur radius 2, #D0D0D0 at 52 %. NeutralGray300 (#CFCFCF) is the
+// palette's closest color.
+private val DinerNameRowShadowRadius = 2.dp
+private val DinerNameRowShadowOffset = DpOffset(0.dp, 1.dp)
+private const val DinerNameRowShadowAlpha = 0.52f
+
+// The LazyColumn clips its content: this keeps the shadow of the first row (1 dp above) and the
+// last row (offset + blur, 3 dp below) visible.
+private val DinerNameListShadowPadding = PaddingValues(top = 1.dp, bottom = 3.dp)
 private const val NoEditingIndex = -1
 private const val DefaultDinerNameMaxLength = 50
 
@@ -130,7 +155,8 @@ fun ToteatDinerNameList(
     }
 
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(DinerNameRowSpacing),
+        contentPadding = DinerNameListShadowPadding,
         modifier = modifier
             .semantics { contentDescription = listDescription }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
@@ -187,12 +213,22 @@ private fun DinerNameRow(
         onCommit(state.text.toString().trim())
     }
 
+    val rowShape = MaterialTheme.shapes.large
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .height(DinerNameRowHeight)
-            .clip(MaterialTheme.shapes.large)
+            // Before clip and background so the shadow is drawn outside the row.
+            .dropShadow(
+                shape = rowShape,
+                shadow = Shadow(
+                    radius = DinerNameRowShadowRadius,
+                    color = NeutralGray300.copy(alpha = DinerNameRowShadowAlpha),
+                    offset = DinerNameRowShadowOffset
+                )
+            )
+            .clip(rowShape)
             .background(MaterialTheme.colorScheme.background)
             // While not editing, tapping anywhere on the card opens it, not only the pencil.
             // While editing, the card takes no taps so the text field keeps them.
@@ -208,7 +244,9 @@ private fun DinerNameRow(
                 }
             )
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
-            .padding(start = 20.dp, end = 4.dp)
+            // No end padding: the pencil's 48 dp touch area reaches the row's edge and the
+            // icon sits 12 dp inside it (see below).
+            .padding(start = DinerNameRowHorizontalPadding)
     ) {
         Box(
             contentAlignment = Alignment.CenterStart,
@@ -226,7 +264,7 @@ private fun DinerNameRow(
             } else {
                 Text(
                     text = name.ifBlank { placeholder },
-                    style = MaterialTheme.typography.bodyLargeRegular,
+                    style = dinerNameTextStyle(),
                     color = if (name.isBlank()) {
                         MaterialTheme.colorScheme.extended.neutral400
                     } else {
@@ -238,10 +276,16 @@ private fun DinerNameRow(
             }
         }
 
+        // 48 dp touch area flush with the row's right edge; the 16 dp icon is aligned to its end
+        // with 12 dp of padding, so it sits 12 dp from the edge as in Figma. The touch area is
+        // not reduced: only the icon moves inside it (4 dp right of its center).
+        // sizeIn makes the clickable node itself 48 dp: minimumInteractiveComponentSize alone
+        // reserves 48 dp but centers a smaller child, which would put the icon 22 dp from the edge.
         Box(
-            contentAlignment = Alignment.Center,
+            contentAlignment = Alignment.CenterEnd,
             modifier = Modifier
                 .minimumInteractiveComponentSize()
+                .sizeIn(minWidth = DinerNameEditTouchSize, minHeight = DinerNameEditTouchSize)
                 .clip(CircleShape)
                 .clickable(
                     onClick = {
@@ -260,13 +304,25 @@ private fun DinerNameRow(
                 .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_edit") else Modifier)
         ) {
             Icon(
-                imageVector = vectorResource(Res.drawable.icon_edit_pencil),
+                imageVector = vectorResource(Res.drawable.icon_edit_pen),
                 contentDescription = null,
                 tint = SecondaryNormal,
-                modifier = Modifier.size(DinerNameEditIconSize)
+                modifier = Modifier
+                    .padding(end = DinerNameRowHorizontalPadding)
+                    .size(DinerNameEditIconSize)
             )
         }
     }
+}
+
+/**
+ * Figma Body-base/helper B (Manrope Bold 11, line height 1.8) for the placeholder, the name and
+ * the text field, so opening a row for editing doesn't change how it looks.
+ */
+@Composable
+private fun dinerNameTextStyle(): TextStyle {
+    val helperBold = MaterialTheme.typography.helperBold
+    return remember(helperBold) { helperBold.copy(lineHeight = DinerNameTextLineHeight) }
 }
 
 @Composable
@@ -289,7 +345,7 @@ private fun DinerNameTextField(
         state = fieldState,
         inputTransformation = inputTransformation,
         lineLimits = TextFieldLineLimits.SingleLine,
-        textStyle = MaterialTheme.typography.bodyLargeRegular.copy(
+        textStyle = dinerNameTextStyle().copy(
             color = MaterialTheme.colorScheme.extended.neutral500
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -312,7 +368,7 @@ private fun DinerNameTextField(
                 if (fieldState.text.isEmpty()) {
                     Text(
                         text = placeholder,
-                        style = MaterialTheme.typography.bodyLargeRegular,
+                        style = dinerNameTextStyle(),
                         color = MaterialTheme.colorScheme.extended.neutral400
                     )
                 }
@@ -354,6 +410,32 @@ private fun ToteatDinerNameListControlledPreview() {
                 names = persistentListOf("Fernanda", ""),
                 onNameChange = { _, _ -> },
                 maxNameLength = 10
+            )
+        }
+    }
+}
+
+/**
+ * Narrow POS width (360 dp) on the Figma screen background, to check that the Bold 11 text reads
+ * well: placeholder, a name, a long name that ellipsizes, and a row being edited.
+ */
+@Preview(showBackground = true, backgroundColor = 0xFFFAFAFA, widthDp = 360)
+@Composable
+private fun ToteatDinerNameListNarrowPreview() {
+    ToteatTheme {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            ToteatDinerNameList(
+                names = persistentListOf("", "Trini", "Maximiliano Fernández de la Fuente"),
+                onNameChange = { _, _ -> }
+            )
+            ToteatDinerNameList(
+                names = persistentListOf("Pauli"),
+                onNameChange = { _, _ -> },
+                editingIndex = 0,
+                onEditingIndexChange = {}
             )
         }
     }
