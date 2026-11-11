@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.79] - 2026-11-11
 ### Changed
 - **ToteatSelectDropDown**: A blank `label` (`""`) is no longer drawn, so there's no empty 18 dp line plus 4 dp gap above the field and it lines up with inputs without a label. In that case the `${testTag}_label` tag doesn't exist, and the field's description uses the `placeholder` instead of the empty label (today the `dropdown_description` string uses `%s`, which Compose resources don't replace, so the description reads "%s, dropdown" either way). With a label nothing changes; the API is the same (`label` is still a required `String`).
 - **Tests** (`iosTest`): `ToteatSelectDropDownTest` checks that a blank label isn't drawn and the field starts at the top.
