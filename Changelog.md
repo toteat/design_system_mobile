@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.77] - 2026-11-11
 ### Added
 - **ToteatSearchInput** (`components/textfields`): New search field with the Figma "Input/ search" design (Design System Toteat, 636:4483). It has the same parameters, in the same order, as `ToteatSearchBar` (which stays as is), with the same behavior (IME Search action, `onSearch`, `iconTint`), semantics and test tag, so switching is just renaming the call. Added after `testTag`:
   - `color: ToteatSearchInputColor = Gray` (`Gray`, `White`, `Dark`). Field 50 dp, 8 dp radius, 12 dp padding, Regular 14 / lh 16.8 sp, 24 dp stroke search icon (new drawable `icon_search_stroke`, from Figma). Gray: `NeutralGray100`, `NeutralGray300` border when focused. White: `NeutralGray`, `NeutralGray100` border when focused. Dark: `NeutralGray500`, text `NeutralGray200`. Placeholder `NeutralGray400`; icon `NeutralGray300` → `NeutralGray400` when focused (`NeutralGray400` → white in Dark). Disabled follows `ToteatSearchBar` (faded background, `NeutralGray400` text and icon); Figma has no disabled variant.
