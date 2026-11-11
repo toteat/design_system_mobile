@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- **ToteatDinerButton**: The pressed area (ripple), clipped with 8 dp rounded corners, cut the bottom of the first and last letters of names that fill the 56 dp label (e.g. "Comensal 1"). The button now has 6 dp of space under the name, inside the pressed area, so the letters sit above the corners. The button is 6 dp taller; width, spacing between diners, semantics and test tags are unchanged.
+
 ## [0.1.77] - 2026-11-11
 ### Added
 - **ToteatSearchInput** (`components/textfields`): New search field with the Figma "Input/ search" design (Design System Toteat, 636:4483). It has the same parameters, in the same order, as `ToteatSearchBar` (which stays as is), with the same behavior (IME Search action, `onSearch`, `iconTint`), semantics and test tag, so switching is just renaming the call. Added after `testTag`:

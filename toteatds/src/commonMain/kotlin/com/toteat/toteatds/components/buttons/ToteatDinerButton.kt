@@ -68,6 +68,10 @@ private val DinerAddGlyphOffset = (-4).dp
 private val DinerLabelWidth = 56.dp
 private val DinerLabelSpacing = 2.dp
 
+// The name fills the full width, so the rounded corners of the pressed area would cut its
+// first and last letters. Extra space at the bottom keeps the name above those corners.
+private val DinerPressedAreaBottomPadding = 6.dp
+
 /**
  * Circular button used to assign an order item to a diner.
  *
@@ -122,6 +126,7 @@ fun ToteatDinerButton(
                 contentDescription = accessibilityDescription
             }
             .then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
+            .padding(bottom = DinerPressedAreaBottomPadding)
     ) {
         Box(
             contentAlignment = Alignment.Center,
