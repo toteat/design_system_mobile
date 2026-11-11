@@ -5,6 +5,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
+import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -44,6 +45,29 @@ class ToteatSelectDropDownTest {
             .assertHeightIsEqualTo(50.dp)
             .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, androidx.compose.ui.semantics.Role.DropdownList))
             .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "colapsado"))
+    }
+
+    @Test
+    fun blankLabelIsNotDrawnAndLeavesNoGap() = runComposeUiTest {
+        setContent {
+            ToteatTheme {
+                ToteatSelectDropDown(
+                    label = "",
+                    options = Options,
+                    selectedOption = "",
+                    onOptionSelect = {},
+                    placeholder = "Seleccionar mesero",
+                    testTag = "meseros"
+                )
+            }
+        }
+
+        onNodeWithTag(Label).assertDoesNotExist()
+        // No gap: the field starts at the top of the dropdown.
+        assertEquals(
+            onNodeWithTag("toteat:id/meseros").getBoundsInRoot().top,
+            onNodeWithTag(Input).getBoundsInRoot().top
+        )
     }
 
     @Test

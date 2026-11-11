@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- **ToteatSelectDropDown**: A blank `label` (`""`) is no longer drawn, so there's no empty 18 dp line plus 4 dp gap above the field and it lines up with inputs without a label. In that case the `${testTag}_label` tag doesn't exist, and the field's description uses the `placeholder` instead of the empty label (today the `dropdown_description` string uses `%s`, which Compose resources don't replace, so the description reads "%s, dropdown" either way). With a label nothing changes; the API is the same (`label` is still a required `String`).
+- **Tests** (`iosTest`): `ToteatSelectDropDownTest` checks that a blank label isn't drawn and the field starts at the top.
+
 ## [0.1.78] - 2026-11-11
 ### Fixed
 - **ToteatDinerButton**: The pressed area (ripple), clipped with 8 dp rounded corners, cut the bottom of the first and last letters of names that fill the 56 dp label (e.g. "Comensal 1"). The button now has 6 dp of space under the name, inside the pressed area, so the letters sit above the corners. The button is 6 dp taller; width, spacing between diners, semantics and test tags are unchanged.

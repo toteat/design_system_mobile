@@ -95,6 +95,8 @@ private const val MenuShadowAlpha = 0.08f
  * máximo de 200 dp y scroll), su semántica y sus test tags (`testTag`, `${testTag}_label`,
  * `${testTag}_input`).
  *
+ * @param label Texto sobre el campo. Si está vacío no se dibuja (ni su tag `${testTag}_label`) y el
+ * campo queda arriba, sin hueco; la descripción del campo usa entonces el [placeholder].
  * @param placeholder Texto cuando [selectedOption] está vacío; se muestra en gris.
  * @param leadingIcon Ícono opcional a la izquierda del texto, de 16 dp en Figma. Es decorativo.
  */
@@ -144,7 +146,8 @@ internal fun SelectDropDownImpl(
 
     val expandedText = stringResource(Res.string.dropdown_expanded)
     val collapsedText = stringResource(Res.string.dropdown_collapsed)
-    val dropdownDescription = stringResource(Res.string.dropdown_description, label)
+    // Without a label the placeholder names the field for screen readers.
+    val dropdownDescription = stringResource(Res.string.dropdown_description, label.ifBlank { placeholder })
 
     val labelStyle = selectLabelStyle()
     val textStyle = selectTextStyle()
@@ -163,14 +166,17 @@ internal fun SelectDropDownImpl(
         verticalArrangement = Arrangement.spacedBy(LabelSpacing),
         modifier = modifier.then(if (testTag.isNotEmpty()) Modifier.setTestTag(testTag) else Modifier)
     ) {
-        Text(
-            text = label,
-            style = labelStyle,
-            color = labelColor,
-            modifier = Modifier
-                .padding(horizontal = FieldHorizontalPadding)
-                .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_label") else Modifier)
-        )
+        // A blank label isn't drawn, so the field starts at the top like an input without label.
+        if (label.isNotBlank()) {
+            Text(
+                text = label,
+                style = labelStyle,
+                color = labelColor,
+                modifier = Modifier
+                    .padding(horizontal = FieldHorizontalPadding)
+                    .then(if (testTag.isNotEmpty()) Modifier.setTestTag("${testTag}_label") else Modifier)
+            )
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -325,6 +331,14 @@ private fun ToteatSelectDropDownPreview() {
                 selectedOption = "Mesero 2",
                 onOptionSelect = {},
                 enabled = false
+            )
+            // Sin etiqueta: el campo queda arriba, sin hueco.
+            ToteatSelectDropDown(
+                label = "",
+                options = persistentListOf("Mesero 1", "Mesero 2", "Mesero 3"),
+                selectedOption = "",
+                onOptionSelect = {},
+                placeholder = "Seleccionar mesero"
             )
         }
     }
