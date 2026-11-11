@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.80] - 2026-11-11
 ### Changed
 - **ToteatDinerButtonContainer**: The selected diner is always fully visible. When `selectedDiner` changes (including its first value) or moves to another position in `diners`, and its button isn't fully visible, the row scrolls with an animation just enough to show it: aligned to the end if it was to the right (e.g. a diner added at the end and selected, or one chosen from "Ver más" and placed last), to the start if it was to the left. If it's already fully visible, or `selectedDiner` is `null` or not in `diners`, the row doesn't move. The leading "Agregar" item is counted in the position. It uses an internal `LazyListState`; public API, item order, sizes, spacing, semantics and test tags are unchanged.
 - **Tests** (`iosTest`): `ToteatDinerButtonContainerTest` checks, in a 200 dp row, that a selected diner off screen (to the right or left, or just added at the end) ends up fully visible, and that the row doesn't move when the selected diner is already visible, `null` or unknown.
