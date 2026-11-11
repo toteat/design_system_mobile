@@ -135,7 +135,7 @@ private fun DinerListRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(26.dp)
+            .height(48.dp)
             .clickable(
                 onClick = onClick,
                 role = Role.Button
