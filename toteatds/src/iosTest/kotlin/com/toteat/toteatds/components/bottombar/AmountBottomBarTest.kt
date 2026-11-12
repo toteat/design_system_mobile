@@ -1,5 +1,8 @@
 package com.toteat.toteatds.components.bottombar
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
@@ -135,6 +138,37 @@ class AmountBottomBarTest {
             }
         }
 
+        onNodeWithTag(PaidTag).assertDoesNotExist()
+
+        onNodeWithTag(SubtotalTag).performClick()
+        onNodeWithTag(PaidTag).assertExists()
+
+        onNodeWithTag(SubtotalTag).performClick()
+        onNodeWithTag(PaidTag).assertDoesNotExist()
+    }
+
+    @Test
+    fun tappingTheAmountsStillTogglesAfterPaidAmountChanges() = runComposeUiTest {
+        var paidAmount by mutableStateOf("$ 0")
+        setContent {
+            ToteatTheme {
+                AmountBottomBar(
+                    subtotalAmount = "$ 32.780",
+                    paidAmount = paidAmount,
+                    amountToPay = "$ 32.780",
+                    onPrintPreBillClick = {},
+                    onConfirmClick = {},
+                    onPayClick = {},
+                    testTag = "bar"
+                )
+            }
+        }
+
+        onNodeWithTag(SubtotalTag).performClick()
+        onNodeWithTag(PaidTag).assertExists()
+
+        paidAmount = "$ 10.000"
+        waitForIdle()
         onNodeWithTag(PaidTag).assertDoesNotExist()
 
         onNodeWithTag(SubtotalTag).performClick()
