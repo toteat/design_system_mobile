@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.82] - 2026-11-12
+### Fixed
+- **AmountBottomBar**: Tapping the amounts before `paidAmount` arrived or changed left the Show/Hide toggle stuck once the new amount showed up. The tap detector now restarts when `paidAmount` or `initialPaidAmountExpanded` changes, so it toggles the current expanded state. Public API, semantics and test tags are unchanged.
+- **Tests** (`iosTest`): `AmountBottomBarTest` checks that tapping the amounts still toggles the detail after `paidAmount` changes.
+
 ## [0.1.80] - 2026-11-11
 ### Changed
 - **ToteatDinerButtonContainer**: The selected diner is always fully visible. When `selectedDiner` changes (including its first value) or moves to another position in `diners`, and its button isn't fully visible, the row scrolls with an animation to show it. If it was to the right (e.g. a diner added at the end and selected, or one chosen from "Ver más" and placed last), the row goes as far towards the end as it can without hiding it: to the end of the row, so "Ver más" shows too, or, if the diner is too far from the end, until it reaches the start. Likewise, if it was to the left (e.g. a diner found with search that sits first), the row goes as far towards the start as it can: to the start of the row, so "Agregar" shows too, or, if the diner is too far from the start, until it reaches the end. If it's already fully visible, or `selectedDiner` is `null` or not in `diners`, the row doesn't move. The leading "Agregar" item is counted in the position. It uses an internal `LazyListState`; public API, item order, sizes, spacing, semantics and test tags are unchanged.

@@ -228,7 +228,7 @@ fun AmountBottomBar(
                                 .fillMaxWidth()
                                 .then(
                                     if (hasExtraRows && enabled) {
-                                        Modifier.pointerInput(Unit) {
+                                        Modifier.pointerInput(paidAmount, initialPaidAmountExpanded) {
                                             detectTapGestures { showPaidAmount = !showPaidAmount }
                                         }
                                     } else {
