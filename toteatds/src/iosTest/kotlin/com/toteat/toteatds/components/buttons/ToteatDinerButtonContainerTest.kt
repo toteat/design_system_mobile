@@ -21,6 +21,7 @@ import kotlin.test.assertTrue
 // setTestTag prefixes every tag with "toteat:id/".
 private const val Container = "toteat:id/diners"
 private const val Add = "toteat:id/diners_add"
+private const val ViewMore = "toteat:id/diners_view_more"
 private fun dinerTag(name: String) = "toteat:id/diners_$name"
 
 private val Diners = persistentListOf("Trini", "Pauli", "Camila", "Angie", "Vale", "Sofi", "Cata")
@@ -32,12 +33,14 @@ private val NarrowWidth = 200.dp
 @OptIn(ExperimentalTestApi::class)
 class ToteatDinerButtonContainerTest {
 
-    private fun ComposeUiTest.assertFullyVisible(diner: String) {
+    private fun ComposeUiTest.assertFullyVisible(diner: String) = assertTagFullyVisible(dinerTag(diner))
+
+    private fun ComposeUiTest.assertTagFullyVisible(tag: String) {
         val container = onNodeWithTag(Container).getUnclippedBoundsInRoot()
-        val button = onNodeWithTag(dinerTag(diner)).getUnclippedBoundsInRoot()
+        val button = onNodeWithTag(tag).getUnclippedBoundsInRoot()
         assertTrue(
             button.left >= container.left && button.right <= container.right,
-            "$diner should be fully visible: button $button, container $container"
+            "$tag should be fully visible: button $button, container $container"
         )
     }
 
@@ -62,7 +65,41 @@ class ToteatDinerButtonContainerTest {
         selected = "Sofi"
         waitForIdle()
 
+        // Scrolled to the end of the row: "Ver más" shows too.
         assertFullyVisible("Sofi")
+        assertTagFullyVisible(ViewMore)
+        assertEquals(
+            onNodeWithTag(Container).getUnclippedBoundsInRoot().right,
+            onNodeWithTag(ViewMore).getUnclippedBoundsInRoot().right
+        )
+    }
+
+    @Test
+    fun aSelectedDinerFarFromTheEndStopsAtTheStart() = runComposeUiTest {
+        var selected by mutableStateOf<String?>("Trini")
+        setContent {
+            ToteatTheme {
+                ToteatDinerButtonContainer(
+                    diners = Diners,
+                    selectedDiner = selected,
+                    onDinerSelect = {},
+                    modifier = Modifier.width(NarrowWidth),
+                    onAddClick = {},
+                    onViewMoreClick = {},
+                    testTag = "diners"
+                )
+            }
+        }
+        waitForIdle()
+
+        // Camila is cut on the right; reaching the end would hide it, so it stops at the start.
+        selected = "Camila"
+        waitForIdle()
+
+        assertEquals(
+            onNodeWithTag(Container).getUnclippedBoundsInRoot().left,
+            onNodeWithTag(dinerTag("Camila")).getUnclippedBoundsInRoot().left
+        )
     }
 
     @Test
@@ -87,7 +124,40 @@ class ToteatDinerButtonContainerTest {
         selected = "Pauli"
         waitForIdle()
 
+        // Scrolled back to the start of the row: "Agregar" shows too.
         assertFullyVisible("Pauli")
+        assertEquals(
+            onNodeWithTag(Container).getUnclippedBoundsInRoot().left,
+            onNodeWithTag(Add).getUnclippedBoundsInRoot().left
+        )
+    }
+
+    @Test
+    fun aSelectedDinerFarFromTheStartStopsAtTheEnd() = runComposeUiTest {
+        var selected by mutableStateOf<String?>("Cata")
+        setContent {
+            ToteatTheme {
+                ToteatDinerButtonContainer(
+                    diners = Diners,
+                    selectedDiner = selected,
+                    onDinerSelect = {},
+                    modifier = Modifier.width(NarrowWidth),
+                    onAddClick = {},
+                    onViewMoreClick = {},
+                    testTag = "diners"
+                )
+            }
+        }
+        waitForIdle()
+
+        // Angie is off screen on the left; reaching the start would hide it, so it stops at the end.
+        selected = "Angie"
+        waitForIdle()
+
+        assertEquals(
+            onNodeWithTag(Container).getUnclippedBoundsInRoot().right,
+            onNodeWithTag(dinerTag("Angie")).getUnclippedBoundsInRoot().right
+        )
     }
 
     @Test
@@ -113,6 +183,7 @@ class ToteatDinerButtonContainerTest {
         waitForIdle()
 
         assertFullyVisible("Nueva")
+        assertTagFullyVisible(ViewMore)
     }
 
     @Test

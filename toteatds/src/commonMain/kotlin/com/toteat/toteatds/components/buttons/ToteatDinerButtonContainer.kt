@@ -41,8 +41,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  * and "Ver más" buttons stay interactive.
  *
  * Whenever [selectedDiner] changes (including its first value) or moves to another
- * position in [diners], the row scrolls with an animation just enough to show that
- * diner's button completely. If it is already fully visible, or [selectedDiner] is
+ * position in [diners] and its button isn't fully visible, the row scrolls with an
+ * animation to show it, as far as possible in its direction without hiding it: towards
+ * the end (so "Ver más" shows) if it was on the right, towards the start (so "Agregar"
+ * shows) if it was on the left. If it is already fully visible, or [selectedDiner] is
  * null or not in [diners], the row doesn't move.
  */
 @Composable
@@ -121,47 +123,48 @@ fun ToteatDinerButtonContainer(
 }
 
 /**
- * Scrolls with an animation the minimum needed so the item at [index] is fully
- * visible: aligned to the start if it's before the viewport, to the end if it's
- * after. Does nothing if it's already fully visible.
+ * Makes the item at [index] fully visible with an animated scroll. Does nothing if it
+ * already is.
+ *
+ * The row moves as far as it can in the direction of the item while the item stays
+ * fully visible:
+ * - After the viewport (or cut on the right): towards the end, until the end of the row
+ *   (so the trailing "Ver más" shows) or until the item reaches the start.
+ * - Before the viewport (or cut on the left): towards the start, until the start of the
+ *   row (so the leading "Agregar" shows) or until the item reaches the end.
+ * The list clamps the scroll at both ends, so asking for "item at the opposite edge"
+ * covers both cases.
  */
 private suspend fun LazyListState.scrollToShowFully(index: Int) {
     // Wait for a layout that already includes the item (e.g. a diner just added).
     snapshotFlow { layoutInfo.totalItemsCount }.first { it > index }
 
-    val info = layoutInfo
-    val visible = info.visibleItemsInfo
+    val visible = layoutInfo.visibleItemsInfo
     if (visible.isEmpty()) return
-    val viewportStart = info.viewportStartOffset
-    val viewportEnd = info.viewportEndOffset
+    val viewportStart = layoutInfo.viewportStartOffset
+    val viewportEnd = layoutInfo.viewportEndOffset
 
     val item = visible.firstOrNull { it.index == index }
     when {
-        item != null -> {
-            val itemEnd = item.offset + item.size
-            when {
-                item.offset < viewportStart -> animateScrollBy((item.offset - viewportStart).toFloat())
-                itemEnd > viewportEnd -> {
-                    // Never push the item's start out of the viewport when it's wider than it.
-                    val delta = minOf(itemEnd - viewportEnd, item.offset - viewportStart)
-                    animateScrollBy(delta.toFloat())
-                }
-            }
-        }
+        item == null && index > visible.last().index -> animateScrollToItem(index)
 
-        index < visible.first().index -> animateScrollToItem(index)
-
-        else -> {
-            // Not laid out yet: bring it in aligned to the end, estimating its size from the
-            // visible items (all diner buttons are the same width), then adjust if needed.
+        item == null -> {
+            // Not laid out: bring it in aligned to the end, estimating its size from the
+            // visible items (all diner buttons are the same width), then adjust.
             val estimatedSize = visible.sumOf { it.size } / visible.size
             val viewportSize = viewportEnd - viewportStart
             animateScrollToItem(index, scrollOffset = -(viewportSize - estimatedSize).coerceAtLeast(0))
             layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }?.let { laidOut ->
                 val overflow = laidOut.offset + laidOut.size - layoutInfo.viewportEndOffset
-                if (overflow > 0) animateScrollBy(overflow.toFloat())
+                if (overflow > 0) animateScrollBy(minOf(overflow, laidOut.offset - layoutInfo.viewportStartOffset).toFloat())
             }
         }
+
+        item.offset + item.size > viewportEnd ->
+            animateScrollBy((item.offset - viewportStart).toFloat())
+
+        item.offset < viewportStart ->
+            animateScrollBy((item.offset + item.size - viewportEnd).toFloat())
     }
 }
 
